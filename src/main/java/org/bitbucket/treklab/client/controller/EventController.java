@@ -72,9 +72,9 @@ public class EventController {
                                 JsArray<Position> data = JsonUtils.safeEval(response.getText());
                                 LoggerHelper.getLogInfo(classname, "data.length() = " + data.length());
                                 for (int i = 0; i < data.length(); i++) {
-                                    if (data.get(i).getSpeed() == 0) {
-                                        LoggerHelper.getLogInfo(classname, String.valueOf(data.get(i).getSpeed()));
-                                        eventStore.add(new Event(DateHelper.getISOToDefaultTime(data.get(i).getDeviceTime()), "Some device", "Overspeed"));
+                                    if (data.get(i).getSpeed() > 30) {
+                                        LoggerHelper.getLogInfo(classname, data.get(i).getDeviceTime());
+                                        eventStore.add(new Event(data.get(i).getDeviceTime(), "Some device", "Overspeed"));
                                         LoggerHelper.getLogInfo(classname, "Added new overspeed");
                                     }
                                 }
