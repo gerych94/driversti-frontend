@@ -1,0 +1,17 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'
+             xmlns:w='urn:import:org.bitbucket.treklab.client.widget'
+             xmlns:grid='urn:import:com.sencha.gxt.widget.core.client.grid'>
+
+  <!-- Данные для заполнения таблицы свойствами объекта Position (инкасуллироваными в объекты Row) -->
+  <ui:with type="com.sencha.gxt.data.shared.ListStore" field="rowStore"/>
+  <ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="rowCM"/>
+  <ui:with type="com.sencha.gxt.widget.core.client.grid.GroupingView" field="rowView"/>
+
+  <gxt:ContentPanel ui:field="contentPanel" headerVisible="false" collapsible="true" titleCollapse="true"
+                    borders="true">
+    <!--<w:StateViewGrid ui:field="stateViewGrid" />-->
+    <grid:Grid ui:field="rowGrid" store="{rowStore}" cm="{rowCM}" view="{rowView}"  stateful="true" stateId="rowGrid"/>
+  </gxt:ContentPanel>
+</ui:UiBinder>

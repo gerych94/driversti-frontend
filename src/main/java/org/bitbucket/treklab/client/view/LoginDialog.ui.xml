@@ -1,0 +1,68 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:gxt="urn:import:com.sencha.gxt.widget.core.client"
+             xmlns:container="urn:import:com.sencha.gxt.widget.core.client.container"
+             xmlns:form="urn:import:com.sencha.gxt.widget.core.client.form"
+             xmlns:button="urn:import:com.sencha.gxt.widget.core.client.button">
+
+
+  <!-- Указываются дополнительные настройки для элементов
+        ширина - по ширине родителя
+        высота - столько, сколько необходимо-->
+  <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="verticalLayoutData">
+    <ui:attributes width="1" height="-1" />
+  </ui:with>
+
+  <!-- С этого места начинается описание интерфейса -->
+  <!-- gxt:Window - означает, что главным контейнером будет окно типа Window.
+       ui:field - своего рода ИД элемента, к которому можна обратиться из связанного класса LoginDialog.java
+                  благодаря аннотации UiField
+       pixelSize - размеры элемента. В данном случае 320рх по ширине и сколько необходимо по высоте (-1)
+                   -1 - занимает столько места, сколько необходимо дочерним элементам
+                   0.0-1.0 - обозначение в процентах
+                   >1 - размеры в рх
+       modal - указание является ли оно модальным
+       closable - устанавливает отображение кнопки "закрыть" и соответствующей возможности для пользователя
+       resizable - устанавливает возможность изменять размеры элемента пользователем
+       draggable - устанваливает возможность перемещения элемента пользователем
+       headingText - устанавливает заголовок элемента
+       focusWidget - указывает какой виджет получает фокус при загрузке элемента -->
+  <gxt:Window ui:field="window" pixelSize="320, -1" modal="true" closable="false"
+              resizable="false" draggable="false"
+              headingText="Авторизация" focusWidget="{login}">
+
+    <!-- container - указываем контейнер, который должен быть дочерним для родительского -->
+    <container:VerticalLayoutContainer>
+
+      <!-- Первый дочерний элемент - совокупность FieldLabel шириной 120рх
+               и TextField с ИД "login" -->
+      <container:child layoutData="{verticalLayoutData}">
+        <form:FieldLabel text="Логин" labelWidth="120">
+          <form:widget>
+            <form:TextField ui:field="login" />
+          </form:widget>
+        </form:FieldLabel>
+      </container:child>
+
+      <!-- Второй дочерний элемент - совокупность FieldLabel шириной 120рх
+                и PasswordField с ИД "password" -->
+      <container:child layoutData="{verticalLayoutData}">
+        <form:FieldLabel text="Пароль" labelWidth="120">
+          <form:widget>
+            <form:PasswordField ui:field="password" />
+          </form:widget>
+        </form:FieldLabel>
+      </container:child>
+    </container:VerticalLayoutContainer>
+
+    <!-- Следующими дочерними элементами для Window являются кнопки авторизации и регистрации -->
+    <gxt:button>
+      <button:TextButton ui:field="loginButton" text="Логин" />
+    </gxt:button>
+    <gxt:button>
+      <button:TextButton ui:field="registerButton" text="Регистрация" enabled="true" />
+    </gxt:button>
+  </gxt:Window>
+
+</ui:UiBinder>

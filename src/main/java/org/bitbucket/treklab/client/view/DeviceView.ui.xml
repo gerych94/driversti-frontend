@@ -1,0 +1,85 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:container='urn:import:com.sencha.gxt.widget.core.client.container'
+             xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'
+             xmlns:grid='urn:import:com.sencha.gxt.widget.core.client.grid'
+             xmlns:toolbar='urn:import:com.sencha.gxt.widget.core.client.toolbar'
+             xmlns:form='urn:import:com.sencha.gxt.widget.core.client.form'
+             xmlns:button='urn:import:com.sencha.gxt.widget.core.client.button'>
+
+  <ui:with field="contentData"
+           type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
+    <ui:attributes width="1" height="1"/>
+  </ui:with>
+  <ui:with field="toolbarData"
+           type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
+    <ui:attributes width="1" height="-1"/>
+  </ui:with>
+  <ui:with field="gridData"
+           type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
+    <ui:attributes width="1" height="1"/>
+  </ui:with>
+
+  <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="objectsTabConfig">
+    <ui:attributes text="Objects"/>
+  </ui:with>
+  <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="eventsTabConfig">
+    <ui:attributes text="Events"/>
+  </ui:with>
+  <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="placesTabConfig">
+    <ui:attributes text="Places"/>
+  </ui:with>
+  <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="historyTabConfig">
+    <ui:attributes text="History"/>
+  </ui:with>
+
+  <!-- Данные для заполнения таблицы с девайсами во вкладке "OBJECTS" -->
+  <ui:with type="com.sencha.gxt.data.shared.ListStore" field="deviceStore"/>
+  <ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="deviceCM"/>
+  <ui:with type="com.sencha.gxt.widget.core.client.grid.GroupingView" field="deviceView"/>
+
+  <!-- Данные для заполнения таблицы с девайсами во вкладке "EVENTS" -->
+  <ui:with type="com.sencha.gxt.data.shared.ListStore" field="eventStore"/>
+  <ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="eventCM"/>
+  <ui:with type="com.sencha.gxt.widget.core.client.grid.GroupingView" field="eventView"/>
+
+  <ui:with type="org.bitbucket.treklab.client.resources.Resources" field="images"/>
+
+  <gxt:ContentPanel ui:field="contentPanel" collapsible="false" headerVisible="false" resize="true">
+    <gxt:TabPanel ui:field="tabPanel" layoutData="{contentData}" width="1">
+      <!-- Tab "Objects" -->
+      <gxt:child config="{objectsTabConfig}">
+        <container:VerticalLayoutContainer>
+          <container:child layoutData="{toolbarData}">
+            <toolbar:ToolBar ui:field="deviceToolbar" borders="true" stateful="true">
+              <form:StoreFilterField ui:field="deviceFilter" emptyText="Type device name..." width="180"/>
+              <button:TextButton ui:field="refreshDevicesButton" icon="{images.refresh}"/>
+              <button:TextButton ui:field="addDeviceButton" icon="{images.addDeviceButton}"/>
+            </toolbar:ToolBar>
+          </container:child>
+          <container:child layoutData="{gridData}">
+            <grid:Grid ui:field="deviceGrid" view="{deviceView}" cm="{deviceCM}" store="{deviceStore}" stateful="true"
+                       stateId="deviceGrid"/>
+          </container:child>
+        </container:VerticalLayoutContainer>
+      </gxt:child>
+
+      <!-- Tab "Events"-->
+      <gxt:child config="{eventsTabConfig}">
+        <container:VerticalLayoutContainer>
+          <container:child layoutData="{toolbarData}">
+            <toolbar:ToolBar ui:field="eventsToolbar" borders="true" stateful="true">
+              <form:StoreFilterField ui:field="eventFilter" emptyText="Type event name..." width="180"/>
+              <button:TextButton ui:field="refreshEventButton" icon="{images.refresh}"/>
+            </toolbar:ToolBar>
+          </container:child>
+          <container:child layoutData="{gridData}">
+            <grid:Grid ui:field="eventGrid" view="{eventView}" cm="{eventCM}" store="{eventStore}" stateful="true"
+                       stateId="deviceGrid"/>
+          </container:child>
+        </container:VerticalLayoutContainer>
+      </gxt:child>
+    </gxt:TabPanel>
+  </gxt:ContentPanel>
+
+</ui:UiBinder>

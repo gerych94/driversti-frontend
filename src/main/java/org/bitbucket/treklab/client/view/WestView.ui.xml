@@ -1,0 +1,20 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'
+             xmlns:container='urn:import:com.sencha.gxt.widget.core.client.container'>
+
+  <ui:with type="com.sencha.gxt.widget.core.client.container.BorderLayoutContainer.BorderLayoutData" field="southData">
+    <ui:attributes size="300" maxSize="400" minSize="100" split="true" collapsible="true"/>
+  </ui:with>
+
+  <gxt:ContentPanel ui:field="contentPanel" headingText="Device Panel" headerVisible="true" resize="true" collapsible="true" animCollapse="true">
+    <container:BorderLayoutContainer ui:field="container">
+      <container:center>
+        <gxt:ContentPanel ui:field="deviceView" />
+      </container:center>
+      <container:south layoutData="{southData}">
+        <gxt:ContentPanel ui:field="stateView" />
+      </container:south>
+    </container:BorderLayoutContainer>
+  </gxt:ContentPanel>
+</ui:UiBinder>
