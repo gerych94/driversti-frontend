@@ -50,7 +50,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
      * @param globalDeviceStore - глобальный список устройств
      *                          В конструкторе инициализируем объект для вызова методов АПИ
      *                          и создаём графический интерфейс для отображения устройств
-     * @param globalEventStore
+     * @param globalEventStore  - глобальный список событий
      * @param mapController     - контроллер карты
      */
     public DeviceController(ListStore<Device> globalDeviceStore,
