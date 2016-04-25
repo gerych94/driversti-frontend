@@ -72,8 +72,8 @@ public class StateController implements ContentController {
                                 rowStore.add(new PositionRow(4, "Широта", String.valueOf(positions.get(i).getLatitude())));
                                 double speed = new BigDecimal(positions.get(i).getSpeed()).setScale(3, RoundingMode.UP).doubleValue();
                                 rowStore.add(new PositionRow(5, "Скорость", speed + " км/ч"));
-                                if (speed > 20) {
-                                    Info.display("Overspeed!", "Allowed speed: 20 km/h. Current speed: " + speed + " km/h");
+                                if (speed > 30) {
+                                    Info.display("Overspeed!", "Allowed speed: 30 km/h. Current speed: " + speed + " km/h");
                                 }
                                 if (positions.get(i).getCourse() != 0) {
                                     rowStore.add(new PositionRow(6, "Курс", positions.get(i).getCourse() + "°"));
@@ -145,7 +145,7 @@ public class StateController implements ContentController {
                                 stateView.getRowStore().update(new PositionRow(5, "Скорость",
                                         new BigDecimal(positions.get(i).getSpeed()).setScale(3, RoundingMode.UP).doubleValue() + " км/ч"));
                                 if (positions.get(i).getCourse() != 0) {
-                                    if (rowStore.hasRecord(new PositionRow(6, "Курс", String.valueOf(positions.get(i).getCourse())))) {
+                                    if (rowStore.hasRecord(new PositionRow(6, "Курс", positions.get(i).getCourse() + "°"))) {
                                         rowStore.update(new PositionRow(6, "Курс", positions.get(i).getCourse() + "°"));
                                     } else {
                                         rowStore.add(new PositionRow(6, "Курс", positions.get(i).getCourse() + "°"));
