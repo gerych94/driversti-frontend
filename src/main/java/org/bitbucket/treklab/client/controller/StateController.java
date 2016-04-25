@@ -75,9 +75,7 @@ public class StateController implements ContentController {
                                 if (speed > 30) {
                                     Info.display("Overspeed!", "Allowed speed: 30 km/h. Current speed: " + speed + " km/h");
                                 }
-                                if (positions.get(i).getCourse() != 0) {
-                                    rowStore.add(new PositionRow(6, "Курс", positions.get(i).getCourse() + "°"));
-                                }
+                                rowStore.add(new PositionRow(6, "Курс", positions.get(i).getCourse() + "°"));
                                 if (positions.get(i).getProtocol() != null && !positions.get(i).getProtocol().equals("")) {
                                     rowStore.add(new PositionRow(7, "Протокол", positions.get(i).getProtocol()));
                                 }
@@ -144,13 +142,7 @@ public class StateController implements ContentController {
                                 rowStore.update(new PositionRow(4, "Широта", String.valueOf(positions.get(i).getLatitude())));
                                 stateView.getRowStore().update(new PositionRow(5, "Скорость",
                                         new BigDecimal(positions.get(i).getSpeed()).setScale(3, RoundingMode.UP).doubleValue() + " км/ч"));
-                                if (positions.get(i).getCourse() != 0) {
-                                    if (rowStore.hasRecord(new PositionRow(6, "Курс", positions.get(i).getCourse() + "°"))) {
-                                        rowStore.update(new PositionRow(6, "Курс", positions.get(i).getCourse() + "°"));
-                                    } else {
-                                        rowStore.add(new PositionRow(6, "Курс", positions.get(i).getCourse() + "°"));
-                                    }
-                                }
+                                rowStore.update(new PositionRow(6, "Курс", positions.get(i).getCourse() + "°"));
                                 if (positions.get(i).getProtocol() != null && !positions.get(i).getProtocol().equals("")) {
                                     rowStore.update(new PositionRow(7, "Протокол", positions.get(i).getProtocol()));
                                 }
