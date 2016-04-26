@@ -86,7 +86,7 @@ public class DeviceDialog {
                             device = JsonUtils.safeEval(response.getText());
                             deviceStore.update(device);
                             hide();
-                            LoggerHelper.getLogInfo(className, "Device "+ device.getName() + " has been updated.");
+                            LoggerHelper.log(className, "Device "+ device.getName() + " has been updated.");
                         } else if (400 == response.getStatusCode()) {
                             new AlertMessageBox("Ошибка обновления", "Такой ИМЕИ уже существует").show();
                             uniqueIdField.setText(device.getUniqueId());
@@ -108,17 +108,17 @@ public class DeviceDialog {
                             device = JsonUtils.safeEval(response.getText());
                             deviceStore.add(device);
                             hide();
-                            LoggerHelper.getLogInfo(className, "New device has been added. Device name: " + device.getName());
+                            LoggerHelper.log(className, "New device has been added. Device name: " + device.getName());
                         } else if (400 == response.getStatusCode()) {
                             new AlertMessageBox("Ошибка добавления", "Такой ИМЕИ уже существует").show();
                         } else {
-                            LoggerHelper.getLogInfo(className, "Bad response from server. Status code: " + response.getStatusCode());
+                            LoggerHelper.log(className, "Bad response from server. Status code: " + response.getStatusCode());
                             new AlertMessageBox("Adding device error", "Status code = " + response.getStatusCode()).show();
                         }
                     }
                 });
             } catch (RequestException e) {
-                LoggerHelper.getLogInfo(className, "Some error while connecting to the server", e);
+                LoggerHelper.log(className, "Some error while connecting to the server", e);
             }
         }
     }

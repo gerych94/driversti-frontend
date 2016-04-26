@@ -124,12 +124,12 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
                         }
                     } else {
                         // при ошибке получения данных отображаем соответствующее сообщение с кодом ошибки (console!)
-                        LoggerHelper.getLogInfo(className, "Bad response from server. Response status code: " + response.getStatusCode());
+                        LoggerHelper.log(className, "Bad response from server. Response status code: " + response.getStatusCode());
                     }
                 }
             });
         } catch (RequestException e) {
-            LoggerHelper.getLogInfo(className, "Error while getting devices. No response from server.", e);
+            LoggerHelper.log(className, "Error while getting devices. No response from server.", e);
         }
     }
 
@@ -138,7 +138,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
      */
     @Override
     public void onRefresh() {
-        LoggerHelper.getLogInfo(className, "'Refresh button' has been pressed");
+        LoggerHelper.log(className, "'Refresh button' has been pressed");
         run();
     }
 
@@ -147,7 +147,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
      */
     @Override
     public void onAdd() {
-        LoggerHelper.getLogInfo(className, "'Add button' has been pressed");
+        LoggerHelper.log(className, "'Add button' has been pressed");
         // создаём временное устройство
         Device device = (Device) Device.createObject();
         // создаём диалог и передаём в конструктор временный объект устройства и список устройств
@@ -156,7 +156,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
 
     @Override
     public void onUpdate(Device selectedItem) {
-        LoggerHelper.getLogInfo(className, "'Edit' has been pressed");
+        LoggerHelper.log(className, "'Edit' has been pressed");
         new DeviceDialog(selectedItem, deviceStore).show();
     }
 
@@ -167,7 +167,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
      */
     @Override
     public void onRemove(final Device selectedItem) {
-        LoggerHelper.getLogInfo(className, "'Remove button' has been pressed");
+        LoggerHelper.log(className, "'Remove button' has been pressed");
         final ConfirmMessageBox confirm = new ConfirmMessageBox(
                 "Подтверждение удаления устройства",
                 "Это действие удалит все данные этого трекера, восстановление будет невозможно! \n" +
@@ -179,7 +179,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
             @Override
             public void onDialogHide(final DialogHideEvent event) {
                 if (event.getHideButton() == Dialog.PredefinedButton.YES) {
-                    LoggerHelper.getLogInfo(className, "Button YES has been pressed");
+                    LoggerHelper.log(className, "Button YES has been pressed");
                     try {
                         // запрос к серверу на удаление устройста
                         deviceData.removeDevice(selectedItem, new BaseRequestCallback() {
@@ -190,9 +190,9 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
                                     deviceStore.remove(selectedItem);
                                     // устанавливаем кнопку удаления в выключенное состояние
                                     //deviceView.getRemoveDeviceButton().setEnabled(false);
-                                    LoggerHelper.getLogInfo(className, "Device " + selectedItem.getName() + " has been removed. Bye-bye motherfucker!");
+                                    LoggerHelper.log(className, "Device " + selectedItem.getName() + " has been removed. Bye-bye motherfucker!");
                                 } else {
-                                    LoggerHelper.getLogInfo(className, "Error while deleting device. " +
+                                    LoggerHelper.log(className, "Error while deleting device. " +
                                             "Error code: " + response.getStatusCode() +
                                             ". Error status message: " + response.getStatusText());
                                     new AlertMessageBox("Error", "Error while deleting device. " +
@@ -202,7 +202,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
                             }
                         });
                     } catch (RequestException e) {
-                        LoggerHelper.getLogInfo(className, "Error while deleting device. No response from server.", e);
+                        LoggerHelper.log(className, "Error while deleting device. No response from server.", e);
                     }
                 }
             }
@@ -212,7 +212,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
 
     @Override
     public void onShowHistory(Device selectedItem) {
-        LoggerHelper.getLogInfo(className, "onShowHistory is not implemented");
+        LoggerHelper.log(className, "onShowHistory is not implemented");
     }
 
     /**
@@ -225,7 +225,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
     public void onSelected() {
         // получаем выбранное устройство
         Device selectedItem = deviceView.getDeviceGrid().getSelectionModel().getSelectedItem();
-        LoggerHelper.getLogInfo(className, "Device " + selectedItem.getName() + " was selected.");
+        LoggerHelper.log(className, "Device " + selectedItem.getName() + " was selected.");
         //deviceView.getRemoveDeviceButton().setEnabled(true);
         stateController.fillGrid(selectedItem);
     }
@@ -237,7 +237,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
      */
     @Override
     public void doubleClicked(Device selectedItem) {
-        LoggerHelper.getLogInfo(className, "Row double clicked in Device Table");
+        LoggerHelper.log(className, "Row double clicked in Device Table");
         // проверка, что оно точно выбрано, а не null
         if (selectedItem != null) {
             //deviceView.getRemoveDeviceButton().setEnabled(true);

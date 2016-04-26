@@ -6,10 +6,10 @@ import java.util.Date;
 
 /**
  *  Этот класс позволяет получать логи событий в консоль браузера в удобном формате - "ClassName HH:mm:SS - message"
- *  Чтобы им воспользоваться, необходимо вызвать статический метод getLogInfo(parameters).
+ *  Чтобы им воспользоваться, необходимо вызвать статический метод log(parameters).
  *  В качестве параметров передаём имя класса, в котором вызывается метод, сообщение (которое хотим увидеть в консоли)
  *  и/или переменную ошибки.
- *  Данный класс с методом getLogInfo(parameters) оборачивает собой GWT.log(parameters) и предоставляет логи в
+ *  Данный класс с методом log(parameters) оборачивает собой GWT.log(parameters) и предоставляет логи в
  *  более удобном для восприятия формате
  *
  *  @author driversti (Yurii Chekhotskyi)
@@ -18,11 +18,11 @@ import java.util.Date;
  */
 public class LoggerHelper {
 
-    public static void getLogInfo(String className, String message) {
+    public static void log(String className, String message) {
         GWT.log(getMessage(className, message));
     }
 
-    public static void getLogInfo(String className, String message, Throwable e) {
+    public static void log(String className, String message, Throwable e) {
         GWT.log(getMessage(className, message), e);
     }
 

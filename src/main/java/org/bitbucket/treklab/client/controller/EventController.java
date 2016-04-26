@@ -41,26 +41,21 @@ public class EventController {
                     public void onResponseReceived(Request request, Response response) {
                         if (200 == response.getStatusCode()) {
                             JsArray<Position> data = JsonUtils.safeEval(response.getText());
-                            LoggerHelper.getLogInfo(classname, "First run");
-                            int counter = 0;
                             for (int i = 0; i < data.length(); i++) {
                                 if (data.get(i).getSpeed() > 30) {
                                     eventStore.add(new Event(data.get(i).getDeviceTime(), "Some device", "Overspeed"));
-                                    counter++;
                                 }
                             }
-                            LoggerHelper.getLogInfo(classname, "Added " + counter + " events");
                         } else {
-                            LoggerHelper.getLogInfo(classname, "Server responded with code: " + response.getStatusCode());
+                            LoggerHelper.log(classname, "Server responded with code: " + response.getStatusCode());
                         }
                     }
                 });
             } catch (RequestException e) {
-                LoggerHelper.getLogInfo(classname, "Can't connect to the server", e);
+                LoggerHelper.log(classname, "Can't connect to the server", e);
             }
             firstRun = false;
         } else {
-            LoggerHelper.getLogInfo(classname, "Next run");
             to = DateHelper.getUTCDate();
             for (int i = 0; i < deviceStore.size(); i++) {
                 final Device device = deviceStore.get(i);
@@ -70,22 +65,21 @@ public class EventController {
                         public void onResponseReceived(Request request, Response response) {
                             if (200 == response.getStatusCode()) {
                                 JsArray<Position> data = JsonUtils.safeEval(response.getText());
-                                LoggerHelper.getLogInfo(classname, "data.length() = " + data.length());
                                 for (int i = 0; i < data.length(); i++) {
                                     if (data.get(i).getSpeed() > 30) {
-                                        LoggerHelper.getLogInfo(classname, data.get(i).getDeviceTime());
+                                        LoggerHelper.log(classname, data.get(i).getDeviceTime());
                                         eventStore.add(new Event(data.get(i).getDeviceTime(), "Some device", "Overspeed"));
-                                        LoggerHelper.getLogInfo(classname, "Added new overspeed");
+                                        LoggerHelper.log(classname, "Added new overspeed");
                                     }
                                 }
                                 from = to;
                             } else {
-                                LoggerHelper.getLogInfo(classname, "Server responded with code: " + response.getStatusCode());
+                                LoggerHelper.log(classname, "Server responded with code: " + response.getStatusCode());
                             }
                         }
                     });
                 } catch (RequestException e) {
-                    LoggerHelper.getLogInfo(classname, "Can't connect to the server", e);
+                    LoggerHelper.log(classname, "Can't connect to the server", e);
                 }
             }
         }
