@@ -1,6 +1,7 @@
 package org.bitbucket.treklab.client.view;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
@@ -21,6 +22,10 @@ public class StateView {
     }
 
     private static StateViewUiBinder ourUiBinder = GWT.create(StateViewUiBinder.class);
+
+    public interface StateHandler {
+        void onTabSelected(SelectionEvent<Widget> event);
+    }
 
     @UiField
     ContentPanel contentPanel;
@@ -63,5 +68,9 @@ public class StateView {
 
     public ListStore<PositionRow> getRowStore() {
         return rowStore;
+    }
+
+    public ColumnModel<PositionRow> getRowCM() {
+        return rowCM;
     }
 }

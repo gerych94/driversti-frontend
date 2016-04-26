@@ -3,17 +3,25 @@ package org.bitbucket.treklab.client.controller;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsonUtils;
+import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.TabItemConfig;
+import com.sencha.gxt.widget.core.client.TabPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.info.Info;
 import org.bitbucket.treklab.client.communication.BaseRequestCallback;
 import org.bitbucket.treklab.client.communication.PositionData;
-import org.bitbucket.treklab.client.model.*;
+import org.bitbucket.treklab.client.model.Device;
+import org.bitbucket.treklab.client.model.Position;
+import org.bitbucket.treklab.client.model.PositionRow;
+import org.bitbucket.treklab.client.model.PositionRowProperties;
 import org.bitbucket.treklab.client.view.StateView;
 
 import java.math.BigDecimal;
@@ -23,7 +31,7 @@ import java.util.Date;
 /**
  * Этот контроллер отвечает за действия панели состояния
  */
-public class StateController implements ContentController {
+public class StateController implements ContentController, StateView.StateHandler {
 
     private final StateView stateView;
     private static final PositionRowProperties prop = GWT.create(PositionRowProperties.class);
@@ -169,6 +177,36 @@ public class StateController implements ContentController {
             });
         } catch (RequestException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onTabSelected(SelectionEvent<Widget> event) {
+        stateView.getRowStore().clear();
+        TabPanel tabPanel = (TabPanel) event.getSource();
+        Widget w = event.getSelectedItem();
+        TabItemConfig tab = tabPanel.getConfig(w);
+        switch (tab.getText()) {
+            case "Objects" :
+                stateView.getRowCM().setColumnHeader(0, new SafeHtml() {
+                    private static final long serialVersionUID = 5328351854632677932L;
+
+                    @Override
+                    public String asString() {
+                        return "Параметр";
+                    }
+                });
+                break;
+            case "Events" :
+                stateView.getRowCM().setColumnHeader(0, new SafeHtml() {
+                    private static final long serialVersionUID = -6460540087293779203L;
+
+                    @Override
+                    public String asString() {
+                        return "Время";
+                    }
+                });
+                break;
         }
     }
 }

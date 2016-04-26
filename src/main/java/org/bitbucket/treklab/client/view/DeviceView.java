@@ -70,14 +70,22 @@ public class DeviceView {
      */
     public interface DeviceHandler {
         void onAdd();
+
         void onUpdate(Device selectedItem);
+
         void onRefresh();
+
         void onRemove(Device selectedItem);
+
         void onShowHistory(Device selectedItem);
+
         void onSelected();
+
         void doubleClicked(Device selectedItem);
+
         //метод который реагирует при смене чекбокса;
         void deviceCheckBoxActionVisible(Device device);
+
         void deviceCheckBoxActionFollow(Device device);
     }
 
@@ -282,26 +290,26 @@ public class DeviceView {
         menu.addSelectionHandler(new SelectionHandler<Item>() {
             @Override
             public void onSelection(SelectionEvent<Item> event) {
-                LoggerHelper.getLogInfo(className, "Selected item id: " + event.getSelectedItem().getId());
+                LoggerHelper.log(className, "Selected item id: " + event.getSelectedItem().getId());
                 switch (event.getSelectedItem().getId()) {
                     case "Редактировать":
-                        LoggerHelper.getLogInfo(className, "'Edit' has been choose in menu");
+                        LoggerHelper.log(className, "'Edit' has been choose in menu");
                         deviceHandler.onUpdate(deviceGrid.getSelectionModel().getSelectedItem());
                         break;
                     case "Показать историю":
-                        LoggerHelper.getLogInfo(className, "'Show history' has been choose in menu");
+                        LoggerHelper.log(className, "'Show history' has been choose in menu");
                         deviceHandler.onShowHistory(deviceGrid.getSelectionModel().getSelectedItem());
                         break;
                     case "Удалить":
-                        LoggerHelper.getLogInfo(className, "'Remove' has been choose in menu");
+                        LoggerHelper.log(className, "'Remove' has been choose in menu");
                         deviceHandler.onRemove(deviceGrid.getSelectionModel().getSelectedItem());
                         break;
                     case "Show MAX Speed":
-                        LoggerHelper.getLogInfo(className, "'Show MAX Speed' has been choose in menu");
+                        LoggerHelper.log(className, "'Show MAX Speed' has been choose in menu");
                         showMaxSpeed();
                         break;
                     case "Show average Speed":
-                        LoggerHelper.getLogInfo(className, "'Show average Speed' has been choose in menu");
+                        LoggerHelper.log(className, "'Show average Speed' has been choose in menu");
                         showAverageSpeed();
                         break;
                 }
@@ -411,12 +419,18 @@ public class DeviceView {
                                     notZeroValue++;
                                 }
                             }
-                            new AlertMessageBox("Info", "Average speed: " + speed/notZeroValue).show();
+                            new AlertMessageBox("Info", "Average speed: " + speed / notZeroValue).show();
                         }
                     });
         } catch (RequestException e) {
             e.printStackTrace();
         }
+    }
+
+    @UiHandler("tabPanel")
+    public void onTabSelected(SelectionEvent<Widget> event) {
+        stateController.onTabSelected(event);
+        deviceGrid.getSelectionModel().deselectAll();
     }
 
     @UiHandler("refreshDevicesButton")
