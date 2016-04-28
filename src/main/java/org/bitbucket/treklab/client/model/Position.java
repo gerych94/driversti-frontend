@@ -18,7 +18,7 @@ public class Position extends JavaScriptObject {
     public final native double getLatitude()/*-{ return this.latitude; }-*/;
     public final native double getLongitude()/*-{ return this.longitude; }-*/;
     public final native double getAltitude()/*-{ return this.altitude; }-*/;
-    public final native double getSpeed()/*-{ return this.speed; }-*/;
+    public final native double getSpeed()/*-{ return this.speed * 1.852; }-*/;
     public final native double getCourse()/*-{ return this.course; }-*/;
     public final native String getAddress()/*-{ return this.address; }-*/;
 
@@ -35,7 +35,7 @@ public class Position extends JavaScriptObject {
     public final native void setLatitude(double latitude)/*-{ this.latitude = latitude; }-*/;
     public final native void setLongitude(double longitude)/*-{ this.longitude = longitude; }-*/;
     public final native void setAltitude(double altitude)/*-{ this.altitude = altitude; }-*/;
-    public final native void setSpeed(double speed)/*-{ this.speed = speed; }-*/;
+    public final native void setSpeed(double speed)/*-{ this.speed = speed / 1.852; }-*/;
     public final native void setCourse(double course)/*-{ this.course = course; }-*/;
     public final native void setAddress(String address)/*-{ this.address = address; }-*/;
 }
