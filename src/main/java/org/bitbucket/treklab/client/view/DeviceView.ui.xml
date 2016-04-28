@@ -79,6 +79,28 @@
           </container:child>
         </container:VerticalLayoutContainer>
       </gxt:child>
+
+      <!-- Tab "Places"-->
+      <gxt:child config="{placesTabConfig}">
+        <container:VerticalLayoutContainer>
+          <container:child layoutData="{toolbarData}">
+            <toolbar:ToolBar ui:field="placesToolbar" borders="true" stateful="true">
+              <button:TextButton ui:field="addPlaceButton" icon="{images.addDeviceButton}"/>
+            </toolbar:ToolBar>
+          </container:child>
+        </container:VerticalLayoutContainer>
+      </gxt:child>
+
+      <!-- Tab "History"-->
+      <gxt:child config="{historyTabConfig}">
+        <container:VerticalLayoutContainer>
+          <container:child layoutData="{toolbarData}">
+            <toolbar:ToolBar ui:field="historyToolbar" borders="true" stateful="true">
+              <button:TextButton ui:field="addHistoryButton" icon="{images.addDeviceButton}"/>
+            </toolbar:ToolBar>
+          </container:child>
+        </container:VerticalLayoutContainer>
+      </gxt:child>
     </gxt:TabPanel>
   </gxt:ContentPanel>
 
