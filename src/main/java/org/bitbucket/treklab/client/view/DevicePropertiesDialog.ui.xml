@@ -1,6 +1,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'
+             xmlns:grid='urn:import:com.sencha.gxt.widget.core.client.grid'
              xmlns:button='urn:import:com.sencha.gxt.widget.core.client.button'
              xmlns:container='urn:import:com.sencha.gxt.widget.core.client.container'>
 
@@ -8,6 +9,10 @@
     <ui:attributes width="1" height="-1" />
   </ui:with>
   <ui:with field="contentData"
+           type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
+    <ui:attributes width="1" height="1"/>
+  </ui:with>
+  <ui:with field="gridData"
            type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
     <ui:attributes width="1" height="1"/>
   </ui:with>
@@ -25,7 +30,15 @@
     <ui:attributes text="Info"/>
   </ui:with>
 
-  <gxt:Window ui:field="window" pixelSize="500, 400" modal="true" headingText="Device Properties"
+
+  <!-- Данные для заполнения таблицы с девайсами во вкладке "INFO" -->
+  <ui:with type="com.sencha.gxt.data.shared.ListStore" field="infoRowStore"/>
+  <ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="infoRowCM"/>
+  <ui:with type="com.sencha.gxt.widget.core.client.grid.GroupingView" field="infoRowView"/>
+
+
+
+  <gxt:Window ui:field="window" pixelSize="400, 400" modal="true" headingText="Device Properties"
               focusWidget="{saveButton}" resizable="false">
     <gxt:TabPanel ui:field="tabPanel" layoutData="{contentData}" width="1">
       <!-- Tab "Main" -->
@@ -52,7 +65,10 @@
       <!-- Tab "Info" -->
       <gxt:child config="{infoTabConfig}">
         <container:VerticalLayoutContainer>
-          <g:Label text="Info"/>
+          <container:child layoutData="{gridData}">
+            <grid:Grid ui:field="infoRowGrid" view="{infoRowView}" cm="{infoRowCM}" store="{infoRowStore}" stateful="true"
+                       stateId="infoRowGrid"/>
+          </container:child>
         </container:VerticalLayoutContainer>
       </gxt:child>
 
@@ -61,6 +77,7 @@
     <gxt:button>
       <button:TextButton ui:field="saveButton" text="Save"/>
     </gxt:button>
+
     <gxt:button>
       <button:TextButton ui:field="cancelButton" text="Cancel"/>
     </gxt:button>
