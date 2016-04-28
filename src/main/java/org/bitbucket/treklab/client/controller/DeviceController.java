@@ -18,7 +18,7 @@ import org.bitbucket.treklab.client.model.Event;
 import org.bitbucket.treklab.client.state.DeviceFollowHandler;
 import org.bitbucket.treklab.client.state.DeviceVisibilityHandler;
 import org.bitbucket.treklab.client.util.LoggerHelper;
-import org.bitbucket.treklab.client.view.DeviceDialog;
+import org.bitbucket.treklab.client.view.DeviceAddDialog;
 import org.bitbucket.treklab.client.view.DeviceView;
 
 /**
@@ -151,13 +151,13 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
         // создаём временное устройство
         Device device = (Device) Device.createObject();
         // создаём диалог и передаём в конструктор временный объект устройства и список устройств
-        new DeviceDialog(device, deviceStore).show();
+        new DeviceAddDialog(device, deviceStore).show();
     }
 
     @Override
     public void onUpdate(Device selectedItem) {
         LoggerHelper.log(className, "'Edit' has been pressed");
-        new DeviceDialog(selectedItem, deviceStore).show();
+        new DeviceAddDialog(selectedItem, deviceStore).show();
     }
 
     /**

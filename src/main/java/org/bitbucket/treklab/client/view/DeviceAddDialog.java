@@ -20,13 +20,13 @@ import org.bitbucket.treklab.client.communication.DeviceData;
 import org.bitbucket.treklab.client.model.Device;
 import org.bitbucket.treklab.client.util.LoggerHelper;
 
-public class DeviceDialog {
-    interface DeviceDialogUiBinder extends UiBinder<Widget, DeviceDialog> {
+public class DeviceAddDialog {
+    interface DeviceDialogUiBinder extends UiBinder<Widget, DeviceAddDialog> {
     }
 
     private static DeviceDialogUiBinder ourUiBinder = GWT.create(DeviceDialogUiBinder.class);
 
-    private static final String className = DeviceDialog.class.getSimpleName();
+    private static final String className = DeviceAddDialog.class.getSimpleName();
 
     private Device device;
     private ListStore<Device> deviceStore;
@@ -46,7 +46,7 @@ public class DeviceDialog {
     @UiField
     TextField uniqueIdField;
 
-    public DeviceDialog(Device selectedDevice, ListStore<Device> deviceStore) {
+    public DeviceAddDialog(Device selectedDevice, ListStore<Device> deviceStore) {
         this.device = selectedDevice;
         this.deviceStore = deviceStore;
         this.deviceData = new DeviceData();
