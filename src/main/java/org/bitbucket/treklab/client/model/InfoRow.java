@@ -1,6 +1,6 @@
 package org.bitbucket.treklab.client.model;
 
-public class PositionRow {
+public class InfoRow {
 
     private static int COUNTER = 0;
 
@@ -8,11 +8,11 @@ public class PositionRow {
     private String name;
     private String value;
 
-    public PositionRow() {
+    public InfoRow() {
         this.id = COUNTER++;
     }
 
-    public PositionRow(int id, String name, String value) {
+    public InfoRow(int id, String name, String value) {
         this.id = id;
         this.name = name;
         this.value = value;

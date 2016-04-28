@@ -5,11 +5,11 @@ import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.PropertyAccess;
 
-public interface PositionRowProperties extends PropertyAccess<PositionRow> {
+public interface InfoRowProperties extends PropertyAccess<InfoRow> {
 
     @Editor.Path("id")
-    ModelKeyProvider<PositionRow> key();
+    ModelKeyProvider<InfoRow> key();
 
-    ValueProvider<PositionRow, String> name();
-    ValueProvider<PositionRow, String> value();
+    ValueProvider<InfoRow, String> name();
+    ValueProvider<InfoRow, String> value();
 }

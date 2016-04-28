@@ -20,8 +20,8 @@ import org.bitbucket.treklab.client.communication.BaseRequestCallback;
 import org.bitbucket.treklab.client.communication.PositionData;
 import org.bitbucket.treklab.client.model.Device;
 import org.bitbucket.treklab.client.model.Position;
-import org.bitbucket.treklab.client.model.PositionRow;
-import org.bitbucket.treklab.client.model.PositionRowProperties;
+import org.bitbucket.treklab.client.model.InfoRow;
+import org.bitbucket.treklab.client.model.InfoRowProperties;
 import org.bitbucket.treklab.client.view.StateView;
 
 import java.math.BigDecimal;
@@ -34,8 +34,8 @@ import java.util.Date;
 public class StateController implements ContentController, StateView.StateHandler {
 
     private final StateView stateView;
-    private static final PositionRowProperties prop = GWT.create(PositionRowProperties.class);
-    private final ListStore<PositionRow> rowStore = new ListStore<>(prop.key());
+    private static final InfoRowProperties prop = GWT.create(InfoRowProperties.class);
+    private final ListStore<InfoRow> rowStore = new ListStore<>(prop.key());
 
     @Override
     public ContentPanel getView() {
@@ -62,44 +62,44 @@ public class StateController implements ContentController, StateView.StateHandle
                         for (int i = 0; i < positions.length(); i++) {
                             if (positions.get(i).getDeviceId() == device.getId()) {
                                 if (positions.get(i).getAddress() != null && !positions.get(i).getAddress().equals("")) {
-                                    rowStore.add(new PositionRow(0, "Адрес", positions.get(i).getAddress()));
+                                    rowStore.add(new InfoRow(0, "Адрес", positions.get(i).getAddress()));
                                 } else {
-                                    rowStore.add(new PositionRow(0, "Адрес", ""));
+                                    rowStore.add(new InfoRow(0, "Адрес", ""));
                                 }
                                 if (positions.get(i).getDeviceTime() != null && !positions.get(i).getDeviceTime().equals("")) {
                                     Date tmp = new Date(positions.get(i).getDeviceTime());
                                     DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
-                                    rowStore.add(new PositionRow(1, "Время устройства", fmt.format(tmp)));
+                                    rowStore.add(new InfoRow(1, "Время устройства", fmt.format(tmp)));
                                 }
                                 if (positions.get(i).getAltitude() >= 0) {
-                                    rowStore.add(new PositionRow(2, "Высота", positions.get(i).getAltitude() + " м"));
+                                    rowStore.add(new InfoRow(2, "Высота", positions.get(i).getAltitude() + " м"));
                                 } else {
-                                    rowStore.add(new PositionRow(2, "Высота", 0 + " м"));
+                                    rowStore.add(new InfoRow(2, "Высота", 0 + " м"));
                                 }
-                                rowStore.add(new PositionRow(3, "Долгота", String.valueOf(positions.get(i).getLongitude())));
-                                rowStore.add(new PositionRow(4, "Широта", String.valueOf(positions.get(i).getLatitude())));
+                                rowStore.add(new InfoRow(3, "Долгота", String.valueOf(positions.get(i).getLongitude())));
+                                rowStore.add(new InfoRow(4, "Широта", String.valueOf(positions.get(i).getLatitude())));
                                 double speed = new BigDecimal(positions.get(i).getSpeed()).setScale(1, RoundingMode.UP).doubleValue();
-                                rowStore.add(new PositionRow(5, "Скорость", speed + " км/ч"));
+                                rowStore.add(new InfoRow(5, "Скорость", speed + " км/ч"));
                                 if (speed > 50) {
                                     Info.display("Overspeed!", "Allowed speed: 50 km/h. Current speed: " + speed + " km/h");
                                 }
-                                rowStore.add(new PositionRow(6, "Курс", positions.get(i).getCourse() + "°"));
+                                rowStore.add(new InfoRow(6, "Курс", positions.get(i).getCourse() + "°"));
                                 if (positions.get(i).getProtocol() != null && !positions.get(i).getProtocol().equals("")) {
-                                    rowStore.add(new PositionRow(7, "Протокол", positions.get(i).getProtocol()));
+                                    rowStore.add(new InfoRow(7, "Протокол", positions.get(i).getProtocol()));
                                 }
                                 if (positions.get(i).getAttributes().getIp() != null && !positions.get(i).getAttributes().getIp().equals("")) {
-                                    rowStore.add(new PositionRow(8, "IP", positions.get(i).getAttributes().getIp()));
+                                    rowStore.add(new InfoRow(8, "IP", positions.get(i).getAttributes().getIp()));
                                 }
                                 if (!String.valueOf(positions.get(i).getAttributes().getPriority()).equals("undefined") /*&&
                                         positions.get(i).getAttributes().getPriority() != 0*/) {
-                                    rowStore.add(new PositionRow(9, "Приоритет", String.valueOf(positions.get(i).getAttributes().getPriority())));
+                                    rowStore.add(new InfoRow(9, "Приоритет", String.valueOf(positions.get(i).getAttributes().getPriority())));
                                 }
                                 if (!String.valueOf(positions.get(i).getAttributes().getSat()).equals("undefined")) {
-                                    rowStore.add(new PositionRow(10, "Сат", String.valueOf(positions.get(i).getAttributes().getSat())));
+                                    rowStore.add(new InfoRow(10, "Сат", String.valueOf(positions.get(i).getAttributes().getSat())));
                                 }
                                 if (!String.valueOf(positions.get(i).getAttributes().getEvent()).equals("undefined") /*&&
                                         positions.get(i).getAttributes().getEvent() != 0*/) {
-                                    rowStore.add(new PositionRow(11, "Событие", String.valueOf(positions.get(i).getAttributes().getEvent())));
+                                    rowStore.add(new InfoRow(11, "Событие", String.valueOf(positions.get(i).getAttributes().getEvent())));
                                 }
                             }
                         }
@@ -132,44 +132,44 @@ public class StateController implements ContentController, StateView.StateHandle
                             if (positions.get(i).getDeviceId() == selectedItem.getId()) {
                                 // проходимся по всем существующим строкам начиная с первой (нулевой)
                                 if (positions.get(i).getAddress() != null && !positions.get(i).getAddress().equals("")) {
-                                    rowStore.update(new PositionRow(0, "Адрес", positions.get(i).getAddress()));
+                                    rowStore.update(new InfoRow(0, "Адрес", positions.get(i).getAddress()));
                                 }
                                 if (positions.get(i).getDeviceTime() != null && !positions.get(i).getDeviceTime().equals("")) {
                                     Date tmp = new Date(positions.get(i).getDeviceTime());
                                     DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
-                                    rowStore.update(new PositionRow(1, "Время устройства", fmt.format(tmp)));
+                                    rowStore.update(new InfoRow(1, "Время устройства", fmt.format(tmp)));
                                 }
                                 /** Обновление объектов реализовать пока не удалось.
                                  * Скорее всего причина ошибок в несоответствии их ID, которые генерируются COUNTER'ом */
                                 if (positions.get(i).getAltitude() >= 0) {
-                                    rowStore.update(new PositionRow(2, "Высота", positions.get(i).getAltitude() + " м"));
+                                    rowStore.update(new InfoRow(2, "Высота", positions.get(i).getAltitude() + " м"));
                                 } else {
-                                    rowStore.update(new PositionRow(2, "Высота", 0 + " м"));
+                                    rowStore.update(new InfoRow(2, "Высота", 0 + " м"));
                                 }
-                                rowStore.update(new PositionRow(3, "Долгота", String.valueOf(positions.get(i).getLongitude())));
-                                rowStore.update(new PositionRow(4, "Широта", String.valueOf(positions.get(i).getLatitude())));
+                                rowStore.update(new InfoRow(3, "Долгота", String.valueOf(positions.get(i).getLongitude())));
+                                rowStore.update(new InfoRow(4, "Широта", String.valueOf(positions.get(i).getLatitude())));
                                 double speed = new BigDecimal(positions.get(i).getSpeed()).setScale(1, RoundingMode.UP).doubleValue();
-                                stateView.getRowStore().update(new PositionRow(5, "Скорость", speed + " км/ч"));
+                                stateView.getRowStore().update(new InfoRow(5, "Скорость", speed + " км/ч"));
                                 if (speed > 50) {
                                     Info.display("Overspeed!", "Allowed speed: 50 km/h. Current speed: " + speed + " km/h");
                                 }
-                                rowStore.update(new PositionRow(6, "Курс", positions.get(i).getCourse() + "°"));
+                                rowStore.update(new InfoRow(6, "Курс", positions.get(i).getCourse() + "°"));
                                 if (positions.get(i).getProtocol() != null && !positions.get(i).getProtocol().equals("")) {
-                                    rowStore.update(new PositionRow(7, "Протокол", positions.get(i).getProtocol()));
+                                    rowStore.update(new InfoRow(7, "Протокол", positions.get(i).getProtocol()));
                                 }
                                 if (positions.get(i).getAttributes().getIp() != null && !positions.get(i).getAttributes().getIp().equals("")) {
-                                    rowStore.update(new PositionRow(8, "IP", positions.get(i).getAttributes().getIp()));
+                                    rowStore.update(new InfoRow(8, "IP", positions.get(i).getAttributes().getIp()));
                                 }
                                 if (!String.valueOf(positions.get(i).getAttributes().getPriority()).equals("undefined") /*&&
                                         positions.get(i).getAttributes().getPriority() != 0*/) {
-                                    rowStore.update(new PositionRow(9, "Приоритет", String.valueOf(positions.get(i).getAttributes().getPriority())));
+                                    rowStore.update(new InfoRow(9, "Приоритет", String.valueOf(positions.get(i).getAttributes().getPriority())));
                                 }
                                 if (!String.valueOf(positions.get(i).getAttributes().getSat()).equals("undefined")) {
-                                    rowStore.update(new PositionRow(10, "Сат", String.valueOf(positions.get(i).getAttributes().getSat())));
+                                    rowStore.update(new InfoRow(10, "Сат", String.valueOf(positions.get(i).getAttributes().getSat())));
                                 }
                                 if (!String.valueOf(positions.get(i).getAttributes().getEvent()).equals("undefined") /*&&
                                         positions.get(i).getAttributes().getEvent() != 0*/) {
-                                    rowStore.update(new PositionRow(11, "Событие", String.valueOf(positions.get(i).getAttributes().getEvent())));
+                                    rowStore.update(new InfoRow(11, "Событие", String.valueOf(positions.get(i).getAttributes().getEvent())));
                                 }
                             }
                         }

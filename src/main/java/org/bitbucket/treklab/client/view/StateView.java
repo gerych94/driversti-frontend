@@ -11,8 +11,8 @@ import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.GroupingView;
-import org.bitbucket.treklab.client.model.PositionRow;
-import org.bitbucket.treklab.client.model.PositionRowProperties;
+import org.bitbucket.treklab.client.model.InfoRow;
+import org.bitbucket.treklab.client.model.InfoRowProperties;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,30 +31,30 @@ public class StateView {
     ContentPanel contentPanel;
 
     @UiField
-    Grid<PositionRow> rowGrid;
+    Grid<InfoRow> rowGrid;
     @UiField(provided = true)
-    final ListStore<PositionRow> rowStore;
+    final ListStore<InfoRow> rowStore;
     @UiField(provided = true)
-    final ColumnModel<PositionRow> rowCM;
+    final ColumnModel<InfoRow> rowCM;
     @UiField
-    GroupingView<PositionRow> rowView;
+    GroupingView<InfoRow> rowView;
 
     public ContentPanel getView() {
         return contentPanel;
     }
 
-    private static final PositionRowProperties prop = GWT.create(PositionRowProperties.class);
+    private static final InfoRowProperties prop = GWT.create(InfoRowProperties.class);
 
-    public StateView(ListStore<PositionRow> rowStore) {
+    public StateView(ListStore<InfoRow> rowStore) {
         // TODO: 20.04.2016 Этот список инициализировать в контроллере
         this.rowStore = rowStore;
 
-        ColumnConfig<PositionRow, String> colName = new ColumnConfig<>(prop.name(), 100, "Параметр");
+        ColumnConfig<InfoRow, String> colName = new ColumnConfig<>(prop.name(), 100, "Параметр");
         colName.setResizable(true);
-        ColumnConfig<PositionRow, String> colValue = new ColumnConfig<>(prop.value(), 100, "Значение");
+        ColumnConfig<InfoRow, String> colValue = new ColumnConfig<>(prop.value(), 100, "Значение");
         colValue.setResizable(true);
 
-        List<ColumnConfig<PositionRow, ?>> configList = new ArrayList<>();
+        List<ColumnConfig<InfoRow, ?>> configList = new ArrayList<>();
         configList.add(colName);
         configList.add(colValue);
 
@@ -66,11 +66,11 @@ public class StateView {
         this.rowView.setStripeRows(true);
     }
 
-    public ListStore<PositionRow> getRowStore() {
+    public ListStore<InfoRow> getRowStore() {
         return rowStore;
     }
 
-    public ColumnModel<PositionRow> getRowCM() {
+    public ColumnModel<InfoRow> getRowCM() {
         return rowCM;
     }
 }
