@@ -78,10 +78,10 @@ public class StateController implements ContentController, StateView.StateHandle
                                 }
                                 rowStore.add(new PositionRow(3, "Долгота", String.valueOf(positions.get(i).getLongitude())));
                                 rowStore.add(new PositionRow(4, "Широта", String.valueOf(positions.get(i).getLatitude())));
-                                double speed = new BigDecimal(positions.get(i).getSpeed()).setScale(3, RoundingMode.UP).doubleValue();
+                                double speed = new BigDecimal(positions.get(i).getSpeed()).setScale(1, RoundingMode.UP).doubleValue();
                                 rowStore.add(new PositionRow(5, "Скорость", speed + " км/ч"));
-                                if (speed > 30) {
-                                    Info.display("Overspeed!", "Allowed speed: 30 km/h. Current speed: " + speed + " km/h");
+                                if (speed > 50) {
+                                    Info.display("Overspeed!", "Allowed speed: 50 km/h. Current speed: " + speed + " km/h");
                                 }
                                 rowStore.add(new PositionRow(6, "Курс", positions.get(i).getCourse() + "°"));
                                 if (positions.get(i).getProtocol() != null && !positions.get(i).getProtocol().equals("")) {
@@ -136,7 +136,7 @@ public class StateController implements ContentController, StateView.StateHandle
                                 }
                                 if (positions.get(i).getDeviceTime() != null && !positions.get(i).getDeviceTime().equals("")) {
                                     Date tmp = new Date(positions.get(i).getDeviceTime());
-                                    DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd hh:mm:ss");
+                                    DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
                                     rowStore.update(new PositionRow(1, "Время устройства", fmt.format(tmp)));
                                 }
                                 /** Обновление объектов реализовать пока не удалось.
@@ -148,8 +148,11 @@ public class StateController implements ContentController, StateView.StateHandle
                                 }
                                 rowStore.update(new PositionRow(3, "Долгота", String.valueOf(positions.get(i).getLongitude())));
                                 rowStore.update(new PositionRow(4, "Широта", String.valueOf(positions.get(i).getLatitude())));
-                                stateView.getRowStore().update(new PositionRow(5, "Скорость",
-                                        new BigDecimal(positions.get(i).getSpeed()).setScale(3, RoundingMode.UP).doubleValue() + " км/ч"));
+                                double speed = new BigDecimal(positions.get(i).getSpeed()).setScale(1, RoundingMode.UP).doubleValue();
+                                stateView.getRowStore().update(new PositionRow(5, "Скорость", speed + " км/ч"));
+                                if (speed > 50) {
+                                    Info.display("Overspeed!", "Allowed speed: 50 km/h. Current speed: " + speed + " km/h");
+                                }
                                 rowStore.update(new PositionRow(6, "Курс", positions.get(i).getCourse() + "°"));
                                 if (positions.get(i).getProtocol() != null && !positions.get(i).getProtocol().equals("")) {
                                     rowStore.update(new PositionRow(7, "Протокол", positions.get(i).getProtocol()));
@@ -187,7 +190,7 @@ public class StateController implements ContentController, StateView.StateHandle
         Widget w = event.getSelectedItem();
         TabItemConfig tab = tabPanel.getConfig(w);
         switch (tab.getText()) {
-            case "Objects" :
+            case "Objects":
                 stateView.getRowCM().setColumnHeader(0, new SafeHtml() {
                     private static final long serialVersionUID = 5328351854632677932L;
 
@@ -197,7 +200,7 @@ public class StateController implements ContentController, StateView.StateHandle
                     }
                 });
                 break;
-            case "Events" :
+            case "Events":
                 stateView.getRowCM().setColumnHeader(0, new SafeHtml() {
                     private static final long serialVersionUID = -6460540087293779203L;
 

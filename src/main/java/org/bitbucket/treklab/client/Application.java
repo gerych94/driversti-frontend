@@ -71,7 +71,7 @@ public class Application {
                     //stateController.fillGrid(selectedDevice);
                     mapController.setDeviceMarker(selectedDevice);
                     //mapController.focusedOnDevice(selectedDevice);
-                    scheduleRepeating(5000);
+                    scheduleRepeating(10000);
                 } else {
                     stateController.getStateView().getRowStore().clear();
                     scheduleRepeating(30000);
@@ -79,7 +79,7 @@ public class Application {
                 eventController.run();
             }
         };
-        timer.scheduleRepeating(1000);
+        timer.schedule(1000);
         //timer.schedule(50);
     }
 
