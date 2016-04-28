@@ -19,6 +19,7 @@ import org.bitbucket.treklab.client.state.DeviceFollowHandler;
 import org.bitbucket.treklab.client.state.DeviceVisibilityHandler;
 import org.bitbucket.treklab.client.util.LoggerHelper;
 import org.bitbucket.treklab.client.view.DeviceAddDialog;
+import org.bitbucket.treklab.client.view.DevicePropertiesDialog;
 import org.bitbucket.treklab.client.view.DeviceView;
 
 /**
@@ -155,9 +156,9 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
     }
 
     @Override
-    public void onUpdate(Device selectedItem) {
-        LoggerHelper.log(className, "'Edit' has been pressed");
-        new DeviceAddDialog(selectedItem, deviceStore).show();
+    public void onProperties(Device selectedItem) {
+        LoggerHelper.log(className, "'Properties' has been pressed");
+        new DevicePropertiesDialog(selectedItem, deviceStore).show();
     }
 
     /**

@@ -47,18 +47,19 @@ public class DeviceAddDialog {
     TextField uniqueIdField;
 
     public DeviceAddDialog(Device selectedDevice, ListStore<Device> deviceStore) {
-        this.device = selectedDevice;
+        this.device = selectedDevice;   // по сути это лишнее, как и устройство в конструкторе
+                                        // так как за редактирование устройства отвечает новый DevicePropertiesDialog
         this.deviceStore = deviceStore;
         this.deviceData = new DeviceData();
 
         ourUiBinder.createAndBindUi(this);
 
-        this.nameField.setText(device.getName());
-        this.uniqueIdField.setText(device.getUniqueId());
-
-        //window.getElement().getStyle().setBackgroundColor("#64AAFF");
-        //window.getHeader().setStyleName("myStyle");
-        //window.setStyleName("myStyle");
+        /**
+         * Эти действия уже не нужны, так как за редактирование устройства
+         * отвечает новый DevicePropertiesDialog
+         */
+        //this.nameField.setText(device.getName());
+        //this.uniqueIdField.setText(device.getUniqueId());
     }
 
     public void show() {
@@ -71,11 +72,34 @@ public class DeviceAddDialog {
 
     @UiHandler("saveButton")
     public void onSaveClicked(SelectEvent event) {
-        // TODO: 28.03.2016 реализовать метод в контроллере
+        // TODO: 28.03.2016 реализовать метод в контроллере (пересмотреть необходимость изменить параметры конструктора и создание временных устройств)
         Device tempDevice = (Device) Device.createObject();
         tempDevice.setName(nameField.getText());
         tempDevice.setUniqueId(uniqueIdField.getText());
-        // этот код выполняется, если мы обновляем существующий объект
+
+        try {
+            deviceData.addDevice(tempDevice, new BaseRequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    if (200 == response.getStatusCode()) {
+                        device = JsonUtils.safeEval(response.getText());
+                        deviceStore.add(device);
+                        hide();
+                        LoggerHelper.log(className, "New device has been added. Device name: " + device.getName());
+                    } else if (400 == response.getStatusCode()) {
+                        new AlertMessageBox("Ошибка добавления", "Такой ИМЕИ уже существует").show();
+                    } else {
+                        LoggerHelper.log(className, "Bad response from server. Status code: " + response.getStatusCode());
+                        new AlertMessageBox("Adding device error", "Status code = " + response.getStatusCode()).show();
+                    }
+                }
+            });
+        } catch (RequestException e) {
+            LoggerHelper.log(className, "Some error while connecting to the server", e);
+        }
+
+
+/*        // этот код выполняется, если мы обновляем существующий объект
         if (device.hasId()) {
             tempDevice.setId(device.getId());
             try {
@@ -120,7 +144,7 @@ public class DeviceAddDialog {
             } catch (RequestException e) {
                 LoggerHelper.log(className, "Some error while connecting to the server", e);
             }
-        }
+        }*/
     }
 
     @UiHandler("cancelButton")

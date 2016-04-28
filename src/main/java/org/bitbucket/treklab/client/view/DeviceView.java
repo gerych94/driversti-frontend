@@ -71,7 +71,7 @@ public class DeviceView {
     public interface DeviceHandler {
         void onAdd();
 
-        void onUpdate(Device selectedItem);
+        void onProperties(Device selectedItem);
 
         void onRefresh();
 
@@ -272,8 +272,8 @@ public class DeviceView {
         TextButtonCell button = new TextButtonCell();
         button.setIcon(resources.cogWheel());
         Menu menu = new Menu();
-        final MenuItem edit = new MenuItem("Редактировать");
-        edit.setId("Редактировать");
+        final MenuItem edit = new MenuItem("Свойства");
+        edit.setId("Свойства");
         menu.add(edit);
         final MenuItem history = new MenuItem("Показать историю");
         history.setId("Показать историю");
@@ -292,9 +292,9 @@ public class DeviceView {
             public void onSelection(SelectionEvent<Item> event) {
                 LoggerHelper.log(className, "Selected item id: " + event.getSelectedItem().getId());
                 switch (event.getSelectedItem().getId()) {
-                    case "Редактировать":
-                        LoggerHelper.log(className, "'Edit' has been choose in menu");
-                        deviceHandler.onUpdate(deviceGrid.getSelectionModel().getSelectedItem());
+                    case "Свойства":
+                        LoggerHelper.log(className, "'Properties' has been choose in menu");
+                        deviceHandler.onProperties(deviceGrid.getSelectionModel().getSelectedItem());
                         break;
                     case "Показать историю":
                         LoggerHelper.log(className, "'Show history' has been choose in menu");
