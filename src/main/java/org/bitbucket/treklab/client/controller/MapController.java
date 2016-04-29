@@ -130,6 +130,7 @@ public class MapController {
 
     public void drawRoad(final Device device, Date previousDate, Date currentDate) {
         try {
+            setDeviceMarker(device);
             // создаём запрос на сервер для получения последних объектов Position для всех девайсов
             positionData.getPositions(device, previousDate, currentDate, new BaseRequestCallback() {
                 @Override
@@ -151,15 +152,14 @@ public class MapController {
                                 previousPosition = currentPosition;
                             }
                         }
-                        //     new AlertMessageBox(" ", " dccd=" + positions.get(0)).show();
                         currentPosition = mapView.getMarkers().get(device.getId()).getLatLng();
                         if (!currentPosition.equals(previousPosition)) {
                             poly = new Polyline(new LatLng[]{previousPosition, currentPosition}, polylineOptions);
                             poly.addTo(mapView.getMap());
                             polylineArrayList.add(poly);
                             previousPosition = currentPosition;
-                            previousPositionMap.put(device.getId(), previousPosition);
                         }
+                        previousPositionMap.put(device.getId(), previousPosition);
                     } else {
                         new AlertMessageBox("Position Error", "Can't retrieve positions <br>"
                                 + "Status code: " + response.getStatusCode() + "<br>, deviceLastUpdate: " + device.getLastUpdate()).show();
@@ -295,7 +295,6 @@ public class MapController {
                                 public void run() {
                                     Date currentDate = new Date();
                                     if (previousDate[0] != null) {
-                                        setDeviceMarker(device);
                                         drawRoad(device, previousDate[0], currentDate);
                                     }
                                     previousDate[0] = currentDate;
@@ -320,7 +319,7 @@ public class MapController {
 
     private PolylineOptions getPolyLineOptions() {
         PolylineOptions polylineOptions = new PolylineOptions();
-        polylineOptions.setOpacity(1);
+        polylineOptions.setOpacity(0.3);
         polylineOptions.setWeight(4);
         return polylineOptions;
     }

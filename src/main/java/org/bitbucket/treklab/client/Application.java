@@ -69,7 +69,7 @@ public class Application {
                 if (isDeviceSelected) {
                     stateController.update(selectedDevice);
                     //stateController.fillGrid(selectedDevice);
-                    mapController.setDeviceMarker(selectedDevice);
+                    //mapController.setDeviceMarker(selectedDevice);
                     //mapController.focusedOnDevice(selectedDevice);
                     scheduleRepeating(10000);
                 } else {

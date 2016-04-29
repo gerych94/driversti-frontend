@@ -6,10 +6,22 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.Viewport;
 import org.bitbucket.treklab.client.map.LayerHelper;
+import org.bitbucket.treklab.client.map.MyLayerHandler;
 import org.discotools.gwt.leaflet.client.Options;
 import org.discotools.gwt.leaflet.client.controls.ControlOptions;
 import org.discotools.gwt.leaflet.client.controls.Position;
+import org.discotools.gwt.leaflet.client.controls.draw.Draw;
+import org.discotools.gwt.leaflet.client.controls.draw.DrawControlOptions;
 import org.discotools.gwt.leaflet.client.controls.layers.Layers;
+import org.discotools.gwt.leaflet.client.draw.edit.EditOptions;
+import org.discotools.gwt.leaflet.client.draw.events.DrawCreatedEvent;
+import org.discotools.gwt.leaflet.client.draw.events.DrawEditedEvent;
+import org.discotools.gwt.leaflet.client.draw.events.handler.DrawEvents;
+import org.discotools.gwt.leaflet.client.events.handler.EventHandler;
+import org.discotools.gwt.leaflet.client.events.handler.EventHandlerManager;
+import org.discotools.gwt.leaflet.client.layers.ILayer;
+import org.discotools.gwt.leaflet.client.layers.others.FeatureGroup;
+import org.discotools.gwt.leaflet.client.layers.others.LayerGroup;
 import org.discotools.gwt.leaflet.client.layers.raster.TileLayer;
 import org.discotools.gwt.leaflet.client.map.Map;
 import org.discotools.gwt.leaflet.client.map.MapOptions;
@@ -20,7 +32,7 @@ import org.discotools.gwt.leaflet.client.widget.MapWidget;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MapView{
+public class MapView {
 
     private Viewport viewport;
     private ContentPanel panel;
@@ -73,6 +85,7 @@ public class MapView{
         /** You must call ‘invalidateSize’ to force the map to redraw otherwise the map is kind of half-drawn.
          * http://www.netthreads.co.uk/2013/07/02/gwt-trafficmap-gwt-leaflet-map-example */
         map.invalidateSize(true);
+        addDrawControl(map);
         //метод для переключения между слоями карт
         switchLayers(map, tileLayers);
     }
@@ -101,6 +114,44 @@ public class MapView{
         Layers control = new Layers(bases, overlays, controlOptions);
         control.addTo(map);
     }
+
+    private void addDrawControl(Map map) {
+
+        final FeatureGroup drawnItems = new FeatureGroup();
+        map.addLayer(drawnItems);
+        DrawControlOptions drawControlOptions = new DrawControlOptions();
+        drawControlOptions.setPosition(Position.TOP_LEFT);
+        EditOptions editOptions = new EditOptions();
+        editOptions.setFeatureGroup(drawnItems);
+        drawControlOptions.setEditOptions(editOptions);
+        Draw draw = new Draw(drawControlOptions);
+
+        map.addControl(draw);
+        EventHandlerManager.addEventHandler(
+                map,
+                DrawEvents.draw_created,
+                new EventHandler<DrawCreatedEvent>() {
+                    @Override
+                    public void handle(
+                            DrawCreatedEvent event) {
+                        ILayer layer = event.getLayer();
+                        drawnItems.addLayer(layer);
+                    }
+                });
+        EventHandlerManager.addEventHandler(
+                map,
+                DrawEvents.draw_edited,
+                new EventHandler<DrawEditedEvent>() {
+                    @Override
+                    public void handle(
+                            DrawEditedEvent event) {
+                        LayerGroup layers = event.getLayers();
+                        MyLayerHandler myLayerHandler = new MyLayerHandler();
+                        layers.forEachLayer(myLayerHandler);
+                    }
+                });
+    }
+
 
     public Viewport getView() {
         return viewport;
