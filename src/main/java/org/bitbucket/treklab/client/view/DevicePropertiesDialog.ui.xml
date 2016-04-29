@@ -3,9 +3,11 @@
              xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'
              xmlns:grid='urn:import:com.sencha.gxt.widget.core.client.grid'
              xmlns:button='urn:import:com.sencha.gxt.widget.core.client.button'
-             xmlns:container='urn:import:com.sencha.gxt.widget.core.client.container'>
+             xmlns:container='urn:import:com.sencha.gxt.widget.core.client.container'
+             xmlns:form='urn:import:com.sencha.gxt.widget.core.client.form'>
 
-  <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="verticalLayoutData">
+  <ui:with field="verticalLayoutData"
+           type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
     <ui:attributes width="1" height="-1" />
   </ui:with>
   <ui:with field="contentData"
@@ -15,6 +17,10 @@
   <ui:with field="gridData"
            type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
     <ui:attributes width="1" height="1"/>
+  </ui:with>
+  <ui:with field="rowsData"
+           type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
+    <ui:attributes width="-1" height="-1"/>
   </ui:with>
 
   <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="mainTabConfig">
@@ -31,20 +37,120 @@
   </ui:with>
 
 
+  <ui:style>
+    .padding {
+      padding: 5px;
+    }
+    .padding-right {
+      padding-right: 5px;
+    }
+  </ui:style>
+
+
   <!-- Данные для заполнения таблицы с девайсами во вкладке "INFO" -->
   <ui:with type="com.sencha.gxt.data.shared.ListStore" field="infoRowStore"/>
   <ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="infoRowCM"/>
   <ui:with type="com.sencha.gxt.widget.core.client.grid.GroupingView" field="infoRowView"/>
 
 
-
-  <gxt:Window ui:field="window" pixelSize="400, 400" modal="true" headingText="Device Properties"
-              focusWidget="{saveButton}" resizable="false">
+  <gxt:Window ui:field="window" pixelSize="400, 550" modal="true" headingText="Device Properties"
+              focusWidget="{saveButton}" resizable="false" closable="false">
     <gxt:TabPanel ui:field="tabPanel" layoutData="{contentData}" width="1">
       <!-- Tab "Main" -->
       <gxt:child config="{mainTabConfig}">
-        <container:VerticalLayoutContainer>
-          <g:Label text="Main"/>
+        <container:VerticalLayoutContainer layoutData="{verticalLayoutData}">
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="Название" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <form:TextField ui:field="name" name="name" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="IMEI" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <form:TextField ui:field="imei" name="imei" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="Модель транспортного средства" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <form:TextField ui:field="vehicleModel" name="vehicleModel" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="VIN" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <form:TextField ui:field="vin" name="vin" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="Номерной знак" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <form:TextField ui:field="numberplate" name="numberplate" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="Группа" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <form:ComboBox ui:field="demoGroupCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="Водитель" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <form:ComboBox ui:field="demoDriverCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="Trailer" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <form:ComboBox ui:field="demoTrailerCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="GPS устройство" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <form:ComboBox ui:field="demoGPSCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="№ SIM-карты" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <form:TextField ui:field="numberSIM" name="numberSIM" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="Одометр (км)" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <g:HorizontalPanel>
+                  <form:ComboBox ui:field="demoOdometerCombo" allowBlank="true" forceSelection="true" triggerAction="ALL"
+                                  addStyleNames="{style.padding-right}" width="80" />
+                  <form:TextField ui:field="odometer" name="odometer" width="90" />
+                </g:HorizontalPanel>
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="Моточасы (h)" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <g:HorizontalPanel>
+                  <form:ComboBox ui:field="demoMotoCombo" allowBlank="true" forceSelection="true" triggerAction="ALL"
+                                  addStyleNames="{style.padding-right}" width="80"/>
+                  <form:TextField ui:field="motohours" name="motohours" width="90" />
+                </g:HorizontalPanel>
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
         </container:VerticalLayoutContainer>
       </gxt:child>
 

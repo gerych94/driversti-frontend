@@ -16,6 +16,7 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.form.ComboBox;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
@@ -27,6 +28,7 @@ import org.bitbucket.treklab.client.model.Device;
 import org.bitbucket.treklab.client.model.InfoRow;
 import org.bitbucket.treklab.client.model.InfoRowProperties;
 import org.bitbucket.treklab.client.model.Position;
+import org.bitbucket.treklab.client.model.demo.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -47,6 +49,36 @@ public class DevicePropertiesDialog extends Composite {
         return window;
     }
 
+    private DemoGroupProperties demoGroupProperties = GWT.create(DemoGroupProperties.class);
+    ListStore<DemoGroup> demoGroupStore = new ListStore<>(demoGroupProperties.key());
+    @UiField(provided = true)
+    ComboBox<DemoGroup> demoGroupCombo;
+
+    private DemoDriverProperties demoDriverProperties = GWT.create(DemoDriverProperties.class);
+    ListStore<DemoDriver> demoDriverStore = new ListStore<>(demoDriverProperties.key());
+    @UiField(provided = true)
+    ComboBox<DemoDriver> demoDriverCombo;
+
+    private DemoTrailerProperties demoTrailerProperties = GWT.create(DemoTrailerProperties.class);
+    ListStore<DemoTrailer> demoTrailerStore = new ListStore<>(demoTrailerProperties.key());
+    @UiField(provided = true)
+    ComboBox<DemoTrailer> demoTrailerCombo;
+
+    private DemoGPSProperties demoGPSProperties = GWT.create(DemoGPSProperties.class);
+    ListStore<DemoGPS> demoGPSStore = new ListStore<>(demoGPSProperties.key());
+    @UiField(provided = true)
+    ComboBox<DemoGPS> demoGPSCombo;
+
+    private DemoOdometerProperties demoOdometerProperties = GWT.create(DemoOdometerProperties.class);
+    ListStore<DemoOdometer> demoOdometerStore = new ListStore<>(demoOdometerProperties.key());
+    @UiField(provided = true)
+    ComboBox<DemoOdometer> demoOdometerCombo;
+
+    private DemoMotoProperties demoMotoProperties = GWT.create(DemoMotoProperties.class);
+    ListStore<DemoMoto> demoMotoStore = new ListStore<>(demoMotoProperties.key());
+    @UiField(provided = true)
+    ComboBox<DemoMoto> demoMotoCombo;
+
 
     @UiField
     Grid<InfoRow> infoRowGrid;
@@ -61,6 +93,39 @@ public class DevicePropertiesDialog extends Composite {
     private static final InfoRowProperties prop = GWT.create(InfoRowProperties.class);
 
     public DevicePropertiesDialog(Device selectedItem, ListStore<Device> deviceStore) {
+
+        this.demoGroupStore = new ListStore<>(demoGroupProperties.key());
+        this.demoGroupStore.add(new DemoGroup("Group 1"));
+        this.demoGroupStore.add(new DemoGroup("Group 2"));
+        this.demoGroupStore.add(new DemoGroup("Group 3"));
+        this.demoGroupCombo = new ComboBox<>(demoGroupStore, demoGroupProperties.nameLabel());
+
+        this.demoDriverStore = new ListStore<>(demoDriverProperties.key());
+        this.demoDriverStore.add(new DemoDriver("Вася"));
+        this.demoDriverStore.add(new DemoDriver("Петя"));
+        this.demoDriverStore.add(new DemoDriver("Ваня"));
+        this.demoDriverCombo = new ComboBox<>(demoDriverStore, demoDriverProperties.nameLabel());
+
+        this.demoTrailerStore = new ListStore<>(demoTrailerProperties.key());
+        this.demoTrailerStore.add(new DemoTrailer("Trailer 1"));
+        this.demoTrailerStore.add(new DemoTrailer("Trailer 2"));
+        this.demoTrailerStore.add(new DemoTrailer("Trailer 3"));
+        this.demoTrailerCombo = new ComboBox<>(demoTrailerStore, demoTrailerProperties.nameLabel());
+
+        this.demoGPSStore = new ListStore<>(demoGPSProperties.key());
+        this.demoGPSStore.add(new DemoGPS("GPS устройство 1"));
+        this.demoGPSStore.add(new DemoGPS("GPS устройство 2"));
+        this.demoGPSStore.add(new DemoGPS("GPS устройство 3"));
+        this.demoGPSCombo = new ComboBox<>(demoGPSStore, demoGPSProperties.nameLabel());
+
+        this.demoOdometerStore = new ListStore<>(demoOdometerProperties.key());
+        this.demoOdometerStore.add(new DemoOdometer("GPS"));
+        this.demoOdometerCombo = new ComboBox<>(demoOdometerStore, demoOdometerProperties.nameLabel());
+
+        this.demoMotoStore = new ListStore<>(demoMotoProperties.key());
+        this.demoMotoStore.add(new DemoMoto("ACC"));
+        this.demoMotoCombo = new ComboBox<>(demoMotoStore, demoMotoProperties.nameLabel());
+
         this.infoRowStore = new ListStore<>(prop.key());
 
         ColumnConfig<InfoRow, String> colName = new ColumnConfig<>(prop.name(), 150, "Параметр");
