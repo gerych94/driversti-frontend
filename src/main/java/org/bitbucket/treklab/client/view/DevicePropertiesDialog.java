@@ -13,6 +13,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.data.shared.event.StoreAddEvent;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -120,69 +121,135 @@ public class DevicePropertiesDialog extends Composite {
     public DevicePropertiesDialog(Device selectedItem, ListStore<Device> deviceStore) {
 
         // заполняем все комбобоксы данными
-        this.demoGroupStore = new ListStore<>(demoGroupProperties.key());
-        this.demoGroupStore.add(new DemoGroup("Group 1"));
-        this.demoGroupStore.add(new DemoGroup("Group 2"));
-        this.demoGroupStore.add(new DemoGroup("Group 3"));
-        this.demoGroupCombo = new ComboBox<>(demoGroupStore, demoGroupProperties.nameLabel());
+        demoGroupStore = new ListStore<>(demoGroupProperties.key());
+        demoGroupCombo = new ComboBox<>(demoGroupStore, demoGroupProperties.nameLabel());
+        demoGroupStore.addStoreAddHandler(new StoreAddEvent.StoreAddHandler<DemoGroup>() {
+            @Override
+            public void onAdd(StoreAddEvent<DemoGroup> event) {
+                demoGroupCombo.setValue(demoGroupStore.get(0));
+            }
+        });
+        demoGroupStore.add(new DemoGroup("Group 1"));
+        demoGroupStore.add(new DemoGroup("Group 2"));
+        demoGroupStore.add(new DemoGroup("Group 3"));
 
-        this.demoDriverStore = new ListStore<>(demoDriverProperties.key());
-        this.demoDriverStore.add(new DemoDriver("Вася"));
-        this.demoDriverStore.add(new DemoDriver("Петя"));
-        this.demoDriverStore.add(new DemoDriver("Ваня"));
-        this.demoDriverCombo = new ComboBox<>(demoDriverStore, demoDriverProperties.nameLabel());
+        demoDriverStore = new ListStore<>(demoDriverProperties.key());
+        demoDriverCombo = new ComboBox<>(demoDriverStore, demoDriverProperties.nameLabel());
+        demoDriverStore.addStoreAddHandler(new StoreAddEvent.StoreAddHandler<DemoDriver>() {
+            @Override
+            public void onAdd(StoreAddEvent<DemoDriver> event) {
+                demoDriverCombo.setValue(demoDriverStore.get(0));
+            }
+        });
+        demoDriverStore.add(new DemoDriver("Вася Васевич"));
+        demoDriverStore.add(new DemoDriver("Петя Петевич"));
+        demoDriverStore.add(new DemoDriver("Ваня Ваневич"));
 
-        this.demoTrailerStore = new ListStore<>(demoTrailerProperties.key());
-        this.demoTrailerStore.add(new DemoTrailer("Trailer 1"));
-        this.demoTrailerStore.add(new DemoTrailer("Trailer 2"));
-        this.demoTrailerStore.add(new DemoTrailer("Trailer 3"));
-        this.demoTrailerCombo = new ComboBox<>(demoTrailerStore, demoTrailerProperties.nameLabel());
+        demoTrailerStore = new ListStore<>(demoTrailerProperties.key());
+        demoTrailerCombo = new ComboBox<>(demoTrailerStore, demoTrailerProperties.nameLabel());
+        demoTrailerStore.addStoreAddHandler(new StoreAddEvent.StoreAddHandler<DemoTrailer>() {
+            @Override
+            public void onAdd(StoreAddEvent<DemoTrailer> event) {
+                demoTrailerCombo.setValue(demoTrailerStore.get(0));
+            }
+        });
+        demoTrailerStore.add(new DemoTrailer("Trailer 1"));
+        demoTrailerStore.add(new DemoTrailer("Trailer 2"));
+        demoTrailerStore.add(new DemoTrailer("Trailer 3"));
 
-        this.demoGPSStore = new ListStore<>(demoGPSProperties.key());
-        this.demoGPSStore.add(new DemoGPS("GPS устройство 1"));
-        this.demoGPSStore.add(new DemoGPS("GPS устройство 2"));
-        this.demoGPSStore.add(new DemoGPS("GPS устройство 3"));
-        this.demoGPSCombo = new ComboBox<>(demoGPSStore, demoGPSProperties.nameLabel());
+        demoGPSStore = new ListStore<>(demoGPSProperties.key());
+        demoGPSCombo = new ComboBox<>(demoGPSStore, demoGPSProperties.nameLabel());
+        demoGPSStore.addStoreAddHandler(new StoreAddEvent.StoreAddHandler<DemoGPS>() {
+            @Override
+            public void onAdd(StoreAddEvent<DemoGPS> event) {
+                demoGPSCombo.setValue(demoGPSStore.get(0));
+            }
+        });
+        demoGPSStore.add(new DemoGPS("GPS устройство 1"));
+        demoGPSStore.add(new DemoGPS("GPS устройство 2"));
+        demoGPSStore.add(new DemoGPS("GPS устройство 3"));
 
-        this.demoOdometerStore = new ListStore<>(demoOdometerProperties.key());
-        this.demoOdometerStore.add(new DemoOdometer("GPS"));
-        this.demoOdometerCombo = new ComboBox<>(demoOdometerStore, demoOdometerProperties.nameLabel());
+        demoOdometerStore = new ListStore<>(demoOdometerProperties.key());
+        demoOdometerCombo = new ComboBox<>(demoOdometerStore, demoOdometerProperties.nameLabel());
+        demoOdometerStore.addStoreAddHandler(new StoreAddEvent.StoreAddHandler<DemoOdometer>() {
+            @Override
+            public void onAdd(StoreAddEvent<DemoOdometer> event) {
+                demoOdometerCombo.setValue(demoOdometerStore.get(0));
+            }
+        });
+        demoOdometerStore.add(new DemoOdometer("GPS"));
 
-        this.demoMotoStore = new ListStore<>(demoMotoProperties.key());
-        this.demoMotoStore.add(new DemoMoto("ACC"));
-        this.demoMotoCombo = new ComboBox<>(demoMotoStore, demoMotoProperties.nameLabel());
+        demoMotoStore = new ListStore<>(demoMotoProperties.key());
+        demoMotoCombo = new ComboBox<>(demoMotoStore, demoMotoProperties.nameLabel());
+        demoMotoStore.addStoreAddHandler(new StoreAddEvent.StoreAddHandler<DemoMoto>() {
+            @Override
+            public void onAdd(StoreAddEvent<DemoMoto> event) {
+                demoMotoCombo.setValue(demoMotoStore.get(0));
+            }
+        });
+        demoMotoStore.add(new DemoMoto("ACC"));
 
 
-        this.demoMapIconStore = new ListStore<>(demoMapIconProperties.key());
-        this.demoMapIconStore.add(new DemoMapIcon("Стрелка 1"));
-        this.demoMapIconStore.add(new DemoMapIcon("Стрелка 2"));
-        this.demoMapIconStore.add(new DemoMapIcon("Стрелка 3"));
-        this.demoMapIconCombo = new ComboBox<>(demoMapIconStore, demoMapIconProperties.nameLabel());
+        demoMapIconStore = new ListStore<>(demoMapIconProperties.key());
+        demoMapIconCombo = new ComboBox<>(demoMapIconStore, demoMapIconProperties.nameLabel());
+        demoMapIconStore.addStoreAddHandler(new StoreAddEvent.StoreAddHandler<DemoMapIcon>() {
+            @Override
+            public void onAdd(StoreAddEvent<DemoMapIcon> event) {
+                demoMapIconCombo.setValue(demoMapIconStore.get(0));
+            }
+        });
+        demoMapIconStore.add(new DemoMapIcon("Стрелка 1"));
+        demoMapIconStore.add(new DemoMapIcon("Стрелка 2"));
+        demoMapIconStore.add(new DemoMapIcon("Стрелка 3"));
 
-        this.demoStoppedArrowStore = new ListStore<>(demoStoppedArrowProperties.key());
-        this.demoStoppedArrowStore.add(new DemoStoppedArrow("Красный"));
-        this.demoStoppedArrowStore.add(new DemoStoppedArrow("Зеленый"));
-        this.demoStoppedArrowStore.add(new DemoStoppedArrow("Синий"));
-        this.demoStoppedArrowCombo = new ComboBox<>(demoStoppedArrowStore, demoStoppedArrowProperties.nameLabel());
+        demoStoppedArrowStore = new ListStore<>(demoStoppedArrowProperties.key());
+        demoStoppedArrowCombo = new ComboBox<>(demoStoppedArrowStore, demoStoppedArrowProperties.nameLabel());
+        demoStoppedArrowStore.addStoreAddHandler(new StoreAddEvent.StoreAddHandler<DemoStoppedArrow>() {
+            @Override
+            public void onAdd(StoreAddEvent<DemoStoppedArrow> event) {
+                demoStoppedArrowCombo.setValue(demoStoppedArrowStore.get(0));
+            }
+        });
+        demoStoppedArrowStore.add(new DemoStoppedArrow("Красный"));
+        demoStoppedArrowStore.add(new DemoStoppedArrow("Зеленый"));
+        demoStoppedArrowStore.add(new DemoStoppedArrow("Синий"));
 
-        this.demoMovingArrowStore = new ListStore<>(demoMovingArrowProperties.key());
-        this.demoMovingArrowStore.add(new DemoMovingArrow("Красный"));
-        this.demoMovingArrowStore.add(new DemoMovingArrow("Зеленый"));
-        this.demoMovingArrowStore.add(new DemoMovingArrow("Синий"));
-        this.demoMovingArrowCombo = new ComboBox<>(demoMovingArrowStore, demoMovingArrowProperties.nameLabel());
+        demoMovingArrowStore = new ListStore<>(demoMovingArrowProperties.key());
+        demoMovingArrowCombo = new ComboBox<>(demoMovingArrowStore, demoMovingArrowProperties.nameLabel());
+        demoMovingArrowStore.addStoreAddHandler(new StoreAddEvent.StoreAddHandler<DemoMovingArrow>() {
+            @Override
+            public void onAdd(StoreAddEvent<DemoMovingArrow> event) {
+                demoMovingArrowCombo.setValue(demoMovingArrowStore.get(0));
+            }
+        });
+        demoMovingArrowStore.add(new DemoMovingArrow("Красный"));
+        demoMovingArrowStore.add(new DemoMovingArrow("Зеленый"));
+        demoMovingArrowStore.add(new DemoMovingArrow("Синий"));
 
-        this.demoEngineArrowStore = new ListStore<>(demoEngineArrowProperties.key());
-        this.demoEngineArrowStore.add(new DemoEngineArrow("Off"));
-        this.demoEngineArrowStore.add(new DemoEngineArrow("On"));
-        this.demoEngineArrowCombo = new ComboBox<>(demoEngineArrowStore, demoEngineArrowProperties.nameLabel());
+        demoEngineArrowStore = new ListStore<>(demoEngineArrowProperties.key());
+        demoEngineArrowCombo = new ComboBox<>(demoEngineArrowStore, demoEngineArrowProperties.nameLabel());
+        demoEngineArrowStore.addStoreAddHandler(new StoreAddEvent.StoreAddHandler<DemoEngineArrow>() {
+            @Override
+            public void onAdd(StoreAddEvent<DemoEngineArrow> event) {
+                demoEngineArrowCombo.setValue(demoEngineArrowStore.get(0));
+            }
+        });
+        demoEngineArrowStore.add(new DemoEngineArrow("Off"));
+        demoEngineArrowStore.add(new DemoEngineArrow("On"));
 
-        this.demoSOSArrowStore = new ListStore<>(demoSOSArrowProperties.key());
-        this.demoSOSArrowStore.add(new DemoSOSArrow("Off"));
-        this.demoSOSArrowStore.add(new DemoSOSArrow("On"));
-        this.demoSOSArrowCombo = new ComboBox<>(demoSOSArrowStore, demoSOSArrowProperties.nameLabel());
+        demoSOSArrowStore = new ListStore<>(demoSOSArrowProperties.key());
+        demoSOSArrowCombo = new ComboBox<>(demoSOSArrowStore, demoSOSArrowProperties.nameLabel());
+        demoSOSArrowStore.addStoreAddHandler(new StoreAddEvent.StoreAddHandler<DemoSOSArrow>() {
+            @Override
+            public void onAdd(StoreAddEvent<DemoSOSArrow> event) {
+                demoSOSArrowCombo.setValue(demoSOSArrowStore.get(0));
+            }
+        });
+        demoSOSArrowStore.add(new DemoSOSArrow("Off"));
+        demoSOSArrowStore.add(new DemoSOSArrow("On"));
 
         // заполняем вкладку "ИНФО"
-        this.infoRowStore = new ListStore<>(prop.key());
+        infoRowStore = new ListStore<>(prop.key());
 
         ColumnConfig<InfoRow, String> colName = new ColumnConfig<>(prop.name(), 150, "Параметр");
         colName.setResizable(true);
@@ -193,13 +260,13 @@ public class DevicePropertiesDialog extends Composite {
         configList.add(colName);
         configList.add(colValue);
 
-        this.infoRowCM = new ColumnModel<>(configList);
+        infoRowCM = new ColumnModel<>(configList);
         fillGrid(selectedItem);
 
         uiBinder.createAndBindUi(this);
 
-        this.infoRowView.setAutoExpandColumn(colValue);
-        this.infoRowView.setStripeRows(true);
+        infoRowView.setAutoExpandColumn(colValue);
+        infoRowView.setStripeRows(true);
     }
 
     /**
