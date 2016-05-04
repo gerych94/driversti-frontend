@@ -49,6 +49,7 @@ public class DevicePropertiesDialog extends Composite {
         return window;
     }
 
+    // поочерёдно создаём списки для хранения данных комбобоксов
     private DemoGroupProperties demoGroupProperties = GWT.create(DemoGroupProperties.class);
     ListStore<DemoGroup> demoGroupStore = new ListStore<>(demoGroupProperties.key());
     @UiField(provided = true)
@@ -79,7 +80,6 @@ public class DevicePropertiesDialog extends Composite {
     @UiField(provided = true)
     ComboBox<DemoMoto> demoMotoCombo;
 
-
     private DemoMapIconProperties demoMapIconProperties = GWT.create(DemoMapIconProperties.class);
     ListStore<DemoMapIcon> demoMapIconStore = new ListStore<>(demoMapIconProperties.key());
     @UiField(provided = true)
@@ -105,14 +105,13 @@ public class DevicePropertiesDialog extends Composite {
     @UiField(provided = true)
     ComboBox<DemoSOSArrow> demoSOSArrowCombo;
 
-
+    // таблица и список для заполнения вкладки "ИНФО"
     @UiField
     Grid<InfoRow> infoRowGrid;
     @UiField(provided = true)
     ListStore<InfoRow> infoRowStore;
     @UiField(provided = true)
     ColumnModel<InfoRow> infoRowCM;
-
     @UiField
     GroupingView<InfoRow> infoRowView;
 
@@ -120,6 +119,7 @@ public class DevicePropertiesDialog extends Composite {
 
     public DevicePropertiesDialog(Device selectedItem, ListStore<Device> deviceStore) {
 
+        // заполняем все комбобоксы данными
         this.demoGroupStore = new ListStore<>(demoGroupProperties.key());
         this.demoGroupStore.add(new DemoGroup("Group 1"));
         this.demoGroupStore.add(new DemoGroup("Group 2"));
@@ -181,7 +181,7 @@ public class DevicePropertiesDialog extends Composite {
         this.demoSOSArrowStore.add(new DemoSOSArrow("On"));
         this.demoSOSArrowCombo = new ComboBox<>(demoSOSArrowStore, demoSOSArrowProperties.nameLabel());
 
-
+        // заполняем вкладку "ИНФО"
         this.infoRowStore = new ListStore<>(prop.key());
 
         ColumnConfig<InfoRow, String> colName = new ColumnConfig<>(prop.name(), 150, "Параметр");
@@ -202,6 +202,10 @@ public class DevicePropertiesDialog extends Composite {
         this.infoRowView.setStripeRows(true);
     }
 
+    /**
+     * Метод для заполнения вкладки "ИНФО" данными
+     * @param device - передаём устройство, данные которого заполняют таблицу
+     */
     private void fillGrid(final Device device) {
         try {
             new PositionData().getPositions(new BaseRequestCallback() {
@@ -272,11 +276,19 @@ public class DevicePropertiesDialog extends Composite {
         window.hide();
     }
 
+    /**
+     * Обработчик нажатия на кнопку "СОХРАНИТЬ"
+     * @param event - в данном случае не используем
+     */
     @UiHandler("saveButton")
     public void onSaveClicked(SelectEvent event) {
         hide();
     }
 
+    /**
+     * Обработчик нажатия на кнопку "ОТМЕНА"
+     * @param event - в данном случае не используем
+     */
     @UiHandler("cancelButton")
     public void onCancelClicked(SelectEvent event) {
         hide();
