@@ -6,6 +6,9 @@ import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.PropertyAccess;
 
+/**
+ * Этот интерфейс используется для доступа к полям класса DemoMoto.java
+ */
 public interface DemoMotoProperties extends PropertyAccess<DemoMoto> {
     @Editor.Path("id")
     ModelKeyProvider<DemoMoto> key();

@@ -1,5 +1,8 @@
 package org.bitbucket.treklab.client.model.demo;
 
+/**
+ * Этот класс используется для создания объектов "МОТОЧАСЫ"
+ */
 public class DemoMoto {
     private static int COUNTER = 0;
 

@@ -1,5 +1,8 @@
 package org.bitbucket.treklab.client.model.demo;
 
+/**
+ * Этот класс используется для создания объектов "ВОДИТЕЛЬ"
+ */
 public class DemoDriver {
     private static int COUNTER = 0;
 

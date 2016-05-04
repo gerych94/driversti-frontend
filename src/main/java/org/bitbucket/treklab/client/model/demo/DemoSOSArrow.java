@@ -1,5 +1,8 @@
 package org.bitbucket.treklab.client.model.demo;
 
+/**
+ * Этот класс используется для создания объектов "SOSArrow"
+ */
 public class DemoSOSArrow {
     private static int COUNTER = 0;
 

@@ -1,5 +1,9 @@
 package org.bitbucket.treklab.client.model.demo;
 
+/**
+ * Этот класс используется для создания объектов "Стрелка при остановке автомобиля" - что-то типа такого
+ * Необходимо, чтобы Толя разжевал что это и как должно работать
+ */
 public class DemoStoppedArrow {
     private static int COUNTER = 0;
 

@@ -1,5 +1,8 @@
 package org.bitbucket.treklab.client.model.demo;
 
+/**
+ * Этот класс используется для создания объектов "Одометр" - то есть по чему мы будем выщитывать пройденное расстояние
+ */
 public class DemoOdometer {
     private static int COUNTER = 0;
 

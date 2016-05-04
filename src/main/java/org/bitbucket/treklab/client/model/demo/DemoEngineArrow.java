@@ -1,5 +1,8 @@
 package org.bitbucket.treklab.client.model.demo;
 
+/**
+ * Этот класс используется для создания объектов "Стрелка при выключенном двигателе" =)
+ */
 public class DemoEngineArrow {
     private static int COUNTER = 0;
 

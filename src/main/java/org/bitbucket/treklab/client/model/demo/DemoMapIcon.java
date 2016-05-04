@@ -1,5 +1,8 @@
 package org.bitbucket.treklab.client.model.demo;
 
+/**
+ * Этот класс используется для создания объектов "Иконка на карте"
+ */
 public class DemoMapIcon {
     private static int COUNTER = 0;
 

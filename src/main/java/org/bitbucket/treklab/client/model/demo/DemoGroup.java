@@ -1,5 +1,8 @@
 package org.bitbucket.treklab.client.model.demo;
 
+/**
+ * Этот класс используется для создания объектов "Группа"
+ */
 public class DemoGroup {
 
     private static int COUNTER = 0;

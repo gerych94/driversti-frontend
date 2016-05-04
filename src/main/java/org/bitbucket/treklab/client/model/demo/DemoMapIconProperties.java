@@ -6,6 +6,9 @@ import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.PropertyAccess;
 
+/**
+ * Этот интерфейс используется для доступа к полям класса DemoMapIcon.java
+ */
 public interface DemoMapIconProperties extends PropertyAccess<DemoMapIcon> {
 
     @Editor.Path("id")

@@ -6,6 +6,9 @@ import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.PropertyAccess;
 
+/**
+ * Этот интерфейс используется для доступа к полям класса DemoTrailer.java
+ */
 public interface DemoTrailerProperties extends PropertyAccess<DemoTrailer> {
 
     @Editor.Path("id")

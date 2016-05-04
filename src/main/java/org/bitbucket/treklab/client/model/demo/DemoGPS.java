@@ -1,5 +1,8 @@
 package org.bitbucket.treklab.client.model.demo;
 
+/**
+ * Этот класс используется для создания объектов "GPS"
+ */
 public class DemoGPS {
     private static int COUNTER = 0;
 

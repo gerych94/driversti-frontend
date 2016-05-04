@@ -6,6 +6,9 @@ import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.PropertyAccess;
 
+/**
+ * Этот интерфейс используется для доступа к полям класса DemoEngineArrow.java
+ */
 public interface DemoEngineArrowProperties extends PropertyAccess<DemoEngineArrow> {
 
     @Editor.Path("id")
