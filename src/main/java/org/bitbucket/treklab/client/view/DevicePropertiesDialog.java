@@ -80,6 +80,32 @@ public class DevicePropertiesDialog extends Composite {
     ComboBox<DemoMoto> demoMotoCombo;
 
 
+    private DemoMapIconProperties demoMapIconProperties = GWT.create(DemoMapIconProperties.class);
+    ListStore<DemoMapIcon> demoMapIconStore = new ListStore<>(demoMapIconProperties.key());
+    @UiField(provided = true)
+    ComboBox<DemoMapIcon> demoMapIconCombo;
+
+    private DemoStoppedArrowProperties demoStoppedArrowProperties = GWT.create(DemoStoppedArrowProperties.class);
+    ListStore<DemoStoppedArrow> demoStoppedArrowStore = new ListStore<>(demoStoppedArrowProperties.key());
+    @UiField(provided = true)
+    ComboBox<DemoStoppedArrow> demoStoppedArrowCombo;
+
+    private DemoMovingArrowProperties demoMovingArrowProperties = GWT.create(DemoMovingArrowProperties.class);
+    ListStore<DemoMovingArrow> demoMovingArrowStore = new ListStore<>(demoMovingArrowProperties.key());
+    @UiField(provided = true)
+    ComboBox<DemoMovingArrow> demoMovingArrowCombo;
+
+    private DemoEngineArrowProperties demoEngineArrowProperties = GWT.create(DemoEngineArrowProperties.class);
+    ListStore<DemoEngineArrow> demoEngineArrowStore = new ListStore<>(demoEngineArrowProperties.key());
+    @UiField(provided = true)
+    ComboBox<DemoEngineArrow> demoEngineArrowCombo;
+
+    private DemoSOSArrowProperties demoSOSArrowProperties = GWT.create(DemoSOSArrowProperties.class);
+    ListStore<DemoSOSArrow> demoSOSArrowStore = new ListStore<>(demoSOSArrowProperties.key());
+    @UiField(provided = true)
+    ComboBox<DemoSOSArrow> demoSOSArrowCombo;
+
+
     @UiField
     Grid<InfoRow> infoRowGrid;
     @UiField(provided = true)
@@ -125,6 +151,36 @@ public class DevicePropertiesDialog extends Composite {
         this.demoMotoStore = new ListStore<>(demoMotoProperties.key());
         this.demoMotoStore.add(new DemoMoto("ACC"));
         this.demoMotoCombo = new ComboBox<>(demoMotoStore, demoMotoProperties.nameLabel());
+
+
+        this.demoMapIconStore = new ListStore<>(demoMapIconProperties.key());
+        this.demoMapIconStore.add(new DemoMapIcon("Стрелка 1"));
+        this.demoMapIconStore.add(new DemoMapIcon("Стрелка 2"));
+        this.demoMapIconStore.add(new DemoMapIcon("Стрелка 3"));
+        this.demoMapIconCombo = new ComboBox<>(demoMapIconStore, demoMapIconProperties.nameLabel());
+
+        this.demoStoppedArrowStore = new ListStore<>(demoStoppedArrowProperties.key());
+        this.demoStoppedArrowStore.add(new DemoStoppedArrow("Красный"));
+        this.demoStoppedArrowStore.add(new DemoStoppedArrow("Зеленый"));
+        this.demoStoppedArrowStore.add(new DemoStoppedArrow("Синий"));
+        this.demoStoppedArrowCombo = new ComboBox<>(demoStoppedArrowStore, demoStoppedArrowProperties.nameLabel());
+
+        this.demoMovingArrowStore = new ListStore<>(demoMovingArrowProperties.key());
+        this.demoMovingArrowStore.add(new DemoMovingArrow("Красный"));
+        this.demoMovingArrowStore.add(new DemoMovingArrow("Зеленый"));
+        this.demoMovingArrowStore.add(new DemoMovingArrow("Синий"));
+        this.demoMovingArrowCombo = new ComboBox<>(demoMovingArrowStore, demoMovingArrowProperties.nameLabel());
+
+        this.demoEngineArrowStore = new ListStore<>(demoEngineArrowProperties.key());
+        this.demoEngineArrowStore.add(new DemoEngineArrow("Off"));
+        this.demoEngineArrowStore.add(new DemoEngineArrow("On"));
+        this.demoEngineArrowCombo = new ComboBox<>(demoEngineArrowStore, demoEngineArrowProperties.nameLabel());
+
+        this.demoSOSArrowStore = new ListStore<>(demoSOSArrowProperties.key());
+        this.demoSOSArrowStore.add(new DemoSOSArrow("Off"));
+        this.demoSOSArrowStore.add(new DemoSOSArrow("On"));
+        this.demoSOSArrowCombo = new ComboBox<>(demoSOSArrowStore, demoSOSArrowProperties.nameLabel());
+
 
         this.infoRowStore = new ListStore<>(prop.key());
 

@@ -4,6 +4,7 @@
              xmlns:grid='urn:import:com.sencha.gxt.widget.core.client.grid'
              xmlns:button='urn:import:com.sencha.gxt.widget.core.client.button'
              xmlns:container='urn:import:com.sencha.gxt.widget.core.client.container'
+             xmlns:menu='urn:import:com.sencha.gxt.widget.core.client.menu'
              xmlns:form='urn:import:com.sencha.gxt.widget.core.client.form'>
 
   <ui:with field="verticalLayoutData"
@@ -156,8 +157,68 @@
 
       <!-- Tab "Icon" -->
       <gxt:child config="{iconTabConfig}">
-        <container:VerticalLayoutContainer>
-          <g:Label text="Icon"/>
+        <container:VerticalLayoutContainer layoutData="{verticalLayoutData}">
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="Иконка на карте" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <form:ComboBox ui:field="demoMapIconCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="Stopped arrow color" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <form:ComboBox ui:field="demoStoppedArrowCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="Moving arrow color" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <form:ComboBox ui:field="demoMovingArrowCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="Engine idle arrow color" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <form:ComboBox ui:field="demoEngineArrowCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="SOS event arrow color" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <form:ComboBox ui:field="demoSOSArrowCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="Иконка" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <g:Label text="Choose icon" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="Tail color" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <gxt:ColorPalette  />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
+          <container:child layoutData="{verticalLayoutData}">
+            <form:FieldLabel text="Tail points quantity" labelWidth="195" addStyleNames="{style.padding}">
+              <form:widget>
+                <form:TextField ui:field="tailPointsQuantity" name="tailPointsQuantity" />
+              </form:widget>
+            </form:FieldLabel>
+          </container:child>
         </container:VerticalLayoutContainer>
       </gxt:child>
 
