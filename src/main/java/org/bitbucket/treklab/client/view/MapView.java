@@ -7,6 +7,7 @@ import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.Viewport;
 import org.bitbucket.treklab.client.map.LayerHelper;
 import org.bitbucket.treklab.client.map.MyLayerHandler;
+import org.bitbucket.treklab.client.util.LoggerHelper;
 import org.discotools.gwt.leaflet.client.Options;
 import org.discotools.gwt.leaflet.client.controls.ControlOptions;
 import org.discotools.gwt.leaflet.client.controls.Position;
@@ -42,6 +43,8 @@ public class MapView {
     private HashMap<Integer, Marker> markers = new HashMap<>();
     private Marker marker = new Marker(new LatLng(0.0, 0.0), new Options());
     private Map map;
+
+    private static final String className = MapView.class.getSimpleName();
 
     public MapView() {
         //создаем компонент для заполнения всего доступного пространства
@@ -136,6 +139,9 @@ public class MapView {
                             DrawCreatedEvent event) {
                         ILayer layer = event.getLayer();
                         drawnItems.addLayer(layer);
+                        LoggerHelper.log(className, "Before dialog");
+                        new GeofenceAddDialog().show();
+                        LoggerHelper.log(className, "After dialog");
                     }
                 });
         EventHandlerManager.addEventHandler(
