@@ -16,6 +16,7 @@ public interface DeviceProperties extends PropertyAccess<Device> {
     ValueProvider<Device, String> status();
     ValueProvider<Device, String> lastUpdate();
     ValueProvider<Device, Integer> positionId();
+    ValueProvider<Device, Double> maxSpeed();
     ValueProvider<Device, String> dateTime();
     ValueProvider<Device, ImageResource> statusImage();
     ValueProvider<Device, Device> device();

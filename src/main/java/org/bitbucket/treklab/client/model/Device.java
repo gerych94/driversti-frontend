@@ -20,6 +20,7 @@ public class Device extends JavaScriptObject{
     public final native String getStatus() /*-{ return this.status; }-*/;
     public final native String getLastUpdate() /*-{ return this.lastUpdate; }-*/;
     public final native int getPositionId() /*-{ return this.positionId; }-*/;
+    public final native double getMaxSpeed() /*-{ return this.maxSpeed; }-*/;
 
 
     public final native void setId(int id) /*-{ this.id = id; }-*/;
@@ -28,6 +29,7 @@ public class Device extends JavaScriptObject{
     public final native void setStatus(String status) /*-{ this.status = status; }-*/;
     public final native void setLastUpdate(String lastUpdate) /*-{  this.lastUpdate = lastUpdate; }-*/;
     public final native void setPositionId(int positionId) /*-{  this.positionId = positionId; }-*/;
+    public final native void setMaxSpeed(double maxSpeed) /*-{  this.maxSpeed = maxSpeed; }-*/;
 
     public final String getDateTime() {
         Date tmp = new Date(getLastUpdate());
