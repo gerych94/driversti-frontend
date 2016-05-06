@@ -12,6 +12,7 @@ import org.bitbucket.treklab.client.communication.BaseRequestCallback;
 import org.bitbucket.treklab.client.communication.PositionData;
 import org.bitbucket.treklab.client.model.Device;
 import org.bitbucket.treklab.client.model.Position;
+import org.bitbucket.treklab.client.util.DateHelper;
 import org.bitbucket.treklab.client.view.MapView;
 import org.discotools.gwt.leaflet.client.Options;
 import org.discotools.gwt.leaflet.client.layers.vector.Polyline;
@@ -293,7 +294,7 @@ public class MapController {
                             timer = new Timer() {
                                 @Override
                                 public void run() {
-                                    Date currentDate = new Date();
+                                    Date currentDate = DateHelper.getUTCDate();
                                     if (previousDate[0] != null) {
                                         drawRoad(device, previousDate[0], currentDate);
                                     }
