@@ -38,7 +38,7 @@ public class UserController extends ServerData {
                         onLogin(userSession);
 
                     } else {
-                        new AlertMessageBox("Ошибка авторизации: сессия пользователя не получена", response.getStatusCode() + "").show();
+                        new AlertMessageBox("Ошибка авторизации", "Сессия пользователя не получена. Код ошибки: " + response.getStatusCode() + "").show();
                         onLogin(null);
                     }
                 }
