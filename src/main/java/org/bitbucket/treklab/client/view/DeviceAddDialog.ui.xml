@@ -13,8 +13,9 @@
   Указываем имя окна, его размеры, устанавливаем его модальным,
   указываем им заголовка и фокусируемся на кнопке "Сохранить", когда окно получает фокус -->
   <gxt:Window ui:field="window" pixelSize="300, 150" modal="true" headingText="Add new device"
-              focusWidget="{saveButton}" resizable="false">
+              focusWidget="{saveButton}" resizable="false" closable="false">
     <container:VerticalLayoutContainer ui:field="container">
+
       <container:child layoutData="{verticalLayoutData}">
         <form:FieldLabel text="Name" labelWidth="100">
           <form:widget>
@@ -22,14 +23,24 @@
           </form:widget>
         </form:FieldLabel>
       </container:child>
+
       <container:child layoutData="{verticalLayoutData}">
-        <form:FieldLabel text="Unique Identifier" labelWidth="100">
+        <form:FieldLabel text="IMEI" labelWidth="100">
           <form:widget>
             <form:TextField ui:field="uniqueIdField" allowBlank="false" />
           </form:widget>
         </form:FieldLabel>
       </container:child>
+
+      <container:child layoutData="{verticalLayoutData}">
+        <form:FieldLabel text="Max speed" labelWidth="100">
+          <form:widget>
+            <form:TextField ui:field="maxSpeedField" allowBlank="false"/>
+          </form:widget>
+        </form:FieldLabel>
+      </container:child>
     </container:VerticalLayoutContainer>
+
     <gxt:button>
       <button:TextButton ui:field="saveButton" text="Save"/>
     </gxt:button>

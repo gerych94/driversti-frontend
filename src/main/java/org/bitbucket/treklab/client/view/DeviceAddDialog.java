@@ -45,6 +45,8 @@ public class DeviceAddDialog {
     TextField nameField;
     @UiField
     TextField uniqueIdField;
+    @UiField
+    TextField maxSpeedField;
 
     public DeviceAddDialog(Device selectedDevice, ListStore<Device> deviceStore) {
         this.device = selectedDevice;   // по сути это лишнее, как и устройство в конструкторе
@@ -53,6 +55,10 @@ public class DeviceAddDialog {
         this.deviceData = new DeviceData();
 
         ourUiBinder.createAndBindUi(this);
+        maxSpeedField.setEnabled(false);
+
+        /*Draggable draggable = new Draggable(window);
+        draggable.setUseProxy(false);*/
 
         /**
          * Эти действия уже не нужны, так как за редактирование устройства
@@ -73,6 +79,7 @@ public class DeviceAddDialog {
     @UiHandler("saveButton")
     public void onSaveClicked(SelectEvent event) {
         // TODO: 28.03.2016 реализовать метод в контроллере (пересмотреть необходимость изменить параметры конструктора и создание временных устройств)
+        // TODO: 10.05.2016 добавить валидацию данных на стороне клиента (требования?)
         Device tempDevice = (Device) Device.createObject();
         tempDevice.setName(nameField.getText());
         tempDevice.setUniqueId(uniqueIdField.getText());
@@ -87,7 +94,7 @@ public class DeviceAddDialog {
                         hide();
                         LoggerHelper.log(className, "New device has been added. Device name: " + device.getName());
                     } else if (400 == response.getStatusCode()) {
-                        new AlertMessageBox("Ошибка добавления", "Такой ИМЕИ уже существует").show();
+                        new AlertMessageBox("Ошибка добавления", "Такой ИМЕИ уже существует или другая ошибка").show();
                     } else {
                         LoggerHelper.log(className, "Bad response from server. Status code: " + response.getStatusCode());
                         new AlertMessageBox("Adding device error", "Status code = " + response.getStatusCode()).show();
