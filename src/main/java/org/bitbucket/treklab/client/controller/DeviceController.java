@@ -8,13 +8,13 @@ import com.google.gwt.http.client.Response;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
-import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.box.ConfirmMessageBox;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import org.bitbucket.treklab.client.communication.BaseRequestCallback;
 import org.bitbucket.treklab.client.communication.DeviceData;
 import org.bitbucket.treklab.client.model.Device;
 import org.bitbucket.treklab.client.model.Event;
+import org.bitbucket.treklab.client.model.Geofence;
 import org.bitbucket.treklab.client.state.DeviceFollowHandler;
 import org.bitbucket.treklab.client.state.DeviceVisibilityHandler;
 import org.bitbucket.treklab.client.util.LoggerHelper;
@@ -48,14 +48,16 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
     /**
      * Конструктор контроллера
      *
-     * @param globalDeviceStore - глобальный список устройств
-     *                          В конструкторе инициализируем объект для вызова методов АПИ
-     *                          и создаём графический интерфейс для отображения устройств
-     * @param globalEventStore  - глобальный список событий
-     * @param mapController     - контроллер карты
+     * @param globalDeviceStore   - глобальный список устройств
+     *                            В конструкторе инициализируем объект для вызова методов АПИ
+     *                            и создаём графический интерфейс для отображения устройств
+     * @param globalEventStore    - глобальный список событий
+     * @param globalGeofenceStore
+     * @param mapController       - контроллер карты
      */
     public DeviceController(ListStore<Device> globalDeviceStore,
                             ListStore<Event> globalEventStore,
+                            ListStore<Geofence> globalGeofenceStore,
                             MapController mapController,
                             StateController stateController,
                             DeviceVisibilityHandler deviceVisibilityHandler,
@@ -67,6 +69,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
         this.deviceView = new DeviceView(this,
                 globalDeviceStore,
                 globalEventStore,
+                globalGeofenceStore,
                 stateController,
                 deviceVisibilityHandler,
                 deviceFollowHandler);
@@ -196,9 +199,9 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
                                     LoggerHelper.log(className, "Error while deleting device. " +
                                             "Error code: " + response.getStatusCode() +
                                             ". Error status message: " + response.getStatusText());
-                                    new AlertMessageBox("Error", "Error while deleting device. " +
+                                    /*new AlertMessageBox("Error", "Error while deleting device. " +
                                             "Error code: " + response.getStatusCode() +
-                                            ". Error status message: " + response.getStatusText()).show();
+                                            ". Error status message: " + response.getStatusText()).show();*/
                                 }
                             }
                         });
@@ -254,18 +257,39 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
     public void deviceCheckBoxActionVisible(Device device) {
         //устанавливает - удаляет маркер для определенного устройства
         if (deviceView.getDeviceVisibilityHandler().isVisible(device)) {
-            mapController.setDeviceMarker(device);
+            mapController.drawDeviceMarker(device);
+            //  mapController.refocusedDevice(device,true);
+            //  mapController.startDraw(device);
         } else {
+            // mapController.refocusedDevice(device,false);
             mapController.removeDeviceMarker(device);
+
         }
     }
 
     //метод который реагирует на переключение чекбокса follow
     @Override
-    public void deviceCheckBoxActionFollow(Device device) {
+    public void deviceCheckBoxActionFollow(Device device,boolean flag,boolean historyFlag) {
         //работает только если включен чекбок visible
-        if (deviceView.getDeviceVisibilityHandler().isVisible(device)) {
-            mapController.refocusedDevice(device, deviceView.getDeviceFollowHandler().isFollow(device));
+        // if (deviceView.getDeviceVisibilityHandler().isVisible(device)) {
+        //  mapController.refocusedDevice(device,deviceView.getDeviceFollowHandler().isFollow(device));
+        // }
+        if(!flag){
+            if(deviceView.getDeviceFollowHandler().isFollow(device)){
+                // new AlertMessageBox("start draw "," start draw").show();
+                if(historyFlag){
+                    //    new AlertMessageBox("history","history flag").show();
+                    mapController.drawHistory(device);
+                }else {
+                    //  new AlertMessageBox("start draw ","start draw").show();
+                    mapController.startDraw(device);}
+            }else {
+                // new AlertMessageBox("delete","delete").show();
+                mapController.removeWay(device);
+            }
+        }else {
+            // new AlertMessageBox("set flag","set flag").show();
+            mapController.setFlag(device);
         }
     }
 

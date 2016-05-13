@@ -86,7 +86,7 @@ public class DeviceView {
         //метод который реагирует при смене чекбокса;
         void deviceCheckBoxActionVisible(Device device);
 
-        void deviceCheckBoxActionFollow(Device device);
+        void deviceCheckBoxActionFollow(Device device, boolean flag, boolean historyFlag);
     }
 
     @UiField
@@ -130,18 +130,34 @@ public class DeviceView {
     @UiField
     GroupingView<Event> eventView;
 
+
+    @UiField(provided = true)
+    StoreFilterField<Geofence> geofenceFilter;
+
+    @UiField
+    Grid<Geofence> geofenceGrid;
+    @UiField(provided = true)
+    ListStore<Geofence> geofenceStore;
+    @UiField(provided = true)
+    ColumnModel<Geofence> geofenceCM;
+    @UiField
+    GroupingView<Geofence> geofenceView;
+
     private final DeviceHandler deviceHandler;
     private final StateController stateController;
     private final DeviceVisibilityHandler deviceVisibilityHandler;
     private final DeviceFollowHandler deviceFollowHandler;
 
-    final ColumnConfig<Device, Boolean> colDeviceVisible;
-    final ColumnConfig<Device, Boolean> colDeviceFollow;
+    private final ColumnConfig<Device, Boolean> colDeviceVisible;
+    private final ColumnConfig<Device, Boolean> colDeviceFollow;
 
     private static final DeviceProperties deviceProp = GWT.create(DeviceProperties.class);
     private static final EventProperties eventProp = GWT.create(EventProperties.class);
-    Resources resources = GWT.create(Resources.class);
-    HeaderIconTemplate headerTemplate = GWT.create(HeaderIconTemplate.class);
+    private static final GeofenceProperties geoProp = GWT.create(GeofenceProperties.class);
+    private Resources resources = GWT.create(Resources.class);
+    private HeaderIconTemplate headerTemplate = GWT.create(HeaderIconTemplate.class);
+    private boolean flag;
+    private boolean historyFlag;
 
     // получаем имя класса для Логера
     private static final String className = DeviceView.class.getSimpleName();
@@ -149,6 +165,7 @@ public class DeviceView {
     public DeviceView(final DeviceHandler deviceHandler,
                       ListStore<Device> globalDeviceStore,
                       ListStore<Event> globalEventStore,
+                      ListStore<Geofence> globalGeofenceStore,
                       final StateController sController,
                       final DeviceVisibilityHandler deviceVisibilityHandler,
                       final DeviceFollowHandler deviceFollowHandler) {
@@ -161,6 +178,9 @@ public class DeviceView {
 
         this.eventStore = globalEventStore;
         this.eventStore.setAutoCommit(true);
+
+        this.geofenceStore = globalGeofenceStore;
+        this.geofenceStore.setAutoCommit(true);
 
         tabPanel = new TabPanel();
 
@@ -195,12 +215,15 @@ public class DeviceView {
             public void setValue(Device device, Boolean value) {
                 deviceVisibilityHandler.setVisible(device, value);
                 //если чекбокс visible отключаем то отключаем и follow
-                if (!value) {
+                if (!value&&deviceFollowHandler.isFollow(device)) {
+                    flag=true;
                     colDeviceFollow.getValueProvider().setValue(device, value);
+                    historyFlag=true;
+                    //  deviceFollowHandler.setFollow(device,value);
+                    // deviceHandler.deviceCheckBoxActionFollow(device);
                 }
                 //метод который реагирует при смене чекбокса
                 deviceHandler.deviceCheckBoxActionVisible(device);
-
             }
 
             @Override
@@ -226,11 +249,18 @@ public class DeviceView {
             public void setValue(Device device, Boolean value) {
                 deviceFollowHandler.setFollow(device, value);
                 //если чекбокс follow true тогда включаем и чекбокс visible
-                if (value) {
+                if (value&&!deviceVisibilityHandler.isVisible(device)) {
                     colDeviceVisible.getValueProvider().setValue(device, value);
+                    deviceHandler.deviceCheckBoxActionVisible(device);
+                }
+                if(historyFlag){
+                    flag=false;
+                }
+                if(!value){
+                    historyFlag=false;
                 }
                 //метод который реагирует при смене чекбокса
-                deviceHandler.deviceCheckBoxActionFollow(device);
+                deviceHandler.deviceCheckBoxActionFollow(device,flag,historyFlag);
             }
 
             @Override
@@ -352,12 +382,76 @@ public class DeviceView {
 
         this.eventCM = new ColumnModel<>(eventList);
 
+        Geofence geofence = (Geofence) Geofence.createObject();
+        geofence.setName("TEST");
+        geofenceStore.add(geofence);
+
+        geofenceFilter = new StoreFilterField<Geofence>() {
+            @Override
+            protected boolean doSelect(Store<Geofence> store, Geofence parent, Geofence item, String filter) {
+                return filter.trim().isEmpty() ||
+                        item.getName().toLowerCase().contains(filter.toLowerCase());
+            }
+        };
+        geofenceFilter.bind(this.geofenceStore);
+
+        ColumnConfig<Geofence, Boolean> colGeofenceVisible = new ColumnConfig<>(new ValueProvider<Geofence, Boolean>() {
+
+            @Override
+            public Boolean getValue(Geofence geofence) {
+                return null;
+            }
+
+            @Override
+            public void setValue(Geofence geofence, Boolean aBoolean) {
+
+            }
+
+            @Override
+            public String getPath() {
+                return "Visible";
+            }
+        }, 40, headerTemplate.render(AbstractImagePrototype.create(resources.eye()).getSafeHtml()));
+        colGeofenceVisible.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        colGeofenceVisible.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        ColumnConfig<Geofence, String> colGeofenceName = new ColumnConfig<>(geoProp.name(), 100, "Geofence");
+        colGeofenceName.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+        colGeofenceName.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        ColumnConfig<Geofence, String> colGeofenceSettings = new ColumnConfig<>(geoProp.empty(), 45, "");
+        TextButtonCell geofenceButton = new TextButtonCell();
+        geofenceButton.setIcon(resources.cogWheel());
+        Menu geofenceMenu = new Menu();
+        final MenuItem geofenceEdit = new MenuItem("Свойства");
+        geofenceEdit.setId("Свойства");
+        geofenceMenu.add(geofenceEdit);
+        geofenceMenu.addSelectionHandler(new SelectionHandler<Item>() {
+            @Override
+            public void onSelection(SelectionEvent<Item> event) {
+                switch (event.getSelectedItem().getId()) {
+                    case "Свойства":
+                        // TODO: 12.05.2016 реализовать метод
+                        new AlertMessageBox("TEST", "TEST").show();
+                        break;
+                }
+            }
+        });
+        geofenceButton.setMenu(geofenceMenu);
+        geofenceButton.setArrowAlign(ButtonCell.ButtonArrowAlign.RIGHT);
+        colGeofenceSettings.setCell(geofenceButton);
+        colGeofenceSettings.setResizable(false);
+        colGeofenceSettings.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        colGeofenceSettings.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+
+        List<ColumnConfig<Geofence, ?>> geofenceList = new ArrayList<>();
+        geofenceList.add(colGeofenceVisible);
+        geofenceList.add(colGeofenceName);
+        geofenceList.add(colGeofenceSettings);
+
+        this.geofenceCM = new ColumnModel<>(geofenceList);
+
         ourUiBinder.createAndBindUi(this);
 
-        //this.removeDeviceButton.setEnabled(false);
-
         deviceView.setAutoExpandColumn(colDeviceName);
-        //deviceView.setAutoFill(true);
         deviceView.setStripeRows(true);
 
         deviceGrid.addCellClickHandler(new CellClickEvent.CellClickHandler() {
@@ -376,6 +470,9 @@ public class DeviceView {
 
         eventView.setAutoExpandColumn(colEventMessage);
         eventView.setStripeRows(true);
+
+        geofenceView.setAutoExpandColumn(colGeofenceName);
+        geofenceView.setStripeRows(true);
     }
 
     private void showMaxSpeed() {

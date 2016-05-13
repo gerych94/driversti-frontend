@@ -6,13 +6,16 @@ import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Timer;
+import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.container.Viewport;
 import org.bitbucket.treklab.client.communication.BaseRequestCallback;
 import org.bitbucket.treklab.client.communication.PositionData;
 import org.bitbucket.treklab.client.model.Device;
+import org.bitbucket.treklab.client.model.Geofence;
 import org.bitbucket.treklab.client.model.Position;
 import org.bitbucket.treklab.client.util.DateHelper;
+import org.bitbucket.treklab.client.util.LoggerHelper;
 import org.bitbucket.treklab.client.view.MapView;
 import org.discotools.gwt.leaflet.client.Options;
 import org.discotools.gwt.leaflet.client.layers.vector.Polyline;
@@ -31,14 +34,21 @@ public class MapController {
     private HashMap<Integer, LatLng> previousPositionMap = new HashMap<>();
     private HashMap<Integer, ArrayList<Polyline>> devicePolyLineHashMap = new HashMap<>();
     private PolylineOptions polylineOptions;
+    private ListStore<Geofence> geofenceStore;
+
+    private boolean flag;
+
     Timer timer = null;
+
+    private static final String className = MapController.class.getSimpleName();
 
     public Viewport getView() {
         return mapView.getView();
     }
 
-    public MapController() {
-        mapView = new MapView();
+    public MapController(ListStore<Geofence> globalGeofenceStore) {
+        this.geofenceStore = globalGeofenceStore;
+        mapView = new MapView(globalGeofenceStore);
         positionData = new PositionData();
     }
 
@@ -69,8 +79,8 @@ public class MapController {
                         }
                     } else {
                         // отображение сообщения об ошибке получения данных
-                        new AlertMessageBox("Position Error", "Can't retrieve positions <br>"
-                                + "Status code: " + response.getStatusCode() + "<br>, deviceLastUpdate: " + device.getLastUpdate()).show();
+                        /*new AlertMessageBox("Position Error", "Can't retrieve positions <br>"
+                                + "Status code: " + response.getStatusCode() + "<br>, deviceLastUpdate: " + device.getLastUpdate()).show();*/
                     }
                 }
             });
@@ -105,12 +115,15 @@ public class MapController {
                                     marker.setLatLng(latLng);
                                 }
                                 // отображаем маркер на карте
-                                marker.addTo(mapView.getMap());
+                                if(!flag){
+                                    marker.addTo(mapView.getMap());
+                                }
                             }
                         }
                     } else {
-                        new AlertMessageBox("Position Error", "Can't retrieve positions <br>"
-                                + "Status code: " + response.getStatusCode() + "<br>, deviceLastUpdate: " + device.getLastUpdate()).show();
+                        LoggerHelper.log(className, "Can't get positions from server");
+                        /*new AlertMessageBox("Position Error", "Can't retrieve positions <br>"
+                                + "Status code: " + response.getStatusCode() + "<br>, deviceLastUpdate: " + device.getLastUpdate()).show();*/
                     }
                 }
             });
@@ -148,7 +161,9 @@ public class MapController {
                                 Position pos = positions.get(i);
                                 currentPosition = new LatLng(pos.getLatitude(), pos.getLongitude());
                                 poly = new Polyline(new LatLng[]{previousPosition, currentPosition}, polylineOptions);
-                                poly.addTo(mapView.getMap());
+                                if(!flag){
+                                    poly.addTo(mapView.getMap());
+                                }
                                 polylineArrayList.add(poly);
                                 previousPosition = currentPosition;
                             }
@@ -156,14 +171,17 @@ public class MapController {
                         currentPosition = mapView.getMarkers().get(device.getId()).getLatLng();
                         if (!currentPosition.equals(previousPosition)) {
                             poly = new Polyline(new LatLng[]{previousPosition, currentPosition}, polylineOptions);
-                            poly.addTo(mapView.getMap());
+                            if(!flag){
+                                refocusedDevice(device,true);
+                                poly.addTo(mapView.getMap());
+                            }
                             polylineArrayList.add(poly);
                             previousPosition = currentPosition;
                         }
                         previousPositionMap.put(device.getId(), previousPosition);
                     } else {
-                        new AlertMessageBox("Position Error", "Can't retrieve positions <br>"
-                                + "Status code: " + response.getStatusCode() + "<br>, deviceLastUpdate: " + device.getLastUpdate()).show();
+                        /*new AlertMessageBox("Position Error", "Can't retrieve positions <br>"
+                                + "Status code: " + response.getStatusCode() + "<br>, deviceLastUpdate: " + device.getLastUpdate()).show();*/
                     }
                 }
             });
@@ -177,7 +195,7 @@ public class MapController {
         DeviceFollowState deviceFollowState = deviceHashMap.get(device.getId());
         deviceFollowState.state = false;
         mapView.getMap().removeLayer(mapView.getMarkers().get(device.getId()));
-        refocusedDevice(device, false);
+        // refocusedDevice(device, false);
     }
 
     public void removeWay(final Device device) {
@@ -187,9 +205,13 @@ public class MapController {
             for (Polyline polyline : polylineArrayList) {
                 mapView.getMap().removeLayer(polyline);
             }
-            polylineArrayList.clear();
+            //   polylineArrayList.clear();
         }
-        previousPositionMap.remove(device.getId());
+        if(!flag){
+            polylineArrayList.clear();
+            timer.cancel();
+            previousPositionMap.remove(device.getId());
+        }
     }
 
     //метод который фокусирует стартовое положение карты
@@ -233,8 +255,8 @@ public class MapController {
                         }
                         // mapView.getMap().setView(latLng,startZoom,true);
                     } else {
-                        new AlertMessageBox("Position Error", "Can't retrieve positions <br>"
-                                + "Status code: " + response.getStatusCode() + "<br>, deviceLastUpdate: "/*device.getLastUpdate()*/).show();
+                        /*new AlertMessageBox("Position Error", "Can't retrieve positions <br>"
+                                + "Status code: " + response.getStatusCode() + "<br>, deviceLastUpdate: "*//*device.getLastUpdate()*//*).show();*/
                     }
                 }
             });
@@ -308,8 +330,8 @@ public class MapController {
                             timer.cancel();
                         }
                     } else {
-                        new AlertMessageBox("Position Error", "Can't retrieve positions <br>"
-                                + "Status code: " + response.getStatusCode() + "<br>, deviceLastUpdate: " + device.getLastUpdate()).show();
+                        /*new AlertMessageBox("Position Error", "Can't retrieve positions <br>"
+                                + "Status code: " + response.getStatusCode() + "<br>, deviceLastUpdate: " + device.getLastUpdate()).show();*/
                     }
                 }
             });
@@ -318,10 +340,87 @@ public class MapController {
         }
     }
 
+    public void startDraw(final Device device) {
+        setDeviceMarker(device);
+        refocusedDevice(device,true);
+        setStartPosition(device);
+        final Date[] previousDate = {null};
+        timer = new Timer() {
+            @Override
+            public void run() {
+                Date currentDate = DateHelper.getUTCDate();
+                if (previousDate[0] != null) {
+                    drawRoad(device, previousDate[0], currentDate);
+                }
+                previousDate[0] = currentDate;
+                scheduleRepeating(15000);
+            }
+        };
+        timer.scheduleRepeating(1);
+    }
+
     private PolylineOptions getPolyLineOptions() {
         PolylineOptions polylineOptions = new PolylineOptions();
         polylineOptions.setOpacity(0.3);
         polylineOptions.setWeight(4);
         return polylineOptions;
+    }
+
+    public void setFlag(Device device) {
+        flag = true;
+        removeDeviceMarker(device);
+        removeWay(device);
+    }
+
+    public void drawHistory(Device device) {
+        flag = false;
+        refocusedDevice(device, true);
+        ArrayList<Polyline> polylineArrayList = devicePolyLineHashMap.get(device.getId());
+        for (Polyline polyline : polylineArrayList) {
+            polyline.addTo(mapView.getMap());
+        }
+    }
+
+    public void drawDeviceMarker(final Device device) {
+        try {
+            // создаём запрос на сервер для получения последних объектов Position для всех девайсов
+            positionData.getPositions(new BaseRequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    if (200 == response.getStatusCode()) {
+                        // в случае успешного запроса получаем массив объектов Position
+                        JsArray<Position> positions = JsonUtils.safeEval(response.getText());
+                        // перебираем массив и ищем объект Position соответствующий выбранному device
+                        for (int i = 0; i < positions.length(); i++) {
+                            if (device.getId() == positions.get(i).getDeviceId()) {
+                                final Position devicePosition = positions.get(i);
+                                LatLng latLng = new LatLng(devicePosition.getLatitude(), devicePosition.getLongitude());
+                                // получаем маркер, который соответствуем выбранному Device
+                                // Options options=new Options();
+                                // options.setProperty("marker-color","#46e63a");
+                                Marker marker = mapView.getMarkers().get(device.getId());
+                                // marker.setOptions(options);
+                                // если он null - создаём новый и добавляем в HashMap
+                                if (marker == null) {
+                                    marker = new Marker(latLng, new Options());
+                                    mapView.getMarkers().put(device.getId(), marker);
+                                } else {
+                                    // иначе обновляем координаты
+                                    marker.setLatLng(latLng);
+                                }
+                                // new AlertMessageBox("Position Error", "Hello");
+                                // отображаем маркер на карте
+                                marker.addTo(mapView.getMap());
+                            }
+                        }
+                    } else {
+                        new AlertMessageBox("Position Error", "Can't retrieve positions <br>"
+                                + "Status code: " + response.getStatusCode() + "<br>, deviceLastUpdate: " + device.getLastUpdate()).show();
+                    }
+                }
+            });
+        } catch (RequestException e) {
+            e.printStackTrace();
+        }
     }
 }

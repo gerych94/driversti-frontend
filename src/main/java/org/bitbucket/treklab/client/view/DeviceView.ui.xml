@@ -43,6 +43,11 @@
   <ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="eventCM"/>
   <ui:with type="com.sencha.gxt.widget.core.client.grid.GroupingView" field="eventView"/>
 
+  <!-- Данные для заполнения таблицы с девайсами во вкладке "PLACES (geofence)" -->
+  <ui:with type="com.sencha.gxt.data.shared.ListStore" field="geofenceStore"/>
+  <ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="geofenceCM"/>
+  <ui:with type="com.sencha.gxt.widget.core.client.grid.GroupingView" field="geofenceView"/>
+
   <ui:with type="org.bitbucket.treklab.client.resources.Resources" field="images"/>
 
   <gxt:ContentPanel ui:field="contentPanel" collapsible="false" headerVisible="false" resize="true">
@@ -75,7 +80,7 @@
           </container:child>
           <container:child layoutData="{gridData}">
             <grid:Grid ui:field="eventGrid" view="{eventView}" cm="{eventCM}" store="{eventStore}" stateful="true"
-                       stateId="deviceGrid"/>
+                       stateId="eventGrid"/>
           </container:child>
         </container:VerticalLayoutContainer>
       </gxt:child>
@@ -85,8 +90,20 @@
         <container:VerticalLayoutContainer>
           <container:child layoutData="{toolbarData}">
             <toolbar:ToolBar ui:field="placesToolbar" borders="true" stateful="true">
-              <button:TextButton ui:field="addPlaceButton" icon="{images.addDeviceButton}"/>
+              <button:TextButton ui:field="markersButton" text="Markers" width="70" />
+              <button:TextButton ui:field="routesButton" text="Routes" width="70" />
+              <button:TextButton ui:field="geofencesButton" text="Geofences" width="70" />
             </toolbar:ToolBar>
+          </container:child>
+          <container:child layoutData="{toolbarData}">
+            <toolbar:ToolBar ui:field="controlsToolbar" borders="true" stateful="true">
+              <form:StoreFilterField ui:field="geofenceFilter" emptyText="Type geofence name..." width="180"/>
+              <button:TextButton ui:field="removePlaceButton" icon="{images.trash}"/>
+            </toolbar:ToolBar>
+          </container:child>
+          <container:child layoutData="{gridData}">
+            <grid:Grid ui:field="geofenceGrid" view="{geofenceView}" cm="{geofenceCM}" store="{geofenceStore}" stateful="true"
+                       stateId="geofenceGrid"/>
           </container:child>
         </container:VerticalLayoutContainer>
       </gxt:child>
