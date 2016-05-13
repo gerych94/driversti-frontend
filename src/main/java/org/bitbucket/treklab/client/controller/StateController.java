@@ -14,14 +14,13 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.TabItemConfig;
 import com.sencha.gxt.widget.core.client.TabPanel;
-import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.info.Info;
 import org.bitbucket.treklab.client.communication.BaseRequestCallback;
 import org.bitbucket.treklab.client.communication.PositionData;
 import org.bitbucket.treklab.client.model.Device;
-import org.bitbucket.treklab.client.model.Position;
 import org.bitbucket.treklab.client.model.InfoRow;
 import org.bitbucket.treklab.client.model.InfoRowProperties;
+import org.bitbucket.treklab.client.model.Position;
 import org.bitbucket.treklab.client.view.StateView;
 
 import java.math.BigDecimal;
@@ -104,7 +103,7 @@ public class StateController implements ContentController, StateView.StateHandle
                             }
                         }
                     } else {
-                        new AlertMessageBox("Error", "Can't get position from server").show();
+                        //new AlertMessageBox("Error", "Can't get position from server").show();
                     }
                 }
             });
@@ -174,7 +173,7 @@ public class StateController implements ContentController, StateView.StateHandle
                             }
                         }
                     } else {
-                        new AlertMessageBox("Error", "Can't get position from server").show();
+                        //new AlertMessageBox("Error", "Can't get position from server").show();
                     }
                 }
             });
