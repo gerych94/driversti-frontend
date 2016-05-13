@@ -5,10 +5,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.sencha.gxt.data.shared.ListStore;
 import org.bitbucket.treklab.client.controller.*;
-import org.bitbucket.treklab.client.model.Device;
-import org.bitbucket.treklab.client.model.DeviceProperties;
-import org.bitbucket.treklab.client.model.Event;
-import org.bitbucket.treklab.client.model.EventProperties;
+import org.bitbucket.treklab.client.model.*;
 import org.bitbucket.treklab.client.view.ApplicationView;
 import org.bitbucket.treklab.client.view.CenterView;
 import org.bitbucket.treklab.client.view.WestView;
@@ -18,6 +15,7 @@ public class Application {
     private final NavController navController;
     private final DeviceController deviceController;
     private final EventController eventController;
+    private final GeofenceController geofenceController;
     private final StateController stateController;
     private final MapController mapController;
     private final ScheduleController scheduleController;
@@ -37,14 +35,17 @@ public class Application {
         final ListStore<Device> globalDeviceStore = new ListStore<>(deviceProperties.key());
         EventProperties eventProperties = GWT.create(EventProperties.class);
         final ListStore<Event> globalEventStore = new ListStore<>(eventProperties.key());
+        GeofenceProperties geofenceProperties = GWT.create(GeofenceProperties.class);
+        final ListStore<Geofence> globalGeofenceStore = new ListStore<>(geofenceProperties.key());
 
         navController = new NavController();
-        mapController = new MapController();
+        mapController = new MapController(globalGeofenceStore);
         visibilityController = new VisibilityController(globalDeviceStore);
         followController = new FollowController(globalDeviceStore);
         stateController = new StateController();
-        deviceController = new DeviceController(globalDeviceStore, globalEventStore, mapController, stateController, visibilityController, followController);
+        deviceController = new DeviceController(globalDeviceStore, globalEventStore, globalGeofenceStore, mapController, stateController, visibilityController, followController);
         eventController = new EventController(globalDeviceStore, globalEventStore);
+        geofenceController = new GeofenceController(globalGeofenceStore);
         scheduleController = new ScheduleController();
 
         centerView = new CenterView(mapController.getView(), scheduleController.getView());
