@@ -18,18 +18,21 @@ import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
+import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.GroupingView;
 import com.sencha.gxt.widget.core.client.info.Info;
 import org.bitbucket.treklab.client.communication.BaseRequestCallback;
+import org.bitbucket.treklab.client.communication.DeviceData;
 import org.bitbucket.treklab.client.communication.PositionData;
 import org.bitbucket.treklab.client.model.Device;
 import org.bitbucket.treklab.client.model.InfoRow;
 import org.bitbucket.treklab.client.model.InfoRowProperties;
 import org.bitbucket.treklab.client.model.Position;
 import org.bitbucket.treklab.client.model.demo.*;
+import org.bitbucket.treklab.client.util.LoggerHelper;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -43,12 +46,20 @@ public class DevicePropertiesDialog extends Composite {
 
     private static DevicePropertiesDialogUiBinder uiBinder = GWT.create(DevicePropertiesDialogUiBinder.class);
 
+    private Device device;
+    private ListStore<Device> deviceStore;
+
     @UiField
     Window window;
 
     public Window getWindow() {
         return window;
     }
+
+    @UiField
+    TextField name;
+    @UiField
+    TextField imei;
 
     // поочерёдно создаём списки для хранения данных комбобоксов
     private DemoGroupProperties demoGroupProperties = GWT.create(DemoGroupProperties.class);
@@ -118,7 +129,12 @@ public class DevicePropertiesDialog extends Composite {
 
     private static final InfoRowProperties prop = GWT.create(InfoRowProperties.class);
 
-    public DevicePropertiesDialog(Device selectedItem, ListStore<Device> deviceStore) {
+    private static final String className = DevicePropertiesDialog.class.getSimpleName();
+
+    public DevicePropertiesDialog(Device selectedItem, ListStore<Device> globalDeviceStore) {
+
+        this.device = selectedItem;
+        this.deviceStore = globalDeviceStore;
 
         // заполняем все комбобоксы данными
         demoGroupStore = new ListStore<>(demoGroupProperties.key());
@@ -267,6 +283,16 @@ public class DevicePropertiesDialog extends Composite {
 
         infoRowView.setAutoExpandColumn(colValue);
         infoRowView.setStripeRows(true);
+
+        name.setText(selectedItem.getName());
+        imei.setText(selectedItem.getUniqueId());
+
+        // при перетаскивании окна контент не пропадает (не за заголовок)
+        /*Draggable draggable = new Draggable(window);
+        draggable.setUseProxy(false);
+        draggable.setUpdateZIndex(true);
+        Draggable d = window.getDraggable();
+        d.setUpdateZIndex(true);*/
     }
 
     /**
@@ -349,7 +375,34 @@ public class DevicePropertiesDialog extends Composite {
      */
     @UiHandler("saveButton")
     public void onSaveClicked(SelectEvent event) {
+
+        if (changed()) {
+            final DeviceData deviceData = new DeviceData();
+            Device tempDevice = Device.getClone(device);
+            try {
+                deviceData.updateDevice(tempDevice, new BaseRequestCallback() {
+                    @Override
+                    public void onResponseReceived(Request request, Response response) {
+                        if (200 == response.getStatusCode()) {
+                            JsArray<Device> array = JsonUtils.safeEval(response.getText());
+                            device = array.get(0);
+                            deviceStore.update(device);
+                        } else {
+                            LoggerHelper.log(className, "Status code: " + response.getStatusCode());
+                        }
+                    }
+                });
+            } catch (RequestException e) {
+                e.printStackTrace();
+                LoggerHelper.log(className, " Can't get data from server", e);
+            }
+        }
         hide();
+    }
+
+    private boolean changed() {
+        return !(name.getText().equals(device.getName()) &&
+                imei.getText().equals(device.getUniqueId()));
     }
 
     /**

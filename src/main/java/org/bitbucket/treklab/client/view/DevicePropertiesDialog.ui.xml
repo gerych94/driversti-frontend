@@ -45,6 +45,11 @@
     .padding-right {
       padding-right: 5px;
     }
+    .x-panel-ghost {
+      opacity:1.0;
+      -moz-opacity:1.0;
+      filter:alpha(opacity=100);
+    }
   </ui:style>
 
 
@@ -54,7 +59,7 @@
   <ui:with type="com.sencha.gxt.widget.core.client.grid.GroupingView" field="infoRowView"/>
 
 
-  <gxt:Window ui:field="window" pixelSize="400, 550" modal="true" headingText="Device Properties"
+  <gxt:Window ui:field="window" pixelSize="400, 550" modal="true" blinkModal="true" headingText="Device Properties"
               focusWidget="{saveButton}" resizable="false" closable="false">
     <gxt:TabPanel ui:field="tabPanel" layoutData="{contentData}" width="1">
       <!-- Tab "Main" -->
