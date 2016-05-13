@@ -31,6 +31,18 @@ public class Device extends JavaScriptObject{
     public final native void setPositionId(int positionId) /*-{  this.positionId = positionId; }-*/;
     public final native void setMaxSpeed(double maxSpeed) /*-{  this.maxSpeed = maxSpeed; }-*/;
 
+    public static Device getClone(Device device) {
+        Device temp = (Device) Device.createObject();
+        temp.setId(device.getId());
+        temp.setName(device.getName());
+        temp.setUniqueId(device.getUniqueId());
+        temp.setStatus(device.getStatus());
+        temp.setLastUpdate(device.getLastUpdate());
+        temp.setPositionId(device.getPositionId());
+        temp.setMaxSpeed(device.getMaxSpeed());
+        return temp;
+    }
+
     public final String getDateTime() {
         Date tmp = new Date(getLastUpdate());
         DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
