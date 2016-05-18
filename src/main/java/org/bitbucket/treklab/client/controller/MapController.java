@@ -397,7 +397,7 @@ public class MapController {
         }
     }
 
-    class DrawTimer extends Timer {
+    private class DrawTimer extends Timer {
 
         private Date previousDate = null;
         private Device device;
