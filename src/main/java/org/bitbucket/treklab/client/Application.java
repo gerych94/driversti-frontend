@@ -2,13 +2,16 @@ package org.bitbucket.treklab.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.sencha.gxt.data.shared.ListStore;
+import org.bitbucket.treklab.client.communication.socket.SocketListener;
 import org.bitbucket.treklab.client.controller.*;
 import org.bitbucket.treklab.client.model.*;
 import org.bitbucket.treklab.client.view.ApplicationView;
 import org.bitbucket.treklab.client.view.CenterView;
 import org.bitbucket.treklab.client.view.WestView;
+import org.realityforge.gwt.websockets.client.WebSocket;
 
 public class Application {
 
@@ -29,6 +32,8 @@ public class Application {
     private final WestView westView;
 
     private boolean isDeviceSelected = false;
+
+    private static final String className = Application.class.getSimpleName();
 
     public Application() {
         DeviceProperties deviceProperties = GWT.create(DeviceProperties.class);
@@ -60,6 +65,16 @@ public class Application {
         RootPanel.get().add(view);
 
         deviceController.run();
+
+        final WebSocket webSocket = WebSocket.newWebSocketIfSupported();
+        if (webSocket != null) {
+            webSocket.setListener(new SocketListener());
+            webSocket.connect("ws://185.69.152.120:8082/api/socket");
+        } else {
+            Window.alert( "WebSocket not available!" );
+        }
+
+
         eventController.run();
         Timer timer = new Timer() {
             @Override

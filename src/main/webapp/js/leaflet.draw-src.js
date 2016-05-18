@@ -2261,11 +2261,11 @@ L.Tooltip = L.Class.extend({
 L.DrawToolbar = L.Toolbar.extend({
 
 	options: {
-		polyline: {},
+		//polyline: {},
 		polygon: {},
-		rectangle: {},
+		//rectangle: {},
 		circle: {},
-		marker: {}
+		//marker: {}
 	},
 
 	initialize: function (options) {

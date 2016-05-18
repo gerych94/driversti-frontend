@@ -26,6 +26,7 @@
 
   <!-- Необходимо для HTTP-запросов -->
   <inherits name="com.google.gwt.http.HTTP" />
+  <inherits name="org.realityforge.gwt.websockets.WebSockets"/>
 
   <!-- Specify the app entry point class.                   -->
   <entry-point class='org.bitbucket.treklab.client.Frontend'/>
