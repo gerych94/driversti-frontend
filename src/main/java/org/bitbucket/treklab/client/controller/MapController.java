@@ -38,7 +38,7 @@ public class MapController {
 
     private boolean flag;
 
-    Timer timer = null;
+    DrawTimer drawTimer;
 
     private static final String className = MapController.class.getSimpleName();
 
@@ -115,11 +115,12 @@ public class MapController {
                                     marker.setLatLng(latLng);
                                 }
                                 // отображаем маркер на карте
-                                if(!flag){
+                                if (!flag) {
                                     marker.addTo(mapView.getMap());
                                 }
                             }
                         }
+                        LoggerHelper.log(className, "setDeviceMarker()");
                     } else {
                         LoggerHelper.log(className, "Can't get positions from server");
                         /*new AlertMessageBox("Position Error", "Can't retrieve positions <br>"
@@ -156,12 +157,13 @@ public class MapController {
                         LatLng previousPosition = previousPositionMap.get(device.getId());
                         LatLng currentPosition;
                         Polyline poly;
+                        LoggerHelper.log(className, "drawRoad()");
                         if (positions.length() > 1) {
                             for (int i = 0; i < positions.length(); i++) {
                                 Position pos = positions.get(i);
                                 currentPosition = new LatLng(pos.getLatitude(), pos.getLongitude());
                                 poly = new Polyline(new LatLng[]{previousPosition, currentPosition}, polylineOptions);
-                                if(!flag){
+                                if (!flag) {
                                     poly.addTo(mapView.getMap());
                                 }
                                 polylineArrayList.add(poly);
@@ -171,8 +173,8 @@ public class MapController {
                         currentPosition = mapView.getMarkers().get(device.getId()).getLatLng();
                         if (!currentPosition.equals(previousPosition)) {
                             poly = new Polyline(new LatLng[]{previousPosition, currentPosition}, polylineOptions);
-                            if(!flag){
-                                refocusedDevice(device,true);
+                            if (!flag) {
+                                refocusedDevice(device, true);
                                 poly.addTo(mapView.getMap());
                             }
                             polylineArrayList.add(poly);
@@ -207,9 +209,9 @@ public class MapController {
             }
             //   polylineArrayList.clear();
         }
-        if(!flag){
+        if (!flag) {
             polylineArrayList.clear();
-            timer.cancel();
+            drawTimer.cancel();
             previousPositionMap.remove(device.getId());
         }
     }
@@ -309,26 +311,6 @@ public class MapController {
                                 startZoom--;
                             }
                         }
-                        if (flag) {
-                            setDeviceMarker(device);
-                            setStartPosition(device);
-                            final Date[] previousDate = {null};
-                            timer = new Timer() {
-                                @Override
-                                public void run() {
-                                    Date currentDate = DateHelper.getUTCDate();
-                                    if (previousDate[0] != null) {
-                                        drawRoad(device, previousDate[0], currentDate);
-                                    }
-                                    previousDate[0] = currentDate;
-                                    scheduleRepeating(10000);
-                                }
-                            };
-                            timer.scheduleRepeating(1);
-                        } else {
-                            removeWay(device);
-                            timer.cancel();
-                        }
                     } else {
                         /*new AlertMessageBox("Position Error", "Can't retrieve positions <br>"
                                 + "Status code: " + response.getStatusCode() + "<br>, deviceLastUpdate: " + device.getLastUpdate()).show();*/
@@ -342,21 +324,12 @@ public class MapController {
 
     public void startDraw(final Device device) {
         setDeviceMarker(device);
-        refocusedDevice(device,true);
+        refocusedDevice(device, true);
         setStartPosition(device);
-        final Date[] previousDate = {null};
-        timer = new Timer() {
-            @Override
-            public void run() {
-                Date currentDate = DateHelper.getUTCDate();
-                if (previousDate[0] != null) {
-                    drawRoad(device, previousDate[0], currentDate);
-                }
-                previousDate[0] = currentDate;
-                scheduleRepeating(15000);
-            }
-        };
-        timer.scheduleRepeating(1);
+
+        drawTimer = new DrawTimer();
+        drawTimer.setDevice(device);
+        drawTimer.run();
     }
 
     private PolylineOptions getPolyLineOptions() {
@@ -421,6 +394,26 @@ public class MapController {
             });
         } catch (RequestException e) {
             e.printStackTrace();
+        }
+    }
+
+    class DrawTimer extends Timer {
+
+        private Date previousDate = null;
+        private Device device;
+
+        @Override
+        public void run() {
+            Date currentDate = DateHelper.getUTCDate();
+            if (previousDate != null) {
+                drawRoad(device, previousDate, currentDate);
+            }
+            previousDate = currentDate;
+            scheduleRepeating(5000);
+        }
+
+        public void setDevice(Device device) {
+            this.device = device;
         }
     }
 }
