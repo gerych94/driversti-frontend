@@ -36,4 +36,7 @@
     <when-type-is class="com.sencha.gxt.widget.core.client.menu.Item.ItemAppearance"/>
   </replace-with>-->
 
+  <!-- Line below fix this issue "GWT no longer supports Quirks Mode" -->
+  <extend-configuration-property name="document.compatMode" value="BackCompat"/>
+
 </module>
