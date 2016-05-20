@@ -147,7 +147,7 @@ public class MapView {
                             DrawCreatedEvent event) {
                         ILayer layer = event.getLayer();
                         drawnItems.addLayer(layer);
-                        String layerType = event.getLayerType(); // получаем тип геозоны
+                        String layerType = event.getLayerType().toUpperCase(); // получаем тип геозоны
                         final Type type = Type.valueOf(layerType); // приводим к enum
                         LoggerHelper.log(className, "Before dialog. Layer type: " + layerType);
                         Geofence geofence = (Geofence) Geofence.createObject(); // создаём пустую геозону
