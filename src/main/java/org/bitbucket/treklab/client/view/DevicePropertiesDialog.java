@@ -63,57 +63,57 @@ public class DevicePropertiesDialog extends Composite {
 
     // поочерёдно создаём списки для хранения данных комбобоксов
     private DemoGroupProperties demoGroupProperties = GWT.create(DemoGroupProperties.class);
-    ListStore<DemoGroup> demoGroupStore = new ListStore<>(demoGroupProperties.key());
+    private ListStore<DemoGroup> demoGroupStore = new ListStore<>(demoGroupProperties.key());
     @UiField(provided = true)
     ComboBox<DemoGroup> demoGroupCombo;
 
     private DemoDriverProperties demoDriverProperties = GWT.create(DemoDriverProperties.class);
-    ListStore<DemoDriver> demoDriverStore = new ListStore<>(demoDriverProperties.key());
+    private ListStore<DemoDriver> demoDriverStore = new ListStore<>(demoDriverProperties.key());
     @UiField(provided = true)
     ComboBox<DemoDriver> demoDriverCombo;
 
     private DemoTrailerProperties demoTrailerProperties = GWT.create(DemoTrailerProperties.class);
-    ListStore<DemoTrailer> demoTrailerStore = new ListStore<>(demoTrailerProperties.key());
+    private ListStore<DemoTrailer> demoTrailerStore = new ListStore<>(demoTrailerProperties.key());
     @UiField(provided = true)
     ComboBox<DemoTrailer> demoTrailerCombo;
 
     private DemoGPSProperties demoGPSProperties = GWT.create(DemoGPSProperties.class);
-    ListStore<DemoGPS> demoGPSStore = new ListStore<>(demoGPSProperties.key());
+    private ListStore<DemoGPS> demoGPSStore = new ListStore<>(demoGPSProperties.key());
     @UiField(provided = true)
     ComboBox<DemoGPS> demoGPSCombo;
 
     private DemoOdometerProperties demoOdometerProperties = GWT.create(DemoOdometerProperties.class);
-    ListStore<DemoOdometer> demoOdometerStore = new ListStore<>(demoOdometerProperties.key());
+    private ListStore<DemoOdometer> demoOdometerStore = new ListStore<>(demoOdometerProperties.key());
     @UiField(provided = true)
     ComboBox<DemoOdometer> demoOdometerCombo;
 
     private DemoMotoProperties demoMotoProperties = GWT.create(DemoMotoProperties.class);
-    ListStore<DemoMoto> demoMotoStore = new ListStore<>(demoMotoProperties.key());
+    private ListStore<DemoMoto> demoMotoStore = new ListStore<>(demoMotoProperties.key());
     @UiField(provided = true)
     ComboBox<DemoMoto> demoMotoCombo;
 
     private DemoMapIconProperties demoMapIconProperties = GWT.create(DemoMapIconProperties.class);
-    ListStore<DemoMapIcon> demoMapIconStore = new ListStore<>(demoMapIconProperties.key());
+    private ListStore<DemoMapIcon> demoMapIconStore = new ListStore<>(demoMapIconProperties.key());
     @UiField(provided = true)
     ComboBox<DemoMapIcon> demoMapIconCombo;
 
     private DemoStoppedArrowProperties demoStoppedArrowProperties = GWT.create(DemoStoppedArrowProperties.class);
-    ListStore<DemoStoppedArrow> demoStoppedArrowStore = new ListStore<>(demoStoppedArrowProperties.key());
+    private ListStore<DemoStoppedArrow> demoStoppedArrowStore = new ListStore<>(demoStoppedArrowProperties.key());
     @UiField(provided = true)
     ComboBox<DemoStoppedArrow> demoStoppedArrowCombo;
 
     private DemoMovingArrowProperties demoMovingArrowProperties = GWT.create(DemoMovingArrowProperties.class);
-    ListStore<DemoMovingArrow> demoMovingArrowStore = new ListStore<>(demoMovingArrowProperties.key());
+    private ListStore<DemoMovingArrow> demoMovingArrowStore = new ListStore<>(demoMovingArrowProperties.key());
     @UiField(provided = true)
     ComboBox<DemoMovingArrow> demoMovingArrowCombo;
 
     private DemoEngineArrowProperties demoEngineArrowProperties = GWT.create(DemoEngineArrowProperties.class);
-    ListStore<DemoEngineArrow> demoEngineArrowStore = new ListStore<>(demoEngineArrowProperties.key());
+    private ListStore<DemoEngineArrow> demoEngineArrowStore = new ListStore<>(demoEngineArrowProperties.key());
     @UiField(provided = true)
     ComboBox<DemoEngineArrow> demoEngineArrowCombo;
 
     private DemoSOSArrowProperties demoSOSArrowProperties = GWT.create(DemoSOSArrowProperties.class);
-    ListStore<DemoSOSArrow> demoSOSArrowStore = new ListStore<>(demoSOSArrowProperties.key());
+    private ListStore<DemoSOSArrow> demoSOSArrowStore = new ListStore<>(demoSOSArrowProperties.key());
     @UiField(provided = true)
     ComboBox<DemoSOSArrow> demoSOSArrowCombo;
 
@@ -286,13 +286,6 @@ public class DevicePropertiesDialog extends Composite {
 
         name.setText(selectedItem.getName());
         imei.setText(selectedItem.getUniqueId());
-
-        // при перетаскивании окна контент не пропадает (не за заголовок)
-        /*Draggable draggable = new Draggable(window);
-        draggable.setUseProxy(false);
-        draggable.setUpdateZIndex(true);
-        Draggable d = window.getDraggable();
-        d.setUpdateZIndex(true);*/
     }
 
     /**
@@ -365,7 +358,7 @@ public class DevicePropertiesDialog extends Composite {
         window.show();
     }
 
-    public void hide() {
+    private void hide() {
         window.hide();
     }
 
@@ -379,12 +372,15 @@ public class DevicePropertiesDialog extends Composite {
         if (changed()) {
             final DeviceData deviceData = new DeviceData();
             Device tempDevice = Device.getClone(device);
+            tempDevice.setName(name.getText());
+            tempDevice.setUniqueId(imei.getText());
             try {
                 deviceData.updateDevice(tempDevice, new BaseRequestCallback() {
                     @Override
                     public void onResponseReceived(Request request, Response response) {
                         if (200 == response.getStatusCode()) {
-                            JsArray<Device> array = JsonUtils.safeEval(response.getText());
+                            JsArray<Device> array = JsonUtils.safeEval("[" + response.getText() + "]");
+                            LoggerHelper.log(className, response.getText());
                             device = array.get(0);
                             deviceStore.update(device);
                         } else {
@@ -401,6 +397,7 @@ public class DevicePropertiesDialog extends Composite {
     }
 
     private boolean changed() {
+        LoggerHelper.log(className, "changed()");
         return !(name.getText().equals(device.getName()) &&
                 imei.getText().equals(device.getUniqueId()));
     }
