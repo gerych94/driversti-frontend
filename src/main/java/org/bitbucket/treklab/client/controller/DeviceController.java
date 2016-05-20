@@ -18,6 +18,9 @@ import org.bitbucket.treklab.client.model.Geofence;
 import org.bitbucket.treklab.client.state.DeviceFollowHandler;
 import org.bitbucket.treklab.client.state.DeviceVisibilityHandler;
 import org.bitbucket.treklab.client.util.LoggerHelper;
+import org.bitbucket.treklab.client.util.Observable;
+import org.bitbucket.treklab.client.util.Observer;
+import org.bitbucket.treklab.client.util.ServerDataHolder;
 import org.bitbucket.treklab.client.view.DeviceAddDialog;
 import org.bitbucket.treklab.client.view.DevicePropertiesDialog;
 import org.bitbucket.treklab.client.view.DeviceView;
@@ -25,13 +28,15 @@ import org.bitbucket.treklab.client.view.DeviceView;
 /**
  * Контроллер панели отображения устройств
  */
-public class DeviceController implements ContentController, DeviceView.DeviceHandler {
+public class DeviceController implements ContentController, DeviceView.DeviceHandler, Observer {
     private final DeviceView deviceView;
     private ListStore<Device> deviceStore;
     private final DeviceData deviceData;
     private final MapController mapController;
     private final StateController stateController;
+    private final Observable observable;
 
+    private static final String DEVICES_KEY = "devices";
     private static final String className = DeviceController.class.getSimpleName();
 
     /**
@@ -47,13 +52,13 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
 
     /**
      * Конструктор контроллера
-     *
-     * @param globalDeviceStore   - глобальный список устройств
+     *  @param globalDeviceStore   - глобальный список устройств
      *                            В конструкторе инициализируем объект для вызова методов АПИ
      *                            и создаём графический интерфейс для отображения устройств
      * @param globalEventStore    - глобальный список событий
      * @param globalGeofenceStore
      * @param mapController       - контроллер карты
+     * @param instance
      */
     public DeviceController(ListStore<Device> globalDeviceStore,
                             ListStore<Event> globalEventStore,
@@ -61,7 +66,8 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
                             MapController mapController,
                             StateController stateController,
                             DeviceVisibilityHandler deviceVisibilityHandler,
-                            DeviceFollowHandler deviceFollowHandler) {
+                            DeviceFollowHandler deviceFollowHandler,
+                            ServerDataHolder instance) {
 
         this.deviceStore = globalDeviceStore;
         this.mapController = mapController;
@@ -74,6 +80,8 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
                 deviceVisibilityHandler,
                 deviceFollowHandler);
         this.deviceData = new DeviceData();
+        this.observable = instance;
+        observable.registerObserver(this);
     }
 
     /**
@@ -175,7 +183,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
         final ConfirmMessageBox confirm = new ConfirmMessageBox(
                 "Подтверждение удаления устройства",
                 "Это действие удалит все данные этого трекера, восстановление будет невозможно! \n" +
-                        "Вы действительно хотите удалить устройство?");
+                "Вы действительно хотите удалить устройство?");
         confirm.setResizable(false);
         confirm.setModal(true);
         confirm.setWidth(350);
@@ -230,7 +238,6 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
         // получаем выбранное устройство
         Device selectedItem = deviceView.getDeviceGrid().getSelectionModel().getSelectedItem();
         LoggerHelper.log(className, "Device " + selectedItem.getName() + " was selected.");
-        //deviceView.getRemoveDeviceButton().setEnabled(true);
         stateController.fillGrid(selectedItem);
     }
 
@@ -300,5 +307,15 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
 
     public DeviceView getDeviceView() {
         return deviceView;
+    }
+
+    @Override
+    public void update(String key, String value) {
+        if (key.equals(DEVICES_KEY)) {
+            JsArray<Device> deviceJsArray = JsonUtils.safeEval(value);
+            for (int i = 0; i < deviceJsArray.length(); i++) {
+                deviceStore.update(deviceJsArray.get(i));
+            }
+        }
     }
 }

@@ -181,14 +181,6 @@ public class MapController {
                             previousPosition = currentPosition;
                         }
                         previousPositionMap.put(device.getId(), previousPosition);
-
-                        /**
-                         * TEST TEST    TEST    TEST    TEST    TEST
-                         */
-
-                    String s = "[{\"fixTime\":\"2016-05-19T11:34:37.000+03:00\",\"outdated\":false,\"valid\":true,\"altitude\":158.0,\"speed\":5.939527,\"course\":104.0,\"latitude\":50.4458583,\"longitude\":30.498215,\"deviceTime\":\"2016-05-19T11:34:37.000+03:00\",\"id\":30080,\"protocol\":\"teltonika\",\"attributes\":{\"priority\":0,\"sat\":16,\"event\":0,\"ip\":\"37.73.255.150\"},\"deviceId\":1},{\"fixTime\":\"2016-05-19T11:34:27.000+03:00\",\"outdated\":false,\"valid\":true,\"altitude\":168.0,\"speed\":0.0,\"course\":0.0,\"latitude\":50.4427433,\"longitude\":30.5167716,\"deviceTime\":\"2016-05-19T11:34:27.000+03:00\",\"id\":30077,\"protocol\":\"teltonika\",\"attributes\":{\"priority\":0,\"sat\":12,\"event\":0,\"ip\":\"37.73.232.67\"},\"deviceId\":2}]";
-                    JsArray<Position> p = JsonUtils.safeEval(s);
-                        LoggerHelper.log(className, "TEST!!! " + p.length());
                     } else {
                         /*new AlertMessageBox("Position Error", "Can't retrieve positions <br>"
                                 + "Status code: " + response.getStatusCode() + "<br>, deviceLastUpdate: " + device.getLastUpdate()).show();*/

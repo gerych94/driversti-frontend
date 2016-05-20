@@ -1,13 +1,13 @@
 package org.bitbucket.treklab.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.sencha.gxt.data.shared.ListStore;
 import org.bitbucket.treklab.client.communication.socket.SocketListener;
 import org.bitbucket.treklab.client.controller.*;
 import org.bitbucket.treklab.client.model.*;
+import org.bitbucket.treklab.client.util.ServerDataHolder;
 import org.bitbucket.treklab.client.view.ApplicationView;
 import org.bitbucket.treklab.client.view.CenterView;
 import org.bitbucket.treklab.client.view.WestView;
@@ -42,13 +42,21 @@ public class Application {
         final ListStore<Event> globalEventStore = new ListStore<>(eventProperties.key());
         GeofenceProperties geofenceProperties = GWT.create(GeofenceProperties.class);
         final ListStore<Geofence> globalGeofenceStore = new ListStore<>(geofenceProperties.key());
+        ServerDataHolder instance = ServerDataHolder.getInstance();
 
         navController = new NavController();
         mapController = new MapController(globalGeofenceStore);
         visibilityController = new VisibilityController(globalDeviceStore);
         followController = new FollowController(globalDeviceStore);
-        stateController = new StateController();
-        deviceController = new DeviceController(globalDeviceStore, globalEventStore, globalGeofenceStore, mapController, stateController, visibilityController, followController);
+        stateController = new StateController(instance);
+        deviceController = new DeviceController(globalDeviceStore,
+                globalEventStore,
+                globalGeofenceStore,
+                mapController,
+                stateController,
+                visibilityController,
+                followController,
+                instance);
         eventController = new EventController(globalDeviceStore, globalEventStore);
         geofenceController = new GeofenceController(globalGeofenceStore);
         scheduleController = new ScheduleController();
@@ -74,29 +82,7 @@ public class Application {
             Window.alert( "WebSocket not available!" );
         }
 
-
         eventController.run();
-        Timer timer = new Timer() {
-            @Override
-            public void run() {
-                deviceController.run();
-                Device selectedDevice = deviceController.getDeviceView().getDeviceGrid().getSelectionModel().getSelectedItem();
-                isDeviceSelected = (selectedDevice != null);
-                if (isDeviceSelected) {
-                    stateController.update(selectedDevice);
-                    //stateController.fillGrid(selectedDevice);
-                    //mapController.setDeviceMarker(selectedDevice);
-                    //mapController.focusedOnDevice(selectedDevice);
-                    scheduleRepeating(10000);
-                } else {
-                    stateController.getStateView().getRowStore().clear();
-                    scheduleRepeating(30000);
-                }
-                eventController.run();
-            }
-        };
-        timer.schedule(1000);
-        //timer.schedule(50);
     }
 
     public static DataService getDataServiceController() {

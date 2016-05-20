@@ -21,6 +21,9 @@ import org.bitbucket.treklab.client.model.Device;
 import org.bitbucket.treklab.client.model.InfoRow;
 import org.bitbucket.treklab.client.model.InfoRowProperties;
 import org.bitbucket.treklab.client.model.Position;
+import org.bitbucket.treklab.client.util.Observable;
+import org.bitbucket.treklab.client.util.Observer;
+import org.bitbucket.treklab.client.util.ServerDataHolder;
 import org.bitbucket.treklab.client.view.StateView;
 
 import java.math.BigDecimal;
@@ -30,11 +33,15 @@ import java.util.Date;
 /**
  * Этот контроллер отвечает за действия панели состояния
  */
-public class StateController implements ContentController, StateView.StateHandler {
+public class StateController implements ContentController, StateView.StateHandler, Observer {
 
     private final StateView stateView;
     private static final InfoRowProperties prop = GWT.create(InfoRowProperties.class);
     private final ListStore<InfoRow> rowStore = new ListStore<>(prop.key());
+    private Device selectedDevice;
+    private final Observable observable;
+
+    private static final String POSITIONS_KEY = "positions";
 
     @Override
     public ContentPanel getView() {
@@ -46,11 +53,14 @@ public class StateController implements ContentController, StateView.StateHandle
 
     }
 
-    public StateController() {
+    public StateController(ServerDataHolder instance) {
         this.stateView = new StateView(rowStore);
+        this.observable = instance;
+        observable.registerObserver(this);
     }
 
     public void fillGrid(final Device device) {
+        this.selectedDevice = device;
         stateView.getRowStore().clear();
         try {
             new PositionData().getPositions(new BaseRequestCallback() {
@@ -116,72 +126,6 @@ public class StateController implements ContentController, StateView.StateHandle
         return stateView;
     }
 
-    /**
-     * Этот метод пока не работает должным образом,
-     * так как мы не можем объектам строк присваивать постоянно одни и те же ИД
-     */
-    public void update(final Device selectedItem) {
-        try {
-            new PositionData().getPositions(new BaseRequestCallback() {
-                @Override
-                public void onResponseReceived(Request request, Response response) {
-                    if (200 == response.getStatusCode()) {
-                        JsArray<Position> positions = JsonUtils.safeEval(response.getText());
-                        for (int i = 0; i < positions.length(); i++) {
-                            if (positions.get(i).getDeviceId() == selectedItem.getId()) {
-                                // проходимся по всем существующим строкам начиная с первой (нулевой)
-                                if (positions.get(i).getAddress() != null && !positions.get(i).getAddress().equals("")) {
-                                    rowStore.update(new InfoRow(0, "Адрес", positions.get(i).getAddress()));
-                                }
-                                if (positions.get(i).getDeviceTime() != null && !positions.get(i).getDeviceTime().equals("")) {
-                                    Date tmp = new Date(positions.get(i).getDeviceTime());
-                                    DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
-                                    rowStore.update(new InfoRow(1, "Время устройства", fmt.format(tmp)));
-                                }
-                                /** Обновление объектов реализовать пока не удалось.
-                                 * Скорее всего причина ошибок в несоответствии их ID, которые генерируются COUNTER'ом */
-                                if (positions.get(i).getAltitude() >= 0) {
-                                    rowStore.update(new InfoRow(2, "Высота", positions.get(i).getAltitude() + " м"));
-                                } else {
-                                    rowStore.update(new InfoRow(2, "Высота", 0 + " м"));
-                                }
-                                rowStore.update(new InfoRow(3, "Долгота", String.valueOf(positions.get(i).getLongitude())));
-                                rowStore.update(new InfoRow(4, "Широта", String.valueOf(positions.get(i).getLatitude())));
-                                double speed = new BigDecimal(positions.get(i).getSpeed()).setScale(1, RoundingMode.UP).doubleValue();
-                                stateView.getRowStore().update(new InfoRow(5, "Скорость", speed + " км/ч"));
-                                if (speed > 50) {
-                                    Info.display("Overspeed!", "Allowed speed: 50 km/h. Current speed: " + speed + " km/h");
-                                }
-                                rowStore.update(new InfoRow(6, "Курс", positions.get(i).getCourse() + "°"));
-                                if (positions.get(i).getProtocol() != null && !positions.get(i).getProtocol().equals("")) {
-                                    rowStore.update(new InfoRow(7, "Протокол", positions.get(i).getProtocol()));
-                                }
-                                if (positions.get(i).getAttributes().getIp() != null && !positions.get(i).getAttributes().getIp().equals("")) {
-                                    rowStore.update(new InfoRow(8, "IP", positions.get(i).getAttributes().getIp()));
-                                }
-                                if (!String.valueOf(positions.get(i).getAttributes().getPriority()).equals("undefined") /*&&
-                                        positions.get(i).getAttributes().getPriority() != 0*/) {
-                                    rowStore.update(new InfoRow(9, "Приоритет", String.valueOf(positions.get(i).getAttributes().getPriority())));
-                                }
-                                if (!String.valueOf(positions.get(i).getAttributes().getSat()).equals("undefined")) {
-                                    rowStore.update(new InfoRow(10, "Сат", String.valueOf(positions.get(i).getAttributes().getSat())));
-                                }
-                                if (!String.valueOf(positions.get(i).getAttributes().getEvent()).equals("undefined") /*&&
-                                        positions.get(i).getAttributes().getEvent() != 0*/) {
-                                    rowStore.update(new InfoRow(11, "Событие", String.valueOf(positions.get(i).getAttributes().getEvent())));
-                                }
-                            }
-                        }
-                    } else {
-                        //new AlertMessageBox("Error", "Can't get position from server").show();
-                    }
-                }
-            });
-        } catch (RequestException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onTabSelected(SelectionEvent<Widget> event) {
         stateView.getRowStore().clear();
@@ -211,4 +155,125 @@ public class StateController implements ContentController, StateView.StateHandle
                 break;
         }
     }
+
+    @Override
+    public void update(String key, String value) {
+        if (key.equals(POSITIONS_KEY) && selectedDevice != null) {
+            updateGrid(selectedDevice, value);
+        }
+    }
+
+    private void updateGrid(Device selectedDevice, String value) {
+        JsArray<Position> positions = JsonUtils.safeEval(value);
+        for (int i = 0; i < positions.length(); i++) {
+            if (positions.get(i).getDeviceId() == selectedDevice.getId()) {
+                // проходимся по всем существующим строкам начиная с первой (нулевой)
+                if (positions.get(i).getAddress() != null && !positions.get(i).getAddress().equals("")) {
+                    rowStore.update(new InfoRow(0, "Адрес", positions.get(i).getAddress()));
+                }
+                if (positions.get(i).getDeviceTime() != null && !positions.get(i).getDeviceTime().equals("")) {
+                    Date tmp = new Date(positions.get(i).getDeviceTime());
+                    DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
+                    rowStore.update(new InfoRow(1, "Время устройства", fmt.format(tmp)));
+                }
+                /** Обновление объектов реализовать пока не удалось.
+                 * Скорее всего причина ошибок в несоответствии их ID, которые генерируются COUNTER'ом */
+                if (positions.get(i).getAltitude() >= 0) {
+                    rowStore.update(new InfoRow(2, "Высота", positions.get(i).getAltitude() + " м"));
+                } else {
+                    rowStore.update(new InfoRow(2, "Высота", 0 + " м"));
+                }
+                rowStore.update(new InfoRow(3, "Долгота", String.valueOf(positions.get(i).getLongitude())));
+                rowStore.update(new InfoRow(4, "Широта", String.valueOf(positions.get(i).getLatitude())));
+                double speed = new BigDecimal(positions.get(i).getSpeed()).setScale(1, RoundingMode.UP).doubleValue();
+                stateView.getRowStore().update(new InfoRow(5, "Скорость", speed + " км/ч"));
+                if (speed > 50) {
+                    Info.display("Overspeed!", "Allowed speed: 50 km/h. Current speed: " + speed + " km/h");
+                }
+                rowStore.update(new InfoRow(6, "Курс", positions.get(i).getCourse() + "°"));
+                if (positions.get(i).getProtocol() != null && !positions.get(i).getProtocol().equals("")) {
+                    rowStore.update(new InfoRow(7, "Протокол", positions.get(i).getProtocol()));
+                }
+                if (positions.get(i).getAttributes().getIp() != null && !positions.get(i).getAttributes().getIp().equals("")) {
+                    rowStore.update(new InfoRow(8, "IP", positions.get(i).getAttributes().getIp()));
+                }
+                if (!String.valueOf(positions.get(i).getAttributes().getPriority()).equals("undefined") /*&&
+                        positions.get(i).getAttributes().getPriority() != 0*/) {
+                    rowStore.update(new InfoRow(9, "Приоритет", String.valueOf(positions.get(i).getAttributes().getPriority())));
+                }
+                if (!String.valueOf(positions.get(i).getAttributes().getSat()).equals("undefined")) {
+                    rowStore.update(new InfoRow(10, "Сат", String.valueOf(positions.get(i).getAttributes().getSat())));
+                }
+                if (!String.valueOf(positions.get(i).getAttributes().getEvent()).equals("undefined") /*&&
+                    positions.get(i).getAttributes().getEvent() != 0*/) {
+                    rowStore.update(new InfoRow(11, "Событие", String.valueOf(positions.get(i).getAttributes().getEvent())));
+                }
+            }
+        }
+    }
+    /**
+     * Этот метод пока не работает должным образом,
+     * так как мы не можем объектам строк присваивать постоянно одни и те же ИД
+     */
+    /*public void updateGrid(final Device selectedItem) {
+        try {
+            new PositionData().getPositions(new BaseRequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    if (200 == response.getStatusCode()) {
+                        JsArray<Position> positions = JsonUtils.safeEval(response.getText());
+                        for (int i = 0; i < positions.length(); i++) {
+                            if (positions.get(i).getDeviceId() == selectedItem.getId()) {
+                                // проходимся по всем существующим строкам начиная с первой (нулевой)
+                                if (positions.get(i).getAddress() != null && !positions.get(i).getAddress().equals("")) {
+                                    rowStore.update(new InfoRow(0, "Адрес", positions.get(i).getAddress()));
+                                }
+                                if (positions.get(i).getDeviceTime() != null && !positions.get(i).getDeviceTime().equals("")) {
+                                    Date tmp = new Date(positions.get(i).getDeviceTime());
+                                    DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
+                                    rowStore.update(new InfoRow(1, "Время устройства", fmt.format(tmp)));
+                                }
+                                *//** Обновление объектов реализовать пока не удалось.
+     * Скорее всего причина ошибок в несоответствии их ID, которые генерируются COUNTER'ом *//*
+                                if (positions.get(i).getAltitude() >= 0) {
+                                    rowStore.update(new InfoRow(2, "Высота", positions.get(i).getAltitude() + " м"));
+                                } else {
+                                    rowStore.update(new InfoRow(2, "Высота", 0 + " м"));
+                                }
+                                rowStore.update(new InfoRow(3, "Долгота", String.valueOf(positions.get(i).getLongitude())));
+                                rowStore.update(new InfoRow(4, "Широта", String.valueOf(positions.get(i).getLatitude())));
+                                double speed = new BigDecimal(positions.get(i).getSpeed()).setScale(1, RoundingMode.UP).doubleValue();
+                                stateView.getRowStore().update(new InfoRow(5, "Скорость", speed + " км/ч"));
+                                if (speed > 50) {
+                                    Info.display("Overspeed!", "Allowed speed: 50 km/h. Current speed: " + speed + " km/h");
+                                }
+                                rowStore.update(new InfoRow(6, "Курс", positions.get(i).getCourse() + "°"));
+                                if (positions.get(i).getProtocol() != null && !positions.get(i).getProtocol().equals("")) {
+                                    rowStore.update(new InfoRow(7, "Протокол", positions.get(i).getProtocol()));
+                                }
+                                if (positions.get(i).getAttributes().getIp() != null && !positions.get(i).getAttributes().getIp().equals("")) {
+                                    rowStore.update(new InfoRow(8, "IP", positions.get(i).getAttributes().getIp()));
+                                }
+                                if (!String.valueOf(positions.get(i).getAttributes().getPriority()).equals("undefined") *//*&&
+                                        positions.get(i).getAttributes().getPriority() != 0*//*) {
+                                    rowStore.update(new InfoRow(9, "Приоритет", String.valueOf(positions.get(i).getAttributes().getPriority())));
+                                }
+                                if (!String.valueOf(positions.get(i).getAttributes().getSat()).equals("undefined")) {
+                                    rowStore.update(new InfoRow(10, "Сат", String.valueOf(positions.get(i).getAttributes().getSat())));
+                                }
+                                if (!String.valueOf(positions.get(i).getAttributes().getEvent()).equals("undefined") *//*&&
+                                        positions.get(i).getAttributes().getEvent() != 0*//*) {
+                                    rowStore.update(new InfoRow(11, "Событие", String.valueOf(positions.get(i).getAttributes().getEvent())));
+                                }
+                            }
+                        }
+                    } else {
+                        //new AlertMessageBox("Error", "Can't get position from server").show();
+                    }
+                }
+            });
+        } catch (RequestException e) {
+            e.printStackTrace();
+        }
+    }*/
 }
