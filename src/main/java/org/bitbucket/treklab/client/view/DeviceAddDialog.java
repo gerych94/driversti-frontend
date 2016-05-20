@@ -56,16 +56,6 @@ public class DeviceAddDialog {
 
         ourUiBinder.createAndBindUi(this);
         maxSpeedField.setEnabled(false);
-
-        /*Draggable draggable = new Draggable(window);
-        draggable.setUseProxy(false);*/
-
-        /**
-         * Эти действия уже не нужны, так как за редактирование устройства
-         * отвечает новый DevicePropertiesDialog
-         */
-        //this.nameField.setText(device.getName());
-        //this.uniqueIdField.setText(device.getUniqueId());
     }
 
     public void show() {
@@ -104,54 +94,6 @@ public class DeviceAddDialog {
         } catch (RequestException e) {
             LoggerHelper.log(className, "Some error while connecting to the server", e);
         }
-
-
-/*        // этот код выполняется, если мы обновляем существующий объект
-        if (device.hasId()) {
-            tempDevice.setId(device.getId());
-            try {
-                deviceData.updateDevice(tempDevice, new BaseRequestCallback() {
-                    @Override
-                    public void onResponseReceived(Request request, Response response) {
-                        if (200 == response.getStatusCode()) {
-                            device = JsonUtils.safeEval(response.getText());
-                            deviceStore.update(device);
-                            hide();
-                            LoggerHelper.log(className, "Device "+ device.getName() + " has been updated.");
-                        } else if (400 == response.getStatusCode()) {
-                            new AlertMessageBox("Ошибка обновления", "Такой ИМЕИ уже существует").show();
-                            uniqueIdField.setText(device.getUniqueId());
-                        } else {
-                            new AlertMessageBox("Updating error", "Status code = " + response.getStatusCode()).show();
-                        }
-                    }
-                });
-            } catch (RequestException e) {
-                e.printStackTrace();
-            }
-            // этот код выполняется, если мы добавляем новый объект
-        } else {
-            try {
-                deviceData.addDevice(tempDevice, new BaseRequestCallback() {
-                    @Override
-                    public void onResponseReceived(Request request, Response response) {
-                        if (200 == response.getStatusCode()) {
-                            device = JsonUtils.safeEval(response.getText());
-                            deviceStore.add(device);
-                            hide();
-                            LoggerHelper.log(className, "New device has been added. Device name: " + device.getName());
-                        } else if (400 == response.getStatusCode()) {
-                            new AlertMessageBox("Ошибка добавления", "Такой ИМЕИ уже существует").show();
-                        } else {
-                            LoggerHelper.log(className, "Bad response from server. Status code: " + response.getStatusCode());
-                            new AlertMessageBox("Adding device error", "Status code = " + response.getStatusCode()).show();
-                        }
-                    }
-                });
-            } catch (RequestException e) {
-                LoggerHelper.log(className, "Some error while connecting to the server", e);
-            }
-        }*/
     }
 
     @UiHandler("cancelButton")
