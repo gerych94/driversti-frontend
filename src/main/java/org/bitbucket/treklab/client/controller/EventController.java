@@ -69,7 +69,7 @@ public class EventController {
                                     if (data.get(i).getSpeed() > 30) {
                                         LoggerHelper.log(classname, data.get(i).getDeviceTime());
                                         eventStore.add(new Event(data.get(i).getDeviceTime(), "Some device", "Overspeed"));
-                                        LoggerHelper.log(classname, "Added new overspeed");
+                                        LoggerHelper.log(classname, "Added new overspeed: " + data.get(i).getSpeed());
                                     }
                                 }
                                 from = to;
