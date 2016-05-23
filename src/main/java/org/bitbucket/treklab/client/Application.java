@@ -15,6 +15,8 @@ import org.realityforge.gwt.websockets.client.WebSocket;
 
 public class Application {
 
+    private final static DataService dataServiceController = DataServiceController.getInstance();
+    private static final String className = Application.class.getSimpleName();
     private final NavController navController;
     private final DeviceController deviceController;
     private final EventController eventController;
@@ -24,16 +26,10 @@ public class Application {
     private final ScheduleController scheduleController;
     private final VisibilityController visibilityController;
     private final FollowController followController;
-    private final static DataService dataServiceController = DataServiceController.getInstance();
-
-    private ApplicationView view;
-
     private final CenterView centerView;
     private final WestView westView;
-
+    private ApplicationView view;
     private boolean isDeviceSelected = false;
-
-    private static final String className = Application.class.getSimpleName();
 
     public Application() {
         DeviceProperties deviceProperties = GWT.create(DeviceProperties.class);
@@ -45,7 +41,7 @@ public class Application {
         ServerDataHolder instance = ServerDataHolder.getInstance();
 
         navController = new NavController();
-        mapController = new MapController(globalGeofenceStore);
+        mapController = new MapController(instance, globalGeofenceStore);
         visibilityController = new VisibilityController(globalDeviceStore);
         followController = new FollowController(globalDeviceStore);
         stateController = new StateController(instance);
@@ -69,6 +65,10 @@ public class Application {
                 centerView.getView());
     }
 
+    public static DataService getDataServiceController() {
+        return dataServiceController;
+    }
+
     public void run() {
         RootPanel.get().add(view);
 
@@ -79,13 +79,9 @@ public class Application {
             webSocket.setListener(new SocketListener());
             webSocket.connect("ws://185.69.152.120:8082/api/socket");
         } else {
-            Window.alert( "WebSocket not available!" );
+            Window.alert("WebSocket not available!");
         }
 
         eventController.run();
-    }
-
-    public static DataService getDataServiceController() {
-        return dataServiceController;
     }
 }

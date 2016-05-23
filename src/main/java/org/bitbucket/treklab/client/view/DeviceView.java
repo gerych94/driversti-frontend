@@ -58,54 +58,28 @@ import java.util.Date;
 import java.util.List;
 
 public class DeviceView {
-    interface DeviceViewUiBinder extends UiBinder<Widget, DeviceView> {
-
-    }
-
+    private static final DeviceProperties deviceProp = GWT.create(DeviceProperties.class);
+    private static final EventProperties eventProp = GWT.create(EventProperties.class);
+    private static final GeofenceProperties geoProp = GWT.create(GeofenceProperties.class);
+    // получаем имя класса для Логера
+    private static final String className = DeviceView.class.getSimpleName();
     private static DeviceViewUiBinder ourUiBinder = GWT.create(DeviceViewUiBinder.class);
-
-    /**
-     * методы этого интерфейса выполняются по нажатию соответствующих кнопок на панели управления.
-     * его реализует DeviceController
-     */
-    public interface DeviceHandler {
-        void onAdd();
-
-        void onProperties(Device selectedItem);
-
-        void onRefresh();
-
-        void onRemove(Device selectedItem);
-
-        void onShowHistory(Device selectedItem);
-
-        void onSelected();
-
-        void doubleClicked(Device selectedItem);
-
-        //метод который реагирует при смене чекбокса;
-        void deviceCheckBoxActionVisible(Device device);
-
-        void deviceCheckBoxActionFollow(Device device, boolean flag, boolean historyFlag);
-    }
-
+    private final DeviceHandler deviceHandler;
+    private final StateController stateController;
+    private final DeviceVisibilityHandler deviceVisibilityHandler;
+    private final DeviceFollowHandler deviceFollowHandler;
+    private final ColumnConfig<Device, Boolean> colDeviceVisible;
+    private final ColumnConfig<Device, Boolean> colDeviceFollow;
     @UiField
     ContentPanel contentPanel;
-
-    public ContentPanel getView() {
-        return contentPanel;
-    }
-
     @UiField(provided = true)
     TabPanel tabPanel;
-
     @UiField(provided = true)
     StoreFilterField<Device> deviceFilter;
     @UiField
     TextButton refreshDevicesButton;
     @UiField
     TextButton addDeviceButton;
-
     @UiField
     Grid<Device> deviceGrid;
     @UiField(provided = true)
@@ -114,13 +88,10 @@ public class DeviceView {
     ColumnModel<Device> deviceCM;
     @UiField
     GroupingView<Device> deviceView;
-
-
     @UiField(provided = true)
     StoreFilterField<Event> eventFilter;
     @UiField
     TextButton refreshEventButton;
-
     @UiField
     Grid<Event> eventGrid;
     @UiField(provided = true)
@@ -129,11 +100,8 @@ public class DeviceView {
     ColumnModel<Event> eventCM;
     @UiField
     GroupingView<Event> eventView;
-
-
     @UiField(provided = true)
     StoreFilterField<Geofence> geofenceFilter;
-
     @UiField
     Grid<Geofence> geofenceGrid;
     @UiField(provided = true)
@@ -142,26 +110,10 @@ public class DeviceView {
     ColumnModel<Geofence> geofenceCM;
     @UiField
     GroupingView<Geofence> geofenceView;
-
-    private final DeviceHandler deviceHandler;
-    private final StateController stateController;
-    private final DeviceVisibilityHandler deviceVisibilityHandler;
-    private final DeviceFollowHandler deviceFollowHandler;
-
-    private final ColumnConfig<Device, Boolean> colDeviceVisible;
-    private final ColumnConfig<Device, Boolean> colDeviceFollow;
-
-    private static final DeviceProperties deviceProp = GWT.create(DeviceProperties.class);
-    private static final EventProperties eventProp = GWT.create(EventProperties.class);
-    private static final GeofenceProperties geoProp = GWT.create(GeofenceProperties.class);
     private Resources resources = GWT.create(Resources.class);
     private HeaderIconTemplate headerTemplate = GWT.create(HeaderIconTemplate.class);
     private boolean flag;
     private boolean historyFlag;
-
-    // получаем имя класса для Логера
-    private static final String className = DeviceView.class.getSimpleName();
-
     public DeviceView(final DeviceHandler deviceHandler,
                       ListStore<Device> globalDeviceStore,
                       ListStore<Event> globalEventStore,
@@ -215,12 +167,12 @@ public class DeviceView {
             public void setValue(Device device, Boolean value) {
                 deviceVisibilityHandler.setVisible(device, value);
                 //если чекбокс visible отключаем то отключаем и follow
-                if (!value&&deviceFollowHandler.isFollow(device)) {
-                    flag=true;
+                if (!value && deviceFollowHandler.isFollow(device)) {
+                    //flagMap.put(device.getId(),true);
+                    flag = true;
                     colDeviceFollow.getValueProvider().setValue(device, value);
-                    historyFlag=true;
-                    //  deviceFollowHandler.setFollow(device,value);
-                    // deviceHandler.deviceCheckBoxActionFollow(device);
+                    // historyFlagMap.put(device.getId(),true);
+                    historyFlag = true;
                 }
                 //метод который реагирует при смене чекбокса
                 deviceHandler.deviceCheckBoxActionVisible(device);
@@ -249,18 +201,18 @@ public class DeviceView {
             public void setValue(Device device, Boolean value) {
                 deviceFollowHandler.setFollow(device, value);
                 //если чекбокс follow true тогда включаем и чекбокс visible
-                if (value&&!deviceVisibilityHandler.isVisible(device)) {
+                if (value && !deviceVisibilityHandler.isVisible(device)) {
                     colDeviceVisible.getValueProvider().setValue(device, value);
                     deviceHandler.deviceCheckBoxActionVisible(device);
                 }
-                if(historyFlag){
-                    flag=false;
+                if (historyFlag) {
+                    flag = false;
                 }
-                if(!value){
-                    historyFlag=false;
+                if (!value) {
+                    historyFlag = false;
                 }
                 //метод который реагирует при смене чекбокса
-                deviceHandler.deviceCheckBoxActionFollow(device,flag,historyFlag);
+                deviceHandler.deviceCheckBoxActionFollow(device, flag, historyFlag);
             }
 
             @Override
@@ -475,6 +427,10 @@ public class DeviceView {
         geofenceView.setStripeRows(true);
     }
 
+    public ContentPanel getView() {
+        return contentPanel;
+    }
+
     private void showMaxSpeed() {
         final PositionData positionData = new PositionData();
         try {
@@ -538,7 +494,7 @@ public class DeviceView {
     /**
      * обработчик кнопки добавления нового устройства
      *
-     * @param event
+     * @param event - не используем
      */
     @UiHandler("addDeviceButton")
     public void onAddDeviceButtonClicked(SelectEvent event) {
@@ -557,7 +513,36 @@ public class DeviceView {
         return deviceFollowHandler;
     }
 
-    interface HeaderIconTemplate extends XTemplates {
+    private interface DeviceViewUiBinder extends UiBinder<Widget, DeviceView> {
+
+    }
+
+    /**
+     * методы этого интерфейса выполняются по нажатию соответствующих кнопок на панели управления.
+     * его реализует DeviceController
+     */
+    public interface DeviceHandler {
+        void onAdd();
+
+        void onProperties(Device selectedItem);
+
+        void onRefresh();
+
+        void onRemove(Device selectedItem);
+
+        void onShowHistory(Device selectedItem);
+
+        void onSelected();
+
+        void doubleClicked(Device selectedItem);
+
+        //метод который реагирует при смене чекбокса;
+        void deviceCheckBoxActionVisible(Device device);
+
+        void deviceCheckBoxActionFollow(Device device, boolean flag, boolean historyFlag);
+    }
+
+    private interface HeaderIconTemplate extends XTemplates {
         @XTemplate("<div style=\"text-align:center;\">{img}</div>")
         SafeHtml render(SafeHtml img);
     }
