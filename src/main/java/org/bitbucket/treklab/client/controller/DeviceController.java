@@ -29,19 +29,30 @@ import org.bitbucket.treklab.client.view.DeviceView;
  * Контроллер панели отображения устройств
  */
 public class DeviceController implements ContentController, DeviceView.DeviceHandler, Observer {
-    private static final String DEVICES_KEY = "devices";
-    private static final String className = DeviceController.class.getSimpleName();
     private final DeviceView deviceView;
+    private ListStore<Device> deviceStore;
     private final DeviceData deviceData;
     private final MapController mapController;
     private final StateController stateController;
     private final Observable observable;
-    private ListStore<Device> deviceStore;
+
+    private static final String DEVICES_KEY = "devices";
+    private static final String className = DeviceController.class.getSimpleName();
+
+    /**
+     * Этот метод возвращает графический интерфейс для отображения списка устройства и тулбара для кнопок усправления:
+     * добавления и удаления устройств из списка, фильтра устройств по имени
+     *
+     * @return - графический интерфейс
+     */
+    @Override
+    public ContentPanel getView() {
+        return deviceView.getView();
+    }
 
     /**
      * Конструктор контроллера
-     *
-     * @param globalDeviceStore   - глобальный список устройств
+     *  @param globalDeviceStore   - глобальный список устройств
      *                            В конструкторе инициализируем объект для вызова методов АПИ
      *                            и создаём графический интерфейс для отображения устройств
      * @param globalEventStore    - глобальный список событий
@@ -71,17 +82,6 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
         this.deviceData = new DeviceData();
         this.observable = instance;
         observable.registerObserver(this);
-    }
-
-    /**
-     * Этот метод возвращает графический интерфейс для отображения списка устройства и тулбара для кнопок усправления:
-     * добавления и удаления устройств из списка, фильтра устройств по имени
-     *
-     * @return - графический интерфейс
-     */
-    @Override
-    public ContentPanel getView() {
-        return deviceView.getView();
     }
 
     /**
@@ -183,7 +183,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
         final ConfirmMessageBox confirm = new ConfirmMessageBox(
                 "Подтверждение удаления устройства",
                 "Это действие удалит все данные этого трекера, восстановление будет невозможно! \n" +
-                        "Вы действительно хотите удалить устройство?");
+                "Вы действительно хотите удалить устройство?");
         confirm.setResizable(false);
         confirm.setModal(true);
         confirm.setWidth(350);
@@ -253,7 +253,10 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
         if (selectedItem != null) {
             //deviceView.getRemoveDeviceButton().setEnabled(true);
             mapController.focusedOnDevice(selectedItem);
-        }
+        } /*else {
+            // в противном случае деактивируем кнопку удаления
+            //deviceView.getRemoveDeviceButton().setEnabled(false);
+        }*/
     }
 
     //метод который реагирует на переключение чекбокса visible
@@ -262,7 +265,10 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
         //устанавливает - удаляет маркер для определенного устройства
         if (deviceView.getDeviceVisibilityHandler().isVisible(device)) {
             mapController.drawDeviceMarker(device);
+            //  mapController.refocusedDevice(device,true);
+            //  mapController.startDraw(device);
         } else {
+            // mapController.refocusedDevice(device,false);
             mapController.removeDeviceMarker(device);
 
         }
@@ -270,27 +276,25 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
 
     //метод который реагирует на переключение чекбокса follow
     @Override
-    public void deviceCheckBoxActionFollow(Device device, boolean flag, boolean historyFlag) {
+    public void deviceCheckBoxActionFollow(Device device,boolean flag,boolean historyFlag) {
         //работает только если включен чекбок visible
         // if (deviceView.getDeviceVisibilityHandler().isVisible(device)) {
         //  mapController.refocusedDevice(device,deviceView.getDeviceFollowHandler().isFollow(device));
         // }
-        if (!flag) {
-            if (deviceView.getDeviceFollowHandler().isFollow(device)) {
+        if(!flag){
+            if(deviceView.getDeviceFollowHandler().isFollow(device)){
                 // new AlertMessageBox("start draw "," start draw").show();
-                if (historyFlag) {
+                if(historyFlag){
                     //    new AlertMessageBox("history","history flag").show();
                     mapController.drawHistory(device);
-                } else {
+                }else {
                     //  new AlertMessageBox("start draw ","start draw").show();
-                    //mapController.startDraw(device);
-                    mapController.setStartDrawFlag(device);
-                }
-            } else {
+                    mapController.startDraw(device);}
+            }else {
                 // new AlertMessageBox("delete","delete").show();
                 mapController.removeWay(device);
             }
-        } else {
+        }else {
             // new AlertMessageBox("set flag","set flag").show();
             mapController.setFlag(device);
         }

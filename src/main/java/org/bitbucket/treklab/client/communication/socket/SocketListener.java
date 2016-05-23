@@ -20,9 +20,6 @@ public class SocketListener implements WebSocketListener {
     @Override
     public void onClose(WebSocket webSocket, boolean wasClean, int code, String reason) {
         Window.alert("WebSocket close! " + reason + " and webSocket is connected: " + webSocket.isConnected());
-        /*while (webSocket.isConnected()) {
-            webSocket.connect("ws://185.69.152.120:8082/api/socket");
-        }*/
     }
 
     @Override
