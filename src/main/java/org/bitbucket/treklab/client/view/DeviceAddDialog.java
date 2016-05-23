@@ -21,24 +21,10 @@ import org.bitbucket.treklab.client.model.Device;
 import org.bitbucket.treklab.client.util.LoggerHelper;
 
 public class DeviceAddDialog {
-    interface DeviceDialogUiBinder extends UiBinder<Widget, DeviceAddDialog> {
-    }
-
-    private static DeviceDialogUiBinder ourUiBinder = GWT.create(DeviceDialogUiBinder.class);
-
     private static final String className = DeviceAddDialog.class.getSimpleName();
-
-    private Device device;
-    private ListStore<Device> deviceStore;
-    private DeviceData deviceData;
-
+    private static DeviceDialogUiBinder ourUiBinder = GWT.create(DeviceDialogUiBinder.class);
     @UiField
     Window window;
-
-    public Window getWindow() {
-        return window;
-    }
-
     @UiField
     VerticalLayoutContainer container;
     @UiField
@@ -47,15 +33,21 @@ public class DeviceAddDialog {
     TextField uniqueIdField;
     @UiField
     TextField maxSpeedField;
-
+    private Device device;
+    private ListStore<Device> deviceStore;
+    private DeviceData deviceData;
     public DeviceAddDialog(Device selectedDevice, ListStore<Device> deviceStore) {
         this.device = selectedDevice;   // по сути это лишнее, как и устройство в конструкторе
-                                        // так как за редактирование устройства отвечает новый DevicePropertiesDialog
+        // так как за редактирование устройства отвечает новый DevicePropertiesDialog
         this.deviceStore = deviceStore;
         this.deviceData = new DeviceData();
 
         ourUiBinder.createAndBindUi(this);
         maxSpeedField.setEnabled(false);
+    }
+
+    public Window getWindow() {
+        return window;
     }
 
     public void show() {
@@ -99,5 +91,8 @@ public class DeviceAddDialog {
     @UiHandler("cancelButton")
     public void onCancelClicked(SelectEvent event) {
         hide();
+    }
+
+    interface DeviceDialogUiBinder extends UiBinder<Widget, DeviceAddDialog> {
     }
 }

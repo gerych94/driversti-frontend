@@ -3,8 +3,7 @@ package org.bitbucket.treklab.client.map;
 import org.discotools.gwt.leaflet.client.marker.label.LabelOptions;
 
 public class LabelHelper {
-    public static LabelOptions createLabelOptions()
-    {
+    public static LabelOptions createLabelOptions() {
         final LabelOptions labelOptions = new LabelOptions();
         //прикрепляет обработчик, который позволяет показывать/скрывать
         //метку при наведении мыши

@@ -23,35 +23,27 @@ import org.bitbucket.treklab.client.communication.GeofenceData;
 import org.bitbucket.treklab.client.model.Geofence;
 
 public class GeofenceAddDialog extends Composite {
-    interface GeoFenceAddDialogUiBinder extends UiBinder<Widget, GeofenceAddDialog> {
-    }
-
-    private static GeoFenceAddDialogUiBinder uiBinder = GWT.create(GeoFenceAddDialogUiBinder.class);
-
     private static final String className = GeofenceAddDialog.class.getSimpleName();
-
-    private Geofence geofence;
-    private ListStore<Geofence> geofenceStore;
-    private GeofenceData geofenceData;
-
+    private static GeoFenceAddDialogUiBinder uiBinder = GWT.create(GeoFenceAddDialogUiBinder.class);
     @UiField
     Window window;
-
-    public Window getWindow() {
-        return window;
-    }
-
     @UiField
     VerticalLayoutContainer container;
     @UiField
     TextField nameField;
     @UiField
     TextArea descriptionArea;
-
+    private Geofence geofence;
+    private ListStore<Geofence> geofenceStore;
+    private GeofenceData geofenceData;
     public GeofenceAddDialog(Geofence geofence, ListStore<Geofence> geofenceStore) {
         this.geofence = geofence;
         this.geofenceStore = geofenceStore;
         uiBinder.createAndBindUi(this);
+    }
+
+    public Window getWindow() {
+        return window;
     }
 
     public void show() {
@@ -93,5 +85,8 @@ public class GeofenceAddDialog extends Composite {
     @UiHandler("cancelButton")
     public void onCancelClicked(SelectEvent event) {
         hide();
+    }
+
+    interface GeoFenceAddDialogUiBinder extends UiBinder<Widget, GeofenceAddDialog> {
     }
 }

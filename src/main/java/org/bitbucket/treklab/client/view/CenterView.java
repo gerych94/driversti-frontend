@@ -10,26 +10,15 @@ import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.Viewport;
 
 public class CenterView extends Composite {
-    interface CenterViewUiBinder extends UiBinder<Widget, CenterView> {
-    }
-
     private static CenterViewUiBinder ourUiBinder = GWT.create(CenterViewUiBinder.class);
-
-    @UiField
-    ContentPanel contentPanel;
-
-    public ContentPanel getView() {
-        return contentPanel;
-    }
-
     @UiField(provided = true)
     final Viewport mapView;
+    @UiField
+    ContentPanel contentPanel;
     @UiField(provided = true)
     ContentPanel scheduleView;
-
     @UiField
     BorderLayoutContainer.BorderLayoutData southData;
-
     public CenterView(final Viewport mapV, ContentPanel scheduleView) {
         this.mapView = mapV;
         this.scheduleView = scheduleView;
@@ -39,5 +28,12 @@ public class CenterView extends Composite {
         this.southData.setCollapseMini(true);
         this.southData.setCollapsed(true);
         //this.southData.setCollapseHidden(true);
+    }
+
+    public ContentPanel getView() {
+        return contentPanel;
+    }
+
+    interface CenterViewUiBinder extends UiBinder<Widget, CenterView> {
     }
 }

@@ -18,14 +18,13 @@ import java.util.Date;
 
 public class EventController {
 
+    private static final String classname = EventController.class.getSimpleName();
     private final ListStore<Device> deviceStore;
     private final ListStore<Event> eventStore;
-    private boolean firstRun = true;
     private final PositionData positionData = new PositionData();
+    private boolean firstRun = true;
     private Date from;
     private Date to;
-
-    private static final String classname = EventController.class.getSimpleName();
 
     public EventController(ListStore<Device> globalDeviceStore, ListStore<Event> globalEventStore) {
         this.deviceStore = globalDeviceStore;

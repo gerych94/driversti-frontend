@@ -41,17 +41,16 @@ import java.util.HashMap;
 
 public class MapView {
 
+    private static final String MAP_ID = "map";
+    private static final String className = MapView.class.getSimpleName();
+    private final LatLng centerLatLng = new LatLng(48.9, 34.9);
     private Viewport viewport;
     private ContentPanel panel;
-    private static final String MAP_ID = "map";
-    private final LatLng centerLatLng = new LatLng(48.9, 34.9);
     // TODO: 04.04.2016 Рассмотреть возможность добавления маркера в список маркеров и отображения их на карте
     private HashMap<Integer, Marker> markers = new HashMap<>();
     private Marker marker = new Marker(new LatLng(0.0, 0.0), new Options());
     private Map map;
     private ListStore<Geofence> geofenceStore;
-
-    private static final String className = MapView.class.getSimpleName();
 
     public MapView(ListStore<Geofence> globalGeofenceStore) {
         this.geofenceStore = globalGeofenceStore;

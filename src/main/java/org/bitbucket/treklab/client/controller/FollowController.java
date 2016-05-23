@@ -17,12 +17,6 @@ public class FollowController implements ContentController, DeviceFollowHandler 
         run();
     }
 
-
-    private static class DeviceState {
-        boolean visible = false;
-    }
-
-
     @Override
     public ContentPanel getView() {
         return null;
@@ -60,6 +54,10 @@ public class FollowController implements ContentController, DeviceFollowHandler 
         for (int i = 0; i < deviceListStore.size(); i++) {
             deviceHashMap.put(deviceListStore.get(i).getId(), new DeviceState());
         }
+    }
+
+    private static class DeviceState {
+        boolean visible = false;
     }
 
 }

@@ -10,6 +10,10 @@ public class ScheduleController implements ContentController {
 
     private final ScheduleView scheduleView;
 
+    public ScheduleController() {
+        this.scheduleView = new ScheduleView();
+    }
+
     @Override
     public ContentPanel getView() {
         return scheduleView.getView();
@@ -18,9 +22,5 @@ public class ScheduleController implements ContentController {
     @Override
     public void run() {
 
-    }
-
-    public ScheduleController() {
-        this.scheduleView = new ScheduleView();
     }
 }

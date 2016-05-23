@@ -18,33 +18,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StateView {
-    interface StateViewUiBinder extends UiBinder<Widget, StateView> {
-    }
-
+    private static final InfoRowProperties prop = GWT.create(InfoRowProperties.class);
     private static StateViewUiBinder ourUiBinder = GWT.create(StateViewUiBinder.class);
-
-    public interface StateHandler {
-        void onTabSelected(SelectionEvent<Widget> event);
-    }
-
-    @UiField
-    ContentPanel contentPanel;
-
-    @UiField
-    Grid<InfoRow> rowGrid;
     @UiField(provided = true)
     final ListStore<InfoRow> rowStore;
     @UiField(provided = true)
     final ColumnModel<InfoRow> rowCM;
     @UiField
+    ContentPanel contentPanel;
+    @UiField
+    Grid<InfoRow> rowGrid;
+    @UiField
     GroupingView<InfoRow> rowView;
-
-    public ContentPanel getView() {
-        return contentPanel;
-    }
-
-    private static final InfoRowProperties prop = GWT.create(InfoRowProperties.class);
-
     public StateView(ListStore<InfoRow> rowStore) {
         // TODO: 20.04.2016 Этот список инициализировать в контроллере
         this.rowStore = rowStore;
@@ -66,11 +51,22 @@ public class StateView {
         this.rowView.setStripeRows(true);
     }
 
+    public ContentPanel getView() {
+        return contentPanel;
+    }
+
     public ListStore<InfoRow> getRowStore() {
         return rowStore;
     }
 
     public ColumnModel<InfoRow> getRowCM() {
         return rowCM;
+    }
+
+    interface StateViewUiBinder extends UiBinder<Widget, StateView> {
+    }
+
+    public interface StateHandler {
+        void onTabSelected(SelectionEvent<Widget> event);
     }
 }

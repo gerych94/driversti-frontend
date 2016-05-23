@@ -6,10 +6,8 @@ import org.discotools.gwt.leaflet.client.types.Icon;
 import org.discotools.gwt.leaflet.client.types.IconOptions;
 import org.discotools.gwt.leaflet.client.types.Point;
 
-public class IconHelper
-{
-       public static Icon createIcon(Map map)
-    {
+public class IconHelper {
+    public static Icon createIcon(Map map) {
         // Create map center position
         IconOptions iconOptions = new IconOptions();
 

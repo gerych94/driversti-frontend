@@ -15,6 +15,7 @@ public interface DemoMovingArrowProperties extends PropertyAccess<DemoMovingArro
     ModelKeyProvider<DemoMovingArrow> key();
 
     ValueProvider<DemoMovingArrow, Integer> id();
+
     @Editor.Path("name")
     LabelProvider<DemoMovingArrow> nameLabel();
 

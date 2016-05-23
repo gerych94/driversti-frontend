@@ -4,12 +4,11 @@
              xmlns:grid='urn:import:com.sencha.gxt.widget.core.client.grid'
              xmlns:button='urn:import:com.sencha.gxt.widget.core.client.button'
              xmlns:container='urn:import:com.sencha.gxt.widget.core.client.container'
-             xmlns:menu='urn:import:com.sencha.gxt.widget.core.client.menu'
              xmlns:form='urn:import:com.sencha.gxt.widget.core.client.form'>
 
   <ui:with field="verticalLayoutData"
            type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
-    <ui:attributes width="1" height="-1" />
+    <ui:attributes width="1" height="-1"/>
   </ui:with>
   <ui:with field="contentData"
            type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
@@ -42,13 +41,15 @@
     .padding {
       padding: 5px;
     }
+
     .padding-right {
       padding-right: 5px;
     }
+
     .x-panel-ghost {
-      opacity:1.0;
-      -moz-opacity:1.0;
-      filter:alpha(opacity=100);
+      opacity: 1.0;
+      -moz-opacity: 1.0;
+      filter: alpha(opacity=100);
     }
   </ui:style>
 
@@ -68,70 +69,70 @@
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="Название" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <form:TextField ui:field="name" name="name" />
+                <form:TextField ui:field="name" name="name"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="IMEI" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <form:TextField ui:field="imei" name="imei" />
+                <form:TextField ui:field="imei" name="imei"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="Модель транспортного средства" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <form:TextField ui:field="vehicleModel" name="vehicleModel" />
+                <form:TextField ui:field="vehicleModel" name="vehicleModel"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="VIN" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <form:TextField ui:field="vin" name="vin" />
+                <form:TextField ui:field="vin" name="vin"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="Номерной знак" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <form:TextField ui:field="numberplate" name="numberplate" />
+                <form:TextField ui:field="numberplate" name="numberplate"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="Группа" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <form:ComboBox ui:field="demoGroupCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+                <form:ComboBox ui:field="demoGroupCombo" allowBlank="true" forceSelection="true" triggerAction="ALL"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="Водитель" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <form:ComboBox ui:field="demoDriverCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+                <form:ComboBox ui:field="demoDriverCombo" allowBlank="true" forceSelection="true" triggerAction="ALL"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="Trailer" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <form:ComboBox ui:field="demoTrailerCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+                <form:ComboBox ui:field="demoTrailerCombo" allowBlank="true" forceSelection="true" triggerAction="ALL"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="GPS устройство" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <form:ComboBox ui:field="demoGPSCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+                <form:ComboBox ui:field="demoGPSCombo" allowBlank="true" forceSelection="true" triggerAction="ALL"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="№ SIM-карты" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <form:TextField ui:field="numberSIM" name="numberSIM" />
+                <form:TextField ui:field="numberSIM" name="numberSIM"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
@@ -139,9 +140,10 @@
             <form:FieldLabel text="Одометр (км)" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
                 <g:HorizontalPanel>
-                  <form:ComboBox ui:field="demoOdometerCombo" allowBlank="true" forceSelection="true" triggerAction="ALL"
-                                  addStyleNames="{style.padding-right}" width="80" />
-                  <form:TextField ui:field="odometer" name="odometer" width="90" />
+                  <form:ComboBox ui:field="demoOdometerCombo" allowBlank="true" forceSelection="true"
+                                 triggerAction="ALL"
+                                 addStyleNames="{style.padding-right}" width="80"/>
+                  <form:TextField ui:field="odometer" name="odometer" width="90"/>
                 </g:HorizontalPanel>
               </form:widget>
             </form:FieldLabel>
@@ -151,8 +153,8 @@
               <form:widget>
                 <g:HorizontalPanel>
                   <form:ComboBox ui:field="demoMotoCombo" allowBlank="true" forceSelection="true" triggerAction="ALL"
-                                  addStyleNames="{style.padding-right}" width="80"/>
-                  <form:TextField ui:field="motohours" name="motohours" width="90" />
+                                 addStyleNames="{style.padding-right}" width="80"/>
+                  <form:TextField ui:field="motohours" name="motohours" width="90"/>
                 </g:HorizontalPanel>
               </form:widget>
             </form:FieldLabel>
@@ -166,7 +168,7 @@
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="Иконка на карте" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <form:ComboBox ui:field="demoMapIconCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+                <form:ComboBox ui:field="demoMapIconCombo" allowBlank="true" forceSelection="true" triggerAction="ALL"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
@@ -174,7 +176,8 @@
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="Stopped arrow color" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <form:ComboBox ui:field="demoStoppedArrowCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+                <form:ComboBox ui:field="demoStoppedArrowCombo" allowBlank="true" forceSelection="true"
+                               triggerAction="ALL"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
@@ -182,7 +185,8 @@
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="Moving arrow color" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <form:ComboBox ui:field="demoMovingArrowCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+                <form:ComboBox ui:field="demoMovingArrowCombo" allowBlank="true" forceSelection="true"
+                               triggerAction="ALL"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
@@ -190,7 +194,8 @@
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="Engine idle arrow color" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <form:ComboBox ui:field="demoEngineArrowCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+                <form:ComboBox ui:field="demoEngineArrowCombo" allowBlank="true" forceSelection="true"
+                               triggerAction="ALL"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
@@ -198,14 +203,15 @@
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="SOS event arrow color" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <form:ComboBox ui:field="demoSOSArrowCombo" allowBlank="true" forceSelection="true" triggerAction="ALL" />
+                <form:ComboBox ui:field="demoSOSArrowCombo" allowBlank="true" forceSelection="true"
+                               triggerAction="ALL"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="Иконка" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <g:Label text="Choose icon" />
+                <g:Label text="Choose icon"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
@@ -213,14 +219,14 @@
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="Tail color" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <gxt:ColorPalette  />
+                <gxt:ColorPalette/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
           <container:child layoutData="{verticalLayoutData}">
             <form:FieldLabel text="Tail points quantity" labelWidth="195" addStyleNames="{style.padding}">
               <form:widget>
-                <form:TextField ui:field="tailPointsQuantity" name="tailPointsQuantity" />
+                <form:TextField ui:field="tailPointsQuantity" name="tailPointsQuantity"/>
               </form:widget>
             </form:FieldLabel>
           </container:child>
@@ -238,7 +244,8 @@
       <gxt:child config="{infoTabConfig}">
         <container:VerticalLayoutContainer>
           <container:child layoutData="{gridData}">
-            <grid:Grid ui:field="infoRowGrid" view="{infoRowView}" cm="{infoRowCM}" store="{infoRowStore}" stateful="true"
+            <grid:Grid ui:field="infoRowGrid" view="{infoRowView}" cm="{infoRowCM}" store="{infoRowStore}"
+                       stateful="true"
                        stateId="infoRowGrid"/>
           </container:child>
         </container:VerticalLayoutContainer>

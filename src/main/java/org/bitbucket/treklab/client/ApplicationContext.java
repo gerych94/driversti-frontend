@@ -7,12 +7,11 @@ import java.util.Set;
 
 public class ApplicationContext {
     private static final ApplicationContext context = new ApplicationContext();
+    private Set<Integer> followedDeviceIds;
 
     public static ApplicationContext getInstance() {
         return context;
     }
-
-    private Set<Integer> followedDeviceIds;
 
     public void follow(Device device) {
         if (followedDeviceIds == null) {

@@ -15,6 +15,7 @@ public interface DemoMapIconProperties extends PropertyAccess<DemoMapIcon> {
     ModelKeyProvider<DemoMapIcon> key();
 
     ValueProvider<DemoMapIcon, Integer> id();
+
     @Editor.Path("name")
     LabelProvider<DemoMapIcon> nameLabel();
 

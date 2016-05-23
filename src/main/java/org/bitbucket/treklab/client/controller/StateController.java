@@ -35,13 +35,18 @@ import java.util.Date;
  */
 public class StateController implements ContentController, StateView.StateHandler, Observer {
 
-    private final StateView stateView;
     private static final InfoRowProperties prop = GWT.create(InfoRowProperties.class);
-    private final ListStore<InfoRow> rowStore = new ListStore<>(prop.key());
-    private Device selectedDevice;
-    private final Observable observable;
-
     private static final String POSITIONS_KEY = "positions";
+    private final StateView stateView;
+    private final ListStore<InfoRow> rowStore = new ListStore<>(prop.key());
+    private final Observable observable;
+    private Device selectedDevice;
+
+    public StateController(ServerDataHolder instance) {
+        this.stateView = new StateView(rowStore);
+        this.observable = instance;
+        observable.registerObserver(this);
+    }
 
     @Override
     public ContentPanel getView() {
@@ -51,12 +56,6 @@ public class StateController implements ContentController, StateView.StateHandle
     @Override
     public void run() {
 
-    }
-
-    public StateController(ServerDataHolder instance) {
-        this.stateView = new StateView(rowStore);
-        this.observable = instance;
-        observable.registerObserver(this);
     }
 
     public void fillGrid(final Device device) {

@@ -1,7 +1,5 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-             xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'
-             xmlns:w='urn:import:org.bitbucket.treklab.client.widget'
              xmlns:grid='urn:import:com.sencha.gxt.widget.core.client.grid'>
 
   <!-- Данные для заполнения таблицы свойствами объекта Position (инкасуллироваными в объекты Row) -->
@@ -12,6 +10,6 @@
   <gxt:ContentPanel ui:field="contentPanel" headerVisible="false" collapsible="true" titleCollapse="true"
                     borders="true">
     <!--<w:StateViewGrid ui:field="stateViewGrid" />-->
-    <grid:Grid ui:field="rowGrid" store="{rowStore}" cm="{rowCM}" view="{rowView}"  stateful="true" stateId="rowGrid"/>
+    <grid:Grid ui:field="rowGrid" store="{rowStore}" cm="{rowCM}" view="{rowView}" stateful="true" stateId="rowGrid"/>
   </gxt:ContentPanel>
 </ui:UiBinder>

@@ -15,6 +15,7 @@ public interface DemoSOSArrowProperties extends PropertyAccess<DemoSOSArrow> {
     ModelKeyProvider<DemoSOSArrow> key();
 
     ValueProvider<DemoSOSArrow, Integer> id();
+
     @Editor.Path("name")
     LabelProvider<DemoSOSArrow> nameLabel();
 

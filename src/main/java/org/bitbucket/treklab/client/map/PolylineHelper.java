@@ -6,9 +6,8 @@ import org.discotools.gwt.leaflet.client.map.Map;
 import org.discotools.gwt.leaflet.client.types.LatLng;
 
 public class PolylineHelper {
-    public static void draw(Map map, LatLng[] latlngs)
-    {
-		/*
+    public static void draw(Map map, LatLng[] latlngs) {
+        /*
 		LatLng latlngLine1 = new LatLng(59.915, 10.759);
 		LatLng latlngLine2 = new LatLng(59.900, 10.800);
 		LatLng latlngLine3 = new LatLng(59.990, 10.800);
@@ -16,7 +15,7 @@ public class PolylineHelper {
 		*/
 
         //GWT.log("size   :" + latlngs.length);
-        for(LatLng l : latlngs) {
+        for (LatLng l : latlngs) {
             //GWT.log("string :" + l.toString());
         }
         //GWT.log("Polyline");

@@ -36,6 +36,7 @@ public class ServerDataHolder implements Observable {
     /**
      * Этот метод парсит полученную от сервера по сокетах строку (по своей сути является Map<String, String>)
      * на ключ и значение. В зависимости от ключа, заполняем данными поля device и positions
+     *
      * @param data - данные из сервера
      */
     public void parse(String data) {

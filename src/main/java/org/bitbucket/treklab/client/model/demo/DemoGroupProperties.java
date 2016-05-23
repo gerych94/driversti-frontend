@@ -15,6 +15,7 @@ public interface DemoGroupProperties extends PropertyAccess<DemoGroup> {
     ModelKeyProvider<DemoGroup> key();
 
     ValueProvider<DemoGroup, Integer> id();
+
     @Editor.Path("name")
     LabelProvider<DemoGroup> nameLabel();
 

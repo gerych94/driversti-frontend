@@ -11,5 +11,6 @@ public interface InfoRowProperties extends PropertyAccess<InfoRow> {
     ModelKeyProvider<InfoRow> key();
 
     ValueProvider<InfoRow, String> name();
+
     ValueProvider<InfoRow, String> value();
 }

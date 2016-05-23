@@ -18,10 +18,6 @@ public class UserController extends ServerData {
 
     private LoginController loginController;
 
-    public interface UserHandler {
-        void onRegister(User user);
-    }
-
     public void login(String login, final String password, LoginController loginController) {
 
         this.loginController = loginController;
@@ -135,6 +131,10 @@ public class UserController extends ServerData {
 
     private void onRegister(User user) {
         loginController.onRegister(user);
+    }
+
+    public interface UserHandler {
+        void onRegister(User user);
     }
 
 }

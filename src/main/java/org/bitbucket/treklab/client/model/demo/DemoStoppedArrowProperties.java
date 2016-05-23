@@ -15,6 +15,7 @@ public interface DemoStoppedArrowProperties extends PropertyAccess<DemoStoppedAr
     ModelKeyProvider<DemoStoppedArrow> key();
 
     ValueProvider<DemoStoppedArrow, Integer> id();
+
     @Editor.Path("name")
     LabelProvider<DemoStoppedArrow> nameLabel();
 

@@ -7,20 +7,16 @@ import org.bitbucket.treklab.client.communication.Base64;
 import org.bitbucket.treklab.client.model.User;
 import org.bitbucket.treklab.client.view.LoginDialog;
 
-public class LoginController implements LoginDialog.LoginHandler, DataServiceController.UserHandler{
+public class LoginController implements LoginDialog.LoginHandler, DataServiceController.UserHandler {
 
     private LoginHandler loginHandler;
-    private LoginDialog  loginDialog;
-
-    public interface LoginHandler {
-        void onLogin();
-    }
+    private LoginDialog loginDialog;
 
     private boolean validate(String login, String password) {
-        if (login == null || login.isEmpty()){
+        if (login == null || login.isEmpty()) {
             new AlertMessageBox("Ошибка авторизации", "Имя пользователя не заполено").show();
             return false;
-        } else if (password == null || password.isEmpty()){
+        } else if (password == null || password.isEmpty()) {
             new AlertMessageBox("Ошибка авторизации", "Пароль не заполен").show();
             return false;
         }
@@ -42,10 +38,10 @@ public class LoginController implements LoginDialog.LoginHandler, DataServiceCon
 
     @Override
     public void onLogin(String login, String password) {
-        if (validate(login, password)){
+        if (validate(login, password)) {
             //User user = Application.getDataServiceController().getUserSession();
             Application.getDataServiceController().login(login, password, LoginController.this);
-        }else {
+        } else {
             new AlertMessageBox("Ошибка логгирования", "Неверное значение логина/пароля");
         }
     }
@@ -84,6 +80,10 @@ public class LoginController implements LoginDialog.LoginHandler, DataServiceCon
         Application.getDataServiceController().setUser(user);
         loginDialog.hide();
         loginHandler.onLogin();
+    }
+
+    public interface LoginHandler {
+        void onLogin();
     }
 
 }

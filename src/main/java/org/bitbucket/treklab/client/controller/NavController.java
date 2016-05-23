@@ -10,6 +10,10 @@ public class NavController implements ContentController {
 
     private final NavView navView;
 
+    public NavController() {
+        this.navView = new NavView();
+    }
+
     @Override
     public ContentPanel getView() {
         return navView.getView();
@@ -18,9 +22,5 @@ public class NavController implements ContentController {
     @Override
     public void run() {
 
-    }
-
-    public NavController() {
-        this.navView = new NavView();
     }
 }

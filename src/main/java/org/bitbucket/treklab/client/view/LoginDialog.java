@@ -14,28 +14,16 @@ import com.sencha.gxt.widget.core.client.form.PasswordField;
 import com.sencha.gxt.widget.core.client.form.TextField;
 
 public class LoginDialog extends Composite {
-    interface LoginDialogUiBinder extends UiBinder<Window, LoginDialog> {
-    }
-
     private static LoginDialogUiBinder uiBinder = GWT.create(LoginDialogUiBinder.class);
-
-    public interface LoginHandler {
-        void onLogin(String login, String password);
-        void onRegister(String login, String password);
-    }
-
-    private LoginHandler loginHandler;
-
     @UiField
     Window window;
-
     @UiField
     TextField login;
     @UiField
     PasswordField password;
     @UiField
     TextButton registerButton;
-
+    private LoginHandler loginHandler;
     public LoginDialog(LoginHandler loginHandler) {
         this.loginHandler = loginHandler;
 
@@ -64,10 +52,19 @@ public class LoginDialog extends Composite {
         loginHandler.onRegister(login.getText(), password.getText());
     }
 
-    @UiHandler({ "login", "password" })
+    @UiHandler({"login", "password"})
     public void onKeyDown(KeyDownEvent event) {
         if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
             login();
         }
+    }
+
+    interface LoginDialogUiBinder extends UiBinder<Window, LoginDialog> {
+    }
+
+    public interface LoginHandler {
+        void onLogin(String login, String password);
+
+        void onRegister(String login, String password);
     }
 }

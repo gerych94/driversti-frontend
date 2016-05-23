@@ -15,6 +15,7 @@ public interface DemoGPSProperties extends PropertyAccess<DemoGPS> {
     ModelKeyProvider<DemoGPS> key();
 
     ValueProvider<DemoGPS, Integer> id();
+
     @Editor.Path("name")
     LabelProvider<DemoGPS> nameLabel();
 

@@ -21,7 +21,7 @@ public class DeviceData extends ServerData {
     }
 
     public void removeDevice(Device device, RequestCallback callback) throws RequestException {
-        sendRequest("/devices/" + device.getId() , null, RequestBuilder.DELETE, callback);
+        sendRequest("/devices/" + device.getId(), null, RequestBuilder.DELETE, callback);
     }
 
     private String createDeviceDataForRequest(Device device) {

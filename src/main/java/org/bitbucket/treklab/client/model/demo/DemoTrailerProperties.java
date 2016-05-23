@@ -15,6 +15,7 @@ public interface DemoTrailerProperties extends PropertyAccess<DemoTrailer> {
     ModelKeyProvider<DemoTrailer> key();
 
     ValueProvider<DemoTrailer, Integer> id();
+
     @Editor.Path("name")
     LabelProvider<DemoTrailer> nameLabel();
 

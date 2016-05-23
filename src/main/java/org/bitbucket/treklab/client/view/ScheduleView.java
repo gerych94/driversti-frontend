@@ -7,19 +7,18 @@ import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 
 public class ScheduleView {
-    interface ScheduleViewUiBinder extends UiBinder<Widget, ScheduleView> {
-    }
-
     private static ScheduleViewUiBinder ourUiBinder = GWT.create(ScheduleViewUiBinder.class);
-
     @UiField
     ContentPanel contentPanel;
+
+    public ScheduleView() {
+        ourUiBinder.createAndBindUi(this);
+    }
 
     public ContentPanel getView() {
         return contentPanel;
     }
 
-    public ScheduleView() {
-        ourUiBinder.createAndBindUi(this);
+    interface ScheduleViewUiBinder extends UiBinder<Widget, ScheduleView> {
     }
 }

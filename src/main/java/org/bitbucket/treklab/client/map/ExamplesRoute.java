@@ -4030,7 +4030,7 @@ public class ExamplesRoute {
         latLng = new LatLng(50.428623000, 30.635461000);
         coordinates.add(latLng);
         /*
-		latLng = new LatLng(50.428648000, 30.635551000);
+        latLng = new LatLng(50.428648000, 30.635551000);
 		coordinates.add(latLng);
 		latLng = new LatLng(50.428670000, 30.635638000);
 		coordinates.add(latLng);

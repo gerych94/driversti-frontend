@@ -12,13 +12,12 @@ import org.discotools.gwt.leaflet.client.marker.MarkerOptions;
 import org.discotools.gwt.leaflet.client.types.LatLng;
 
 public class MarkerHelper {
-    public static void createGroupMarker(Map map)
-    {
+    public static void createGroupMarker(Map map) {
 
         // Параметры для контрола-переключателя слоев: bases, overlays, controlOptions
         Options bases = new Options();
 
-        Options overlays =new Options();
+        Options overlays = new Options();
 
         ControlOptions controlOptions = new ControlOptions();
         controlOptions.setPosition(Position.BOTTOM_RIGHT);
@@ -37,15 +36,15 @@ public class MarkerHelper {
         opt3.setTitle("marker3");
         MarkerOptions opt4 = new MarkerOptions();
         opt4.setTitle("marker4");
-        Marker marker1 = new Marker(glatlng1,opt1);
-        Marker marker2 = new Marker(glatlng2,opt2);
-        Marker marker3 = new Marker(glatlng3,opt3);
-        Marker marker4 = new Marker(glatlng4,opt4);
+        Marker marker1 = new Marker(glatlng1, opt1);
+        Marker marker2 = new Marker(glatlng2, opt2);
+        Marker marker3 = new Marker(glatlng3, opt3);
+        Marker marker4 = new Marker(glatlng4, opt4);
 
-        Marker[] markers = new Marker[] {marker1, marker2};
+        Marker[] markers = new Marker[]{marker1, marker2};
         LayerGroup groupMarkers1 = new LayerGroup(markers);
 
-        Marker[] markers2 = new Marker[] {marker3, marker4};
+        Marker[] markers2 = new Marker[]{marker3, marker4};
         LayerGroup groupMarkers2 = new LayerGroup(markers2);
         overlays.setProperty("Group marker 1", groupMarkers1);
         overlays.setProperty("Group marker 2", groupMarkers2);
@@ -57,9 +56,8 @@ public class MarkerHelper {
     }
 
 
-    public static LatLng getUkraineLatLng()
-    {
-		/*
+    public static LatLng getUkraineLatLng() {
+        /*
 		//Крайние точки Украины
 
 		Северная точка — село Гремяч (Черниговская область).
@@ -117,8 +115,7 @@ public class MarkerHelper {
 
 
     //генерируем массив маркеров
-    public static Marker[] generateArrayOfMarkers()
-    {
+    public static Marker[] generateArrayOfMarkers() {
 
 
         LatLng glatlng1 = new LatLng(52.414139000, 30.604332000);
@@ -161,25 +158,25 @@ public class MarkerHelper {
         marker2.bindPopup("Это маркер <b>два</b> для проверки центрирования карты по положению маркера");
         marker3.bindPopup("Это маркер <b>три</b> для проверки центрирования карты по положению маркера");
         //marker4.bindPopup("Это маркер <b>четыре</b> для проверки центрирования карты по положению маркера");
-        String popup4Content = "<div id='content'>"+
-                "<div id='siteNotice'>"+
-                "</div>"+
-                "<h1 id='firstHeading' class='firstHeading'>Uluru</h1>"+
-                "<div id='bodyContent'>"+
+        String popup4Content = "<div id='content'>" +
+                "<div id='siteNotice'>" +
+                "</div>" +
+                "<h1 id='firstHeading' class='firstHeading'>Uluru</h1>" +
+                "<div id='bodyContent'>" +
                 "<p><b>Маркер 4</b>, also referred to as <b>Ayers Rock</b>, is a large " +
-                "sandstone rock formation in the southern part of the "+
-                "Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) "+
-                "south west of the nearest large town, Alice Springs; 450&#160;km "+
-                "(280&#160;mi) by road. Kata Tjuta and Uluru are the two major "+
-                "features of the Uluru - Kata Tjuta National Park. Uluru is "+
-                "sacred to the Pitjantjatjara and Yankunytjatjara, the "+
-                "Aboriginal people of the area. It has many springs, waterholes, "+
-                "rock caves and ancient paintings. Uluru is listed as a World "+
-                "Heritage Site.</p>"+
-                "<p>Attribution: Uluru, <a href='https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194'>"+
-                "https://en.wikipedia.org/w/index.php?title=Uluru</a> "+
-                "(last visited June 22, 2009).</p>"+
-                "</div>"+
+                "sandstone rock formation in the southern part of the " +
+                "Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) " +
+                "south west of the nearest large town, Alice Springs; 450&#160;km " +
+                "(280&#160;mi) by road. Kata Tjuta and Uluru are the two major " +
+                "features of the Uluru - Kata Tjuta National Park. Uluru is " +
+                "sacred to the Pitjantjatjara and Yankunytjatjara, the " +
+                "Aboriginal people of the area. It has many springs, waterholes, " +
+                "rock caves and ancient paintings. Uluru is listed as a World " +
+                "Heritage Site.</p>" +
+                "<p>Attribution: Uluru, <a href='https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194'>" +
+                "https://en.wikipedia.org/w/index.php?title=Uluru</a> " +
+                "(last visited June 22, 2009).</p>" +
+                "</div>" +
                 "</div>";
 
 
@@ -189,6 +186,6 @@ public class MarkerHelper {
 
         markerUkraine.bindPopup("Украина!");
 
-        return new Marker[] { marker1, marker2, marker3, marker4, markerUkraine };
+        return new Marker[]{marker1, marker2, marker3, marker4, markerUkraine};
     }
 }

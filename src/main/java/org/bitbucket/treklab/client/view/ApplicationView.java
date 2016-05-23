@@ -9,26 +9,19 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 
 public class ApplicationView extends Composite {
-    interface ApplicationViewUiBinder extends UiBinder<Widget, ApplicationView> {
-    }
-
     private static ApplicationViewUiBinder uiBinder = GWT.create(ApplicationViewUiBinder.class);
-
-    @UiField
-    BorderLayoutContainer container;
-
     @UiField(provided = true)
     final ContentPanel navPanel;
     @UiField(provided = true)
     final ContentPanel westPanel;
     @UiField(provided = true)
     final ContentPanel centerPanel;
-
+    @UiField
+    BorderLayoutContainer container;
     @UiField
     BorderLayoutContainer.BorderLayoutData northData;
     @UiField
     BorderLayoutContainer.BorderLayoutData westData;
-
     public ApplicationView(ContentPanel navPanel,
                            final ContentPanel westPanel,
                            final ContentPanel centerPanel) {
@@ -57,5 +50,8 @@ public class ApplicationView extends Composite {
             }
         };
         t.schedule(10);*/
+    }
+
+    interface ApplicationViewUiBinder extends UiBinder<Widget, ApplicationView> {
     }
 }

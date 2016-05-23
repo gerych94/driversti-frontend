@@ -13,19 +13,13 @@ import org.discotools.gwt.leaflet.client.marker.MarkerOptions;
 import org.discotools.gwt.leaflet.client.types.*;
 
 public class LeafletCircleEditor {
-    LayerGroup layerGroup;
-
-    Circle circle;
-
     private final Marker centerMarker;
-
     private final Marker northMarker;
-
     private final Marker southMarker;
-
     private final Marker westMarker;
-
     private final Marker eastMarker;
+    LayerGroup layerGroup;
+    Circle circle;
 
     public LeafletCircleEditor(Circle circle) {
         super();

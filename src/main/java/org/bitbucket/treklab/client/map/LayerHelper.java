@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LayerHelper
-{
+public class LayerHelper {
 
-    private  static String[] urls={ "https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicGFtcHVzaGtvIiwiYSI6ImNpbDg0aWFvajAwMXd3NGtyZThrMm83aHQifQ.4V4UOkBoW5ijyvLdjqKJdw",
+    private static String[] urls = {"https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicGFtcHVzaGtvIiwiYSI6ImNpbDg0aWFvajAwMXd3NGtyZThrMm83aHQifQ.4V4UOkBoW5ijyvLdjqKJdw",
             "https://api.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicGFtcHVzaGtvIiwiYSI6ImNpbDg0aWFvajAwMXd3NGtyZThrMm83aHQifQ.4V4UOkBoW5ijyvLdjqKJdw",
             "http://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"};
 
     private static Map<String, String> mapName = new HashMap<>();
+
     static {
         mapName.put("Mapbox Streets", "https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicGFtcHVzaGtvIiwiYSI6ImNpbDg0aWFvajAwMXd3NGtyZThrMm83aHQifQ.4V4UOkBoW5ijyvLdjqKJdw");
         mapName.put("Mapbox Light", "https://api.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicGFtcHVzaGtvIiwiYSI6ImNpbDg0aWFvajAwMXd3NGtyZThrMm83aHQifQ.4V4UOkBoW5ijyvLdjqKJdw");
@@ -22,8 +22,7 @@ public class LayerHelper
     }
 
     //получаем массив опций всех наших слоев
-    public static ArrayList<Options> getTileLayersOptions()
-    {
+    public static ArrayList<Options> getTileLayersOptions() {
         //создание переменных для хранения опций соответствующих слоев
         ArrayList<Options> arrayTileLayerOptions = new ArrayList<Options>();
 
@@ -48,14 +47,12 @@ public class LayerHelper
     }
 
     //получаем массив всех наших слоев с добавленными к ним опциями
-    public static ArrayList<TileLayer>getTileLayers()
-    {
+    public static ArrayList<TileLayer> getTileLayers() {
         ArrayList<TileLayer> tileLayers = new ArrayList<TileLayer>();
         //получение массива слоев карт
         ArrayList<Options> arrayTileLayerOptions = getTileLayersOptions();
 
-        for (int i = 0; i < urls.length; i++)
-        {
+        for (int i = 0; i < urls.length; i++) {
             TileLayer tileLayer = new TileLayer(urls[i], arrayTileLayerOptions.get(i));
             tileLayers.add(tileLayer);
         }

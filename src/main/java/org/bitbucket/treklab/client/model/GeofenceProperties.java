@@ -13,10 +13,16 @@ public interface GeofenceProperties extends PropertyAccess<Geofence> {
     ModelKeyProvider<Geofence> key();
 
     ValueProvider<Geofence, Integer> id();
+
     ValueProvider<Geofence, String> name();
+
     ValueProvider<Geofence, String> description();
+
     ValueProvider<Geofence, List<Coordinate>> coordinates();
+
     ValueProvider<Geofence, Double> radius();
+
     ValueProvider<Geofence, Integer> userId();
+
     ValueProvider<Geofence, String> empty();
 }

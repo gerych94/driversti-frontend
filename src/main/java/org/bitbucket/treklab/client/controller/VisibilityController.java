@@ -18,11 +18,6 @@ public class VisibilityController implements ContentController, DeviceVisibility
         run();
     }
 
-    private class DeviceState {
-        boolean visible = true;
-    }
-
-
     @Override
     public ContentPanel getView() {
         return null;
@@ -60,6 +55,10 @@ public class VisibilityController implements ContentController, DeviceVisibility
         for (int i = 0; i < deviceListStore.size(); i++) {
             deviceState.put(deviceListStore.get(i).getId(), new DeviceState());
         }
+    }
+
+    private class DeviceState {
+        boolean visible = true;
     }
 
 }

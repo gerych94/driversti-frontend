@@ -1,5 +1,4 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-             xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:container='urn:import:com.sencha.gxt.widget.core.client.container'
              xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'>
 
@@ -23,13 +22,13 @@
   <container:Viewport>
     <container:BorderLayoutContainer ui:field="container">
       <container:north layoutData="{northData}">
-        <gxt:ContentPanel ui:field="navPanel" />
+        <gxt:ContentPanel ui:field="navPanel"/>
       </container:north>
       <container:west layoutData="{westData}">
-        <gxt:ContentPanel ui:field="westPanel" />
+        <gxt:ContentPanel ui:field="westPanel"/>
       </container:west>
       <container:center layoutData="{centerData}">
-        <gxt:ContentPanel ui:field="centerPanel" />
+        <gxt:ContentPanel ui:field="centerPanel"/>
       </container:center>
     </container:BorderLayoutContainer>
   </container:Viewport>

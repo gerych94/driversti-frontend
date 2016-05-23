@@ -8,18 +8,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 
 public class WestView extends Composite {
-    interface WestViewUiBinder extends UiBinder<Widget, WestView> {
-    }
-
     private static WestViewUiBinder ourUiBinder = GWT.create(WestViewUiBinder.class);
-
     @UiField
     ContentPanel contentPanel;
-
-    public ContentPanel getView() {
-        return contentPanel;
-    }
-
     @UiField(provided = true)
     ContentPanel deviceView;
     @UiField(provided = true)
@@ -30,5 +21,12 @@ public class WestView extends Composite {
         this.deviceView = deviceView;
         this.stateView = stateView;
         ourUiBinder.createAndBindUi(this);
+    }
+
+    public ContentPanel getView() {
+        return contentPanel;
+    }
+
+    interface WestViewUiBinder extends UiBinder<Widget, WestView> {
     }
 }

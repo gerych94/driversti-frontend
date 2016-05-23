@@ -41,82 +41,37 @@ import java.util.Date;
 import java.util.List;
 
 public class DevicePropertiesDialog extends Composite {
-    interface DevicePropertiesDialogUiBinder extends UiBinder<Widget, DevicePropertiesDialog> {
-    }
-
+    private static final InfoRowProperties prop = GWT.create(InfoRowProperties.class);
+    private static final String className = DevicePropertiesDialog.class.getSimpleName();
     private static DevicePropertiesDialogUiBinder uiBinder = GWT.create(DevicePropertiesDialogUiBinder.class);
-
-    private Device device;
-    private ListStore<Device> deviceStore;
-
     @UiField
     Window window;
-
-    public Window getWindow() {
-        return window;
-    }
-
     @UiField
     TextField name;
     @UiField
     TextField imei;
-
-    // поочерёдно создаём списки для хранения данных комбобоксов
-    private DemoGroupProperties demoGroupProperties = GWT.create(DemoGroupProperties.class);
-    private ListStore<DemoGroup> demoGroupStore = new ListStore<>(demoGroupProperties.key());
     @UiField(provided = true)
     ComboBox<DemoGroup> demoGroupCombo;
-
-    private DemoDriverProperties demoDriverProperties = GWT.create(DemoDriverProperties.class);
-    private ListStore<DemoDriver> demoDriverStore = new ListStore<>(demoDriverProperties.key());
     @UiField(provided = true)
     ComboBox<DemoDriver> demoDriverCombo;
-
-    private DemoTrailerProperties demoTrailerProperties = GWT.create(DemoTrailerProperties.class);
-    private ListStore<DemoTrailer> demoTrailerStore = new ListStore<>(demoTrailerProperties.key());
     @UiField(provided = true)
     ComboBox<DemoTrailer> demoTrailerCombo;
-
-    private DemoGPSProperties demoGPSProperties = GWT.create(DemoGPSProperties.class);
-    private ListStore<DemoGPS> demoGPSStore = new ListStore<>(demoGPSProperties.key());
     @UiField(provided = true)
     ComboBox<DemoGPS> demoGPSCombo;
-
-    private DemoOdometerProperties demoOdometerProperties = GWT.create(DemoOdometerProperties.class);
-    private ListStore<DemoOdometer> demoOdometerStore = new ListStore<>(demoOdometerProperties.key());
     @UiField(provided = true)
     ComboBox<DemoOdometer> demoOdometerCombo;
-
-    private DemoMotoProperties demoMotoProperties = GWT.create(DemoMotoProperties.class);
-    private ListStore<DemoMoto> demoMotoStore = new ListStore<>(demoMotoProperties.key());
     @UiField(provided = true)
     ComboBox<DemoMoto> demoMotoCombo;
-
-    private DemoMapIconProperties demoMapIconProperties = GWT.create(DemoMapIconProperties.class);
-    private ListStore<DemoMapIcon> demoMapIconStore = new ListStore<>(demoMapIconProperties.key());
     @UiField(provided = true)
     ComboBox<DemoMapIcon> demoMapIconCombo;
-
-    private DemoStoppedArrowProperties demoStoppedArrowProperties = GWT.create(DemoStoppedArrowProperties.class);
-    private ListStore<DemoStoppedArrow> demoStoppedArrowStore = new ListStore<>(demoStoppedArrowProperties.key());
     @UiField(provided = true)
     ComboBox<DemoStoppedArrow> demoStoppedArrowCombo;
-
-    private DemoMovingArrowProperties demoMovingArrowProperties = GWT.create(DemoMovingArrowProperties.class);
-    private ListStore<DemoMovingArrow> demoMovingArrowStore = new ListStore<>(demoMovingArrowProperties.key());
     @UiField(provided = true)
     ComboBox<DemoMovingArrow> demoMovingArrowCombo;
-
-    private DemoEngineArrowProperties demoEngineArrowProperties = GWT.create(DemoEngineArrowProperties.class);
-    private ListStore<DemoEngineArrow> demoEngineArrowStore = new ListStore<>(demoEngineArrowProperties.key());
     @UiField(provided = true)
     ComboBox<DemoEngineArrow> demoEngineArrowCombo;
-
-    private DemoSOSArrowProperties demoSOSArrowProperties = GWT.create(DemoSOSArrowProperties.class);
-    private ListStore<DemoSOSArrow> demoSOSArrowStore = new ListStore<>(demoSOSArrowProperties.key());
     @UiField(provided = true)
     ComboBox<DemoSOSArrow> demoSOSArrowCombo;
-
     // таблица и список для заполнения вкладки "ИНФО"
     @UiField
     Grid<InfoRow> infoRowGrid;
@@ -126,10 +81,31 @@ public class DevicePropertiesDialog extends Composite {
     ColumnModel<InfoRow> infoRowCM;
     @UiField
     GroupingView<InfoRow> infoRowView;
-
-    private static final InfoRowProperties prop = GWT.create(InfoRowProperties.class);
-
-    private static final String className = DevicePropertiesDialog.class.getSimpleName();
+    private Device device;
+    private ListStore<Device> deviceStore;
+    // поочерёдно создаём списки для хранения данных комбобоксов
+    private DemoGroupProperties demoGroupProperties = GWT.create(DemoGroupProperties.class);
+    private ListStore<DemoGroup> demoGroupStore = new ListStore<>(demoGroupProperties.key());
+    private DemoDriverProperties demoDriverProperties = GWT.create(DemoDriverProperties.class);
+    private ListStore<DemoDriver> demoDriverStore = new ListStore<>(demoDriverProperties.key());
+    private DemoTrailerProperties demoTrailerProperties = GWT.create(DemoTrailerProperties.class);
+    private ListStore<DemoTrailer> demoTrailerStore = new ListStore<>(demoTrailerProperties.key());
+    private DemoGPSProperties demoGPSProperties = GWT.create(DemoGPSProperties.class);
+    private ListStore<DemoGPS> demoGPSStore = new ListStore<>(demoGPSProperties.key());
+    private DemoOdometerProperties demoOdometerProperties = GWT.create(DemoOdometerProperties.class);
+    private ListStore<DemoOdometer> demoOdometerStore = new ListStore<>(demoOdometerProperties.key());
+    private DemoMotoProperties demoMotoProperties = GWT.create(DemoMotoProperties.class);
+    private ListStore<DemoMoto> demoMotoStore = new ListStore<>(demoMotoProperties.key());
+    private DemoMapIconProperties demoMapIconProperties = GWT.create(DemoMapIconProperties.class);
+    private ListStore<DemoMapIcon> demoMapIconStore = new ListStore<>(demoMapIconProperties.key());
+    private DemoStoppedArrowProperties demoStoppedArrowProperties = GWT.create(DemoStoppedArrowProperties.class);
+    private ListStore<DemoStoppedArrow> demoStoppedArrowStore = new ListStore<>(demoStoppedArrowProperties.key());
+    private DemoMovingArrowProperties demoMovingArrowProperties = GWT.create(DemoMovingArrowProperties.class);
+    private ListStore<DemoMovingArrow> demoMovingArrowStore = new ListStore<>(demoMovingArrowProperties.key());
+    private DemoEngineArrowProperties demoEngineArrowProperties = GWT.create(DemoEngineArrowProperties.class);
+    private ListStore<DemoEngineArrow> demoEngineArrowStore = new ListStore<>(demoEngineArrowProperties.key());
+    private DemoSOSArrowProperties demoSOSArrowProperties = GWT.create(DemoSOSArrowProperties.class);
+    private ListStore<DemoSOSArrow> demoSOSArrowStore = new ListStore<>(demoSOSArrowProperties.key());
 
     public DevicePropertiesDialog(Device selectedItem, ListStore<Device> globalDeviceStore) {
 
@@ -288,8 +264,13 @@ public class DevicePropertiesDialog extends Composite {
         imei.setText(selectedItem.getUniqueId());
     }
 
+    public Window getWindow() {
+        return window;
+    }
+
     /**
      * Метод для заполнения вкладки "ИНФО" данными
+     *
      * @param device - передаём устройство, данные которого заполняют таблицу
      */
     private void fillGrid(final Device device) {
@@ -364,6 +345,7 @@ public class DevicePropertiesDialog extends Composite {
 
     /**
      * Обработчик нажатия на кнопку "СОХРАНИТЬ"
+     *
      * @param event - в данном случае не используем
      */
     @UiHandler("saveButton")
@@ -404,10 +386,14 @@ public class DevicePropertiesDialog extends Composite {
 
     /**
      * Обработчик нажатия на кнопку "ОТМЕНА"
+     *
      * @param event - в данном случае не используем
      */
     @UiHandler("cancelButton")
     public void onCancelClicked(SelectEvent event) {
         hide();
+    }
+
+    interface DevicePropertiesDialogUiBinder extends UiBinder<Widget, DevicePropertiesDialog> {
     }
 }

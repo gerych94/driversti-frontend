@@ -1,4 +1,3 @@
-
 package org.bitbucket.treklab.client.controller;
 
 import org.bitbucket.treklab.client.model.Device;
@@ -11,11 +10,13 @@ public interface DataService {
     User authenticated();
 
     User login(String login, String password);
+
     void login(String login, String password, LoginController loginController);
 
     boolean logout();
 
     User register(String login, String password);
+
     void register(String login, String password, LoginController loginController);
 
     User getUserSession();
@@ -38,6 +39,7 @@ public interface DataService {
 
     void setUser(User user);
 
-    void setUserAuthentication(String userPasswordBase64);
     String getUserAuthentication();
+
+    void setUserAuthentication(String userPasswordBase64);
 }

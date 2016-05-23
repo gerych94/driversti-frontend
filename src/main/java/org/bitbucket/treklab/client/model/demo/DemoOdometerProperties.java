@@ -14,6 +14,7 @@ public interface DemoOdometerProperties extends PropertyAccess<DemoGroup> {
     ModelKeyProvider<DemoOdometer> key();
 
     ValueProvider<DemoOdometer, Integer> id();
+
     @Editor.Path("name")
     LabelProvider<DemoOdometer> nameLabel();
 

@@ -1,5 +1,4 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-             xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'
              xmlns:container='urn:import:com.sencha.gxt.widget.core.client.container'>
 
@@ -10,10 +9,10 @@
   <gxt:ContentPanel ui:field="contentPanel" headerVisible="false">
     <container:BorderLayoutContainer ui:field="container">
       <container:center>
-        <container:Viewport ui:field="mapView" />
+        <container:Viewport ui:field="mapView"/>
       </container:center>
       <container:south layoutData="{southData}">
-        <gxt:ContentPanel ui:field="scheduleView" />
+        <gxt:ContentPanel ui:field="scheduleView"/>
       </container:south>
     </container:BorderLayoutContainer>
   </gxt:ContentPanel>

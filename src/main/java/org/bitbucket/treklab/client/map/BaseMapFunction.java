@@ -1,4 +1,5 @@
 package org.bitbucket.treklab.client.map;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import org.discotools.gwt.leaflet.client.Options;
@@ -27,250 +28,227 @@ import org.discotools.gwt.leaflet.client.types.LatLng;
 
 import java.util.ArrayList;
 
-public class BaseMapFunction
-{
-	//Добавить на карту маркер с меткой
-	public static MarkerWithLabel createMarkerWithLabel(Map map)
-	{
-		/////////////////////////////////////////////////////
-		MapOptions mapOptions = new MapOptions();
+public class BaseMapFunction {
+    //Добавить на карту маркер с меткой
+    public static MarkerWithLabel createMarkerWithLabel(Map map) {
+        /////////////////////////////////////////////////////
+        MapOptions mapOptions = new MapOptions();
 
-		//создаем иконку для маркера
-		Icon icon = IconHelper.createIcon(map);
+        //создаем иконку для маркера
+        Icon icon = IconHelper.createIcon(map);
 
-		//TODO Solve icon url problem
-		mapOptions.setProperty("icon", icon);
+        //TODO Solve icon url problem
+        mapOptions.setProperty("icon", icon);
 
 
-		//координаты метки
-		final LatLng latlngLabel = new  LatLng(50.420710000, 30.640718000);
-		//создаем маркер с меткой
-		final MarkerWithLabel markerWithLabel = new MarkerWithLabel(latlngLabel, mapOptions);
-		//добавляем
-		markerWithLabel.addTo(map);
+        //координаты метки
+        final LatLng latlngLabel = new LatLng(50.420710000, 30.640718000);
+        //создаем маркер с меткой
+        final MarkerWithLabel markerWithLabel = new MarkerWithLabel(latlngLabel, mapOptions);
+        //добавляем
+        markerWithLabel.addTo(map);
 
-		LabelOptions labelOptions = LabelHelper.createLabelOptions();
-		markerWithLabel.bindLabel("<b>Это маркер с меткой</b>", labelOptions);
+        LabelOptions labelOptions = LabelHelper.createLabelOptions();
+        markerWithLabel.bindLabel("<b>Это маркер с меткой</b>", labelOptions);
 
-		markerWithLabel.showLabel();
+        markerWithLabel.showLabel();
 
-		return markerWithLabel;
-	}
+        return markerWithLabel;
+    }
 
-	//добавить на карту маркер со всплывающим попапом
-	public static Marker createMarkerWithPopup(Map map)
-	{
+    //добавить на карту маркер со всплывающим попапом
+    public static Marker createMarkerWithPopup(Map map) {
 
-		MapOptions mapOptions = new MapOptions();
+        MapOptions mapOptions = new MapOptions();
 
-		//создаем координаты маркера
-		final LatLng latlng1 = new LatLng(50.4333, 30.5167);
-		//создаем маркер
-		//конструктор маркера принимает координаты и опции карты MapOptions
-		final Marker marker = new Marker(latlng1, mapOptions);
-		//добавляем маркер на карту
-		marker.addTo(map);
-		//прикрепляем к маркеру попап, параметром выступает HTML (любая строка)
-		marker.bindPopup("<b>Ура попап1!<b>");
+        //создаем координаты маркера
+        final LatLng latlng1 = new LatLng(50.4333, 30.5167);
+        //создаем маркер
+        //конструктор маркера принимает координаты и опции карты MapOptions
+        final Marker marker = new Marker(latlng1, mapOptions);
+        //добавляем маркер на карту
+        marker.addTo(map);
+        //прикрепляем к маркеру попап, параметром выступает HTML (любая строка)
+        marker.bindPopup("<b>Ура попап1!<b>");
 
-		return marker;
-	}
+        return marker;
+    }
 
-	//Добавляем контрол для переключения между слоями карты
-	public static void addLayerCheckboxControl(Map map, ArrayList<TileLayer> tileLayers)
-	{
+    //Добавляем контрол для переключения между слоями карты
+    public static void addLayerCheckboxControl(Map map, ArrayList<TileLayer> tileLayers) {
 
-		//контрол для переключения между слоями карты
-		Options bases = new Options();
-		for (int i = 0; i < tileLayers.size(); i++)
-		{
-			bases.setProperty("слой №"+Integer.toString(i+1), tileLayers.get(i));
-		}
+        //контрол для переключения между слоями карты
+        Options bases = new Options();
+        for (int i = 0; i < tileLayers.size(); i++) {
+            bases.setProperty("слой №" + Integer.toString(i + 1), tileLayers.get(i));
+        }
 
-		Options overlays = new Options();
+        Options overlays = new Options();
 
-		ControlOptions controlOptions = new ControlOptions();
-		controlOptions.setPosition(Position.TOP_RIGHT);
+        ControlOptions controlOptions = new ControlOptions();
+        controlOptions.setPosition(Position.TOP_RIGHT);
 
-		//TODO разобрать что значат параметры bases, overlays, controlOptions
-		Layers control = new Layers(bases, overlays, controlOptions);
-		control.addTo(map);
+        //TODO разобрать что значат параметры bases, overlays, controlOptions
+        Layers control = new Layers(bases, overlays, controlOptions);
+        control.addTo(map);
 
-	}
+    }
 
 
-	public static void runMarker(final Map map,
-								 final Marker marker,
-								 final ArrayList<LatLng> route,
-								 int delay)
-	{
-		//запускаем таймер который будет эмулировать
-		//перемещение маркера по маршруту с течение времени
-		//и отрисовывать маршрут
-		Timer timer = new Timer()
-		{
-			//текущая позиция
-			LatLng currentPosition = new LatLng(50.420710000, 30.640718000);
-			//предыдущая позиция
-			LatLng previousPosition = new LatLng(50.420710000, 30.640718000);
-			//нужды для рисования отрезков маршрута по мере перемещения маркера
+    public static void runMarker(final Map map,
+                                 final Marker marker,
+                                 final ArrayList<LatLng> route,
+                                 int delay) {
+        //запускаем таймер который будет эмулировать
+        //перемещение маркера по маршруту с течение времени
+        //и отрисовывать маршрут
+        Timer timer = new Timer() {
+            //текущая позиция
+            LatLng currentPosition = new LatLng(50.420710000, 30.640718000);
+            //предыдущая позиция
+            LatLng previousPosition = new LatLng(50.420710000, 30.640718000);
+            //нужды для рисования отрезков маршрута по мере перемещения маркера
 
-			//номер точки в коллекции координат маршрута
-			int pointNumber = 0;
+            //номер точки в коллекции координат маршрута
+            int pointNumber = 0;
 
-			public void run()
-			{
-				LatLng latlng;
+            public void run() {
+                LatLng latlng;
 
-				if (pointNumber < route.size())
-				{
-					LatLng currentPosition = route.get(pointNumber);
-					marker.setLatLng(currentPosition);
-					LatLng[] polylineArray = {previousPosition, currentPosition};
+                if (pointNumber < route.size()) {
+                    LatLng currentPosition = route.get(pointNumber);
+                    marker.setLatLng(currentPosition);
+                    LatLng[] polylineArray = {previousPosition, currentPosition};
 
-					if (pointNumber < route.size()-1)
-					{
-						PolylineHelper.draw(map, polylineArray);
-					}
-					previousPosition = currentPosition;
-					pointNumber++;
-				}
-				else
-				{
-					pointNumber = 0;
-					LatLng currentPosition = route.get(pointNumber);
-					previousPosition = currentPosition;
-				}
-			}
-		};
-		timer.scheduleRepeating(delay);
+                    if (pointNumber < route.size() - 1) {
+                        PolylineHelper.draw(map, polylineArray);
+                    }
+                    previousPosition = currentPosition;
+                    pointNumber++;
+                } else {
+                    pointNumber = 0;
+                    LatLng currentPosition = route.get(pointNumber);
+                    previousPosition = currentPosition;
+                }
+            }
+        };
+        timer.scheduleRepeating(delay);
 
-	}
+    }
 
-	//1) Для какого маркера установить его по центру экрана
-	public static void setMarketToScreenCenter(final Map map)
-	{
-		//GWT.debugger();
-		//генерируем много маркеров
-		final Marker[] markers = MarkerHelper.generateArrayOfMarkers();
-		for (int i = 0; i < markers.length; i++)
-		{
-			markers[i].addTo(map);
-			GWT.log("Маркер добавлен к карте " + Integer.toString(i));
-		}
-		//каждые 3 секунды перемещаем карту на указанный маркер
+    //1) Для какого маркера установить его по центру экрана
+    public static void setMarketToScreenCenter(final Map map) {
+        //GWT.debugger();
+        //генерируем много маркеров
+        final Marker[] markers = MarkerHelper.generateArrayOfMarkers();
+        for (int i = 0; i < markers.length; i++) {
+            markers[i].addTo(map);
+            GWT.log("Маркер добавлен к карте " + Integer.toString(i));
+        }
+        //каждые 3 секунды перемещаем карту на указанный маркер
 
 
-		final Timer timer = new Timer()
-		{
+        final Timer timer = new Timer() {
 
 
-			int number = 0;
-			public void run()
-			{
-				//GWT.debugger();
-				GWT.log(String.valueOf(number));
-				if (number > markers.length-1)
-				{
-					number = 0;
+            int number = 0;
 
-				}
-				//GWT.log("");
+            public void run() {
+                //GWT.debugger();
+                GWT.log(String.valueOf(number));
+                if (number > markers.length - 1) {
+                    number = 0;
 
-				LatLng currentLatLng = markers[number].getLatLng();
-				GWT.log("Выводим координаты!");
-				GWT.log(String.valueOf(currentLatLng.lat()));
-				GWT.log(String.valueOf(currentLatLng.lng()));
-				GWT.log("закончили вывод координат");
-				LatLng newLatLng = new LatLng(currentLatLng.lat(), currentLatLng.lng());
+                }
+                //GWT.log("");
 
-				map.setView(newLatLng, 6, false);
-				markers[number].openPopup();
+                LatLng currentLatLng = markers[number].getLatLng();
+                GWT.log("Выводим координаты!");
+                GWT.log(String.valueOf(currentLatLng.lat()));
+                GWT.log(String.valueOf(currentLatLng.lng()));
+                GWT.log("закончили вывод координат");
+                LatLng newLatLng = new LatLng(currentLatLng.lat(), currentLatLng.lng());
 
-				number = number + 1;
+                map.setView(newLatLng, 6, false);
+                markers[number].openPopup();
 
-			}
+                number = number + 1;
 
-		};
-		timer.scheduleRepeating(10000);
+            }
 
-		//map.setView(new LatLng(49.00, 32.00), 6, true);
+        };
+        timer.scheduleRepeating(10000);
 
-		//GWT.log(String.valueOf());
-		//map.setView(new LatLng(51.414139000, 30.604332000), 12, false);
+        //map.setView(new LatLng(49.00, 32.00), 6, true);
 
-	}
-	//2) Отрисовка маршрут
-	////отрисовываем маршрут по коллекции точек
-	public static void drawRoute()
-	{
+        //GWT.log(String.valueOf());
+        //map.setView(new LatLng(51.414139000, 30.604332000), 12, false);
 
-	}
-	//3) Кластеризация ?
+    }
 
+    //2) Отрисовка маршрут
+    ////отрисовываем маршрут по коллекции точек
+    public static void drawRoute() {
 
-	//4) Создание: рисовать полигон, прямоугольник, элипс и круг
+    }
+    //3) Кластеризация ?
 
 
+    //4) Создание: рисовать полигон, прямоугольник, элипс и круг
 
-	public static void addDrawControl(Map map)
-	{
-		// Add Draw Control
-		GWT.log("Draw Control");
-		final FeatureGroup drawnItems = new FeatureGroup();
-		map.addLayer(drawnItems);
-		DrawControlOptions drawControlOptions = new DrawControlOptions();
-		drawControlOptions.setPosition(Position.TOP_LEFT);
-		EditOptions editOptions = new EditOptions();
-		editOptions.setFeatureGroup(drawnItems);
-		drawControlOptions.setEditOptions(editOptions);
-		Draw draw = new Draw(drawControlOptions);
-		map.addControl(draw);
-		EventHandlerManager.addEventHandler(
-				map,
-				DrawEvents.draw_created,
-				new EventHandler<DrawCreatedEvent>()
-				{
 
-					@Override
-					public void handle(
-							DrawCreatedEvent event)
-					{
-						GWT.log("Added " + event.getLayerType() + " to map.");
-						String type = event.getLayerType();
-						ILayer layer = event.getLayer();
-						if (type == "marker")
-						{
-							((Marker) layer).bindPopup("A popup!");
-						}
+    public static void addDrawControl(Map map) {
+        // Add Draw Control
+        GWT.log("Draw Control");
+        final FeatureGroup drawnItems = new FeatureGroup();
+        map.addLayer(drawnItems);
+        DrawControlOptions drawControlOptions = new DrawControlOptions();
+        drawControlOptions.setPosition(Position.TOP_LEFT);
+        EditOptions editOptions = new EditOptions();
+        editOptions.setFeatureGroup(drawnItems);
+        drawControlOptions.setEditOptions(editOptions);
+        Draw draw = new Draw(drawControlOptions);
+        map.addControl(draw);
+        EventHandlerManager.addEventHandler(
+                map,
+                DrawEvents.draw_created,
+                new EventHandler<DrawCreatedEvent>() {
 
-						drawnItems.addLayer(layer);
-					}
-				});
-		EventHandlerManager.addEventHandler(
-				map,
-				DrawEvents.draw_edited,
-				new EventHandler<DrawEditedEvent>()
-				{
+                    @Override
+                    public void handle(
+                            DrawCreatedEvent event) {
+                        GWT.log("Added " + event.getLayerType() + " to map.");
+                        String type = event.getLayerType();
+                        ILayer layer = event.getLayer();
+                        if (type == "marker") {
+                            ((Marker) layer).bindPopup("A popup!");
+                        }
 
-					@Override
-					public void handle(
-							DrawEditedEvent event)
-					{
-						LayerGroup layers = event.getLayers();
-						MyLayerHandler myLayerHandler = new MyLayerHandler();
-						layers.forEachLayer(myLayerHandler);
-						//int countOfEditedLayers = layers.getLayers().length;
-						GWT.log("Edited " + myLayerHandler.countOfEditedLayers + " layers.");
-					}
-				});
-	}
+                        drawnItems.addLayer(layer);
+                    }
+                });
+        EventHandlerManager.addEventHandler(
+                map,
+                DrawEvents.draw_edited,
+                new EventHandler<DrawEditedEvent>() {
 
-	//5) Отобразить или скрыть полигоны
-	//6) Отобразить скрыть маркеры
-	//7) Табличка с данным в попапе
-	//8) на геозоне нужно название геозоны, и присвоили ей название.
-	//9) линейка
-	//10) знать длину маршрута
+                    @Override
+                    public void handle(
+                            DrawEditedEvent event) {
+                        LayerGroup layers = event.getLayers();
+                        MyLayerHandler myLayerHandler = new MyLayerHandler();
+                        layers.forEachLayer(myLayerHandler);
+                        //int countOfEditedLayers = layers.getLayers().length;
+                        GWT.log("Edited " + myLayerHandler.countOfEditedLayers + " layers.");
+                    }
+                });
+    }
+
+    //5) Отобразить или скрыть полигоны
+    //6) Отобразить скрыть маркеры
+    //7) Табличка с данным в попапе
+    //8) на геозоне нужно название геозоны, и присвоили ей название.
+    //9) линейка
+    //10) знать длину маршрута
 
 }

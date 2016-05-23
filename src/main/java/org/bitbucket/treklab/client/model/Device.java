@@ -8,28 +8,12 @@ import org.bitbucket.treklab.client.resources.Resources;
 
 import java.util.Date;
 
-public class Device extends JavaScriptObject{
+public class Device extends JavaScriptObject {
 
     static Resources resources = GWT.create(Resources.class);
 
-    protected Device(){}
-
-    public final native int getId() /*-{ return this.id; }-*/;
-    public final native String getName() /*-{ return this.name; }-*/;
-    public final native String getUniqueId() /*-{ return this.uniqueId; }-*/;
-    public final native String getStatus() /*-{ return this.status; }-*/;
-    public final native String getLastUpdate() /*-{ return this.lastUpdate; }-*/;
-    public final native int getPositionId() /*-{ return this.positionId; }-*/;
-    public final native double getMaxSpeed() /*-{ return this.maxSpeed; }-*/;
-
-
-    public final native void setId(int id) /*-{ this.id = id; }-*/;
-    public final native void setName(String name) /*-{ this.name = name; }-*/;
-    public final native void setUniqueId(String uniqueId) /*-{ this.uniqueId = uniqueId; }-*/;
-    public final native void setStatus(String status) /*-{ this.status = status; }-*/;
-    public final native void setLastUpdate(String lastUpdate) /*-{  this.lastUpdate = lastUpdate; }-*/;
-    public final native void setPositionId(int positionId) /*-{  this.positionId = positionId; }-*/;
-    public final native void setMaxSpeed(double maxSpeed) /*-{  this.maxSpeed = maxSpeed; }-*/;
+    protected Device() {
+    }
 
     public static Device getClone(Device device) {
         Device temp = (Device) Device.createObject();
@@ -42,6 +26,62 @@ public class Device extends JavaScriptObject{
         temp.setMaxSpeed(device.getMaxSpeed());
         return temp;
     }
+
+    public final native int getId() /*-{
+        return this.id;
+    }-*/;
+
+    public final native void setId(int id) /*-{
+        this.id = id;
+    }-*/;
+
+    public final native String getName() /*-{
+        return this.name;
+    }-*/;
+
+    public final native void setName(String name) /*-{
+        this.name = name;
+    }-*/;
+
+    public final native String getUniqueId() /*-{
+        return this.uniqueId;
+    }-*/;
+
+    public final native void setUniqueId(String uniqueId) /*-{
+        this.uniqueId = uniqueId;
+    }-*/;
+
+    public final native String getStatus() /*-{
+        return this.status;
+    }-*/;
+
+    public final native void setStatus(String status) /*-{
+        this.status = status;
+    }-*/;
+
+    public final native String getLastUpdate() /*-{
+        return this.lastUpdate;
+    }-*/;
+
+    public final native void setLastUpdate(String lastUpdate) /*-{
+        this.lastUpdate = lastUpdate;
+    }-*/;
+
+    public final native int getPositionId() /*-{
+        return this.positionId;
+    }-*/;
+
+    public final native void setPositionId(int positionId) /*-{
+        this.positionId = positionId;
+    }-*/;
+
+    public final native double getMaxSpeed() /*-{
+        return this.maxSpeed;
+    }-*/;
+
+    public final native void setMaxSpeed(double maxSpeed) /*-{
+        this.maxSpeed = maxSpeed;
+    }-*/;
 
     public final String getDateTime() {
         Date tmp = new Date(getLastUpdate());

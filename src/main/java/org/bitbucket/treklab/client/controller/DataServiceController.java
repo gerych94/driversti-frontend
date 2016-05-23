@@ -5,16 +5,20 @@ import org.bitbucket.treklab.client.model.User;
 
 import java.util.List;
 
-public final class DataServiceController implements DataService{
+public final class DataServiceController implements DataService {
 
     private static volatile DataServiceController dataServiceInstance;
 
-//    private LoginController loginController;
+    //    private LoginController loginController;
     private UserController userController;
     private User user;
     private String userAuthentication = null;
 
-    public static DataServiceController getInstance(){
+    private DataServiceController() {
+        userController = new UserController();
+    }
+
+    public static DataServiceController getInstance() {
         // скопировали ссылку на инстанс, чтобы гарантированно получить ее в наш стек
         // каждый поток имеет свой стек
         // еще тут могут быть несколько потоков
@@ -31,7 +35,7 @@ public final class DataServiceController implements DataService{
             // тут выстраиваются в очередь все потоки, которые определили,
             // что на момент копирования ссылки из instance в local она была null
             // то есть они соревнуются за первенство - кто же всетаки создаст экземпляр
-            synchronized (DataServiceController.class){
+            synchronized (DataServiceController.class) {
                 // тут всегда только один поток - это критическая секция
                 // лочимся на объекте класса dataServiceInstance, а потому точно для всех потоков
 
@@ -52,18 +56,9 @@ public final class DataServiceController implements DataService{
         return local;
     }
 
-    private DataServiceController(){
-        userController = new UserController();
-    }
-
-    public interface UserHandler {
-        void onRegister(User user);
-        void onLogin(User user);
-    }
-
     @Override
     public User authenticated() {
-        return user == null ? null: getUser();
+        return user == null ? null : getUser();
     }
 
     @Override
@@ -146,13 +141,19 @@ public final class DataServiceController implements DataService{
     }
 
     @Override
+    public String getUserAuthentication() {
+        return this.userAuthentication;
+    }
+
+    @Override
     public void setUserAuthentication(String userPasswordBase64) {
         this.userAuthentication = userPasswordBase64;
     }
 
-    @Override
-    public String getUserAuthentication() {
-        return this.userAuthentication;
+    public interface UserHandler {
+        void onRegister(User user);
+
+        void onLogin(User user);
     }
 
 

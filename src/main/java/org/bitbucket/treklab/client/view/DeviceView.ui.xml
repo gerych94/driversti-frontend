@@ -1,5 +1,4 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-             xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:container='urn:import:com.sencha.gxt.widget.core.client.container'
              xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'
              xmlns:grid='urn:import:com.sencha.gxt.widget.core.client.grid'
@@ -90,9 +89,9 @@
         <container:VerticalLayoutContainer>
           <container:child layoutData="{toolbarData}">
             <toolbar:ToolBar ui:field="placesToolbar" borders="true" stateful="true">
-              <button:TextButton ui:field="markersButton" text="Markers" width="70" />
-              <button:TextButton ui:field="routesButton" text="Routes" width="70" />
-              <button:TextButton ui:field="geofencesButton" text="Geofences" width="70" />
+              <button:TextButton ui:field="markersButton" text="Markers" width="70"/>
+              <button:TextButton ui:field="routesButton" text="Routes" width="70"/>
+              <button:TextButton ui:field="geofencesButton" text="Geofences" width="70"/>
             </toolbar:ToolBar>
           </container:child>
           <container:child layoutData="{toolbarData}">
@@ -102,7 +101,8 @@
             </toolbar:ToolBar>
           </container:child>
           <container:child layoutData="{gridData}">
-            <grid:Grid ui:field="geofenceGrid" view="{geofenceView}" cm="{geofenceCM}" store="{geofenceStore}" stateful="true"
+            <grid:Grid ui:field="geofenceGrid" view="{geofenceView}" cm="{geofenceCM}" store="{geofenceStore}"
+                       stateful="true"
                        stateId="geofenceGrid"/>
           </container:child>
         </container:VerticalLayoutContainer>

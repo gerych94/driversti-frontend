@@ -7,10 +7,8 @@ import org.discotools.gwt.leaflet.client.layers.vector.Circle;
 import org.discotools.gwt.leaflet.client.map.Map;
 import org.discotools.gwt.leaflet.client.types.LatLng;
 
-public class CircleHelper
-{
-    public static Circle draw(Map map, LatLng latlng)
-    {
+public class CircleHelper {
+    public static Circle draw(Map map, LatLng latlng) {
         final double radiusStart = 1000;
         //Circle
         GWT.log("Circle");
@@ -23,15 +21,13 @@ public class CircleHelper
 
         circle.addTo(map);
 
-        Timer timer = new Timer()
-        {
+        Timer timer = new Timer() {
             double radius = radiusStart;
-            public void run()
-            {
+
+            public void run() {
                 circle.setRadius(radius);
                 radius = radius - 1;
-                if (radius < 100)
-                {
+                if (radius < 100) {
                     radius = radiusStart;
                 }
             }

@@ -15,6 +15,7 @@ public interface DemoEngineArrowProperties extends PropertyAccess<DemoEngineArro
     ModelKeyProvider<DemoEngineArrow> key();
 
     ValueProvider<DemoEngineArrow, Integer> id();
+
     @Editor.Path("name")
     LabelProvider<DemoEngineArrow> nameLabel();
 

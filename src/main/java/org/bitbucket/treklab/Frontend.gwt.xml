@@ -1,6 +1,6 @@
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0//EN"
         "http://google-web-toolkit.googlecode.com/svn/releases/2.0/distro-source/core/src/gwt-module.dtd">
-<module  rename-to="frontend">
+<module rename-to="frontend">
 
   <inherits name='com.google.gwt.user.User'/>
   <inherits name="com.sencha.gxt.widget.core.Core"/>
@@ -25,7 +25,7 @@
   <!-- GWT Leaflet modules Конец-->
 
   <!-- Необходимо для HTTP-запросов -->
-  <inherits name="com.google.gwt.http.HTTP" />
+  <inherits name="com.google.gwt.http.HTTP"/>
   <inherits name="org.realityforge.gwt.websockets.WebSockets"/>
 
   <!-- Specify the app entry point class.                   -->

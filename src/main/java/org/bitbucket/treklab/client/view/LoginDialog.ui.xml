@@ -1,6 +1,5 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-             xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:gxt="urn:import:com.sencha.gxt.widget.core.client"
              xmlns:container="urn:import:com.sencha.gxt.widget.core.client.container"
              xmlns:form="urn:import:com.sencha.gxt.widget.core.client.form"
@@ -10,8 +9,9 @@
   <!-- Указываются дополнительные настройки для элементов
         ширина - по ширине родителя
         высота - столько, сколько необходимо-->
-  <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="verticalLayoutData">
-    <ui:attributes width="1" height="-1" />
+  <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData"
+           field="verticalLayoutData">
+    <ui:attributes width="1" height="-1"/>
   </ui:with>
 
   <!-- С этого места начинается описание интерфейса -->
@@ -40,7 +40,7 @@
       <container:child layoutData="{verticalLayoutData}">
         <form:FieldLabel text="Логин" labelWidth="120">
           <form:widget>
-            <form:TextField ui:field="login" />
+            <form:TextField ui:field="login"/>
           </form:widget>
         </form:FieldLabel>
       </container:child>
@@ -50,7 +50,7 @@
       <container:child layoutData="{verticalLayoutData}">
         <form:FieldLabel text="Пароль" labelWidth="120">
           <form:widget>
-            <form:PasswordField ui:field="password" />
+            <form:PasswordField ui:field="password"/>
           </form:widget>
         </form:FieldLabel>
       </container:child>
@@ -58,10 +58,10 @@
 
     <!-- Следующими дочерними элементами для Window являются кнопки авторизации и регистрации -->
     <gxt:button>
-      <button:TextButton ui:field="loginButton" text="Логин" />
+      <button:TextButton ui:field="loginButton" text="Логин"/>
     </gxt:button>
     <gxt:button>
-      <button:TextButton ui:field="registerButton" text="Регистрация" enabled="true" />
+      <button:TextButton ui:field="registerButton" text="Регистрация" enabled="true"/>
     </gxt:button>
   </gxt:Window>
 

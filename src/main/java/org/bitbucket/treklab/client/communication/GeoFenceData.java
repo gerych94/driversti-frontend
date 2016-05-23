@@ -9,7 +9,7 @@ import org.bitbucket.treklab.client.model.Geofence;
 /**
  * Created by dog on 5/5/16.
  */
-public class GeofenceData extends ServerData{
+public class GeofenceData extends ServerData {
     public void getGeofences(RequestCallback callback) throws RequestException {
         sendRequest("/geofence", null, RequestBuilder.GET, callback);
     }
@@ -23,7 +23,7 @@ public class GeofenceData extends ServerData{
     }
 
     public void removeGeofence(Geofence geofence, RequestCallback callback) throws RequestException {
-        sendRequest("/geofence/" + geofence.getId() , null, RequestBuilder.DELETE, callback);
+        sendRequest("/geofence/" + geofence.getId(), null, RequestBuilder.DELETE, callback);
     }
 
     private String createGeofenceDataForRequest(Geofence geofence) {

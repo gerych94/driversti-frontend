@@ -5,8 +5,7 @@ import org.discotools.gwt.leaflet.client.map.MapOptions;
 import org.discotools.gwt.leaflet.client.types.LatLng;
 
 public class MapHelper {
-    public static MapOptions getMapOptions()
-    {
+    public static MapOptions getMapOptions() {
         //создаем набор опций карты
         MapOptions loptions = new MapOptions();
         //опция Центр карты

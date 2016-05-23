@@ -2,7 +2,8 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'>
 
-  <gxt:ContentPanel ui:field="contentPanel" headingText="Schedule Panel" headerVisible="true" collapsible="true" titleCollapse="false">
-    <g:Label text="Schedule View" />
+  <gxt:ContentPanel ui:field="contentPanel" headingText="Schedule Panel" headerVisible="true" collapsible="true"
+                    titleCollapse="false">
+    <g:Label text="Schedule View"/>
   </gxt:ContentPanel>
 </ui:UiBinder>

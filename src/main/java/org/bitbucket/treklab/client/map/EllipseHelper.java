@@ -6,10 +6,8 @@ import org.discotools.gwt.leaflet.client.layers.vector.Ellipse;
 import org.discotools.gwt.leaflet.client.map.Map;
 import org.discotools.gwt.leaflet.client.types.LatLng;
 
-public class EllipseHelper
-{
-    public static Ellipse draw(Map map)
-    {
+public class EllipseHelper {
+    public static Ellipse draw(Map map) {
         GWT.log("Ellipse");
         Options ellipseOptions = new Options();
         ellipseOptions.setProperty("color", "blue");

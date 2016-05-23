@@ -15,6 +15,7 @@ public interface DemoDriverProperties extends PropertyAccess<DemoDriver> {
     ModelKeyProvider<DemoDriver> key();
 
     ValueProvider<DemoDriver, Integer> id();
+
     @Editor.Path("name")
     LabelProvider<DemoDriver> nameLabel();
 
