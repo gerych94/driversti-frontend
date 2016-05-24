@@ -73,6 +73,7 @@ public class Application {
         RootPanel.get().add(view);
 
         deviceController.run();
+        geofenceController.run();
 
         final WebSocket webSocket = WebSocket.newWebSocketIfSupported();
         if (webSocket != null) {

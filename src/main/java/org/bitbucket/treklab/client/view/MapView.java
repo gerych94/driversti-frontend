@@ -181,7 +181,7 @@ public class MapView {
                                 break;
                         }
                         // вызываем диалог добавления новой геозоны и передаём ей созданную геозону и список геозон
-                        new GeofenceAddDialog(geofence, geofenceStore).show();
+                        new GeofenceAddDialog(geofence, geofenceStore, MapView.this, layer).show();
                         LoggerHelper.log(className, "After dialog");
                     }
                 });

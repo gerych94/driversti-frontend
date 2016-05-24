@@ -56,9 +56,9 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
      *                            В конструкторе инициализируем объект для вызова методов АПИ
      *                            и создаём графический интерфейс для отображения устройств
      * @param globalEventStore    - глобальный список событий
-     * @param globalGeofenceStore
+     * @param globalGeofenceStore - глобальный список геозон
      * @param mapController       - контроллер карты
-     * @param instance
+     * @param instance            - объект, оповещающий о событии в сокете
      */
     public DeviceController(ListStore<Device> globalDeviceStore,
                             ListStore<Event> globalEventStore,

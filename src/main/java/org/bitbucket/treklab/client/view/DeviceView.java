@@ -3,15 +3,10 @@ package org.bitbucket.treklab.client.view;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.ImageResourceCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JsArray;
-import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -31,7 +26,6 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.Store;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.TabPanel;
-import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.CellClickEvent;
 import com.sencha.gxt.widget.core.client.event.CellDoubleClickEvent;
@@ -44,8 +38,6 @@ import com.sencha.gxt.widget.core.client.grid.GroupingView;
 import com.sencha.gxt.widget.core.client.menu.Item;
 import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
-import org.bitbucket.treklab.client.communication.BaseRequestCallback;
-import org.bitbucket.treklab.client.communication.PositionData;
 import org.bitbucket.treklab.client.controller.StateController;
 import org.bitbucket.treklab.client.model.*;
 import org.bitbucket.treklab.client.resources.Resources;
@@ -54,7 +46,6 @@ import org.bitbucket.treklab.client.state.DeviceVisibilityHandler;
 import org.bitbucket.treklab.client.util.LoggerHelper;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class DeviceView {
@@ -311,12 +302,12 @@ public class DeviceView {
         final MenuItem remove = new MenuItem("Удалить");
         remove.setId("Удалить");
         menu.add(remove);
-        final MenuItem showMaxSpeed = new MenuItem("Show MAX Speed");
+        /*final MenuItem showMaxSpeed = new MenuItem("Show MAX Speed");
         showMaxSpeed.setId("Show MAX Speed");
         menu.add(showMaxSpeed);
         final MenuItem showAverageSpeed = new MenuItem("Show average Speed");
         showAverageSpeed.setId("Show average Speed");
-        menu.add(showAverageSpeed);
+        menu.add(showAverageSpeed);*/
         menu.addSelectionHandler(new SelectionHandler<Item>() {
             @Override
             public void onSelection(SelectionEvent<Item> event) {
@@ -334,14 +325,14 @@ public class DeviceView {
                         LoggerHelper.log(className, "'Remove' has been choose in menu");
                         deviceHandler.onRemove(deviceGrid.getSelectionModel().getSelectedItem());
                         break;
-                    case "Show MAX Speed":
+                    /*case "Show MAX Speed":
                         LoggerHelper.log(className, "'Show MAX Speed' has been choose in menu");
                         showMaxSpeed();
                         break;
                     case "Show average Speed":
                         LoggerHelper.log(className, "'Show average Speed' has been choose in menu");
                         showAverageSpeed();
-                        break;
+                        break;*/
                 }
             }
         });
@@ -381,10 +372,6 @@ public class DeviceView {
         eventList.add(colEventMessage);
 
         this.eventCM = new ColumnModel<>(eventList);
-
-        Geofence geofence = (Geofence) Geofence.createObject();
-        geofence.setName("TEST");
-        geofenceStore.add(geofence);
 
         geofenceFilter = new StoreFilterField<Geofence>() {
             @Override
@@ -430,7 +417,7 @@ public class DeviceView {
                 switch (event.getSelectedItem().getId()) {
                     case "Свойства":
                         // TODO: 12.05.2016 реализовать метод
-                        new AlertMessageBox("TEST", "TEST").show();
+                        LoggerHelper.log(className, "Not implemented");
                         break;
                 }
             }
@@ -475,7 +462,7 @@ public class DeviceView {
         geofenceView.setStripeRows(true);
     }
 
-    private void showMaxSpeed() {
+    /*private void showMaxSpeed() {
         final PositionData positionData = new PositionData();
         try {
             positionData.getPositions(deviceGrid.getSelectionModel().getSelectedItem(),
@@ -522,7 +509,7 @@ public class DeviceView {
         } catch (RequestException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     @UiHandler("tabPanel")
     public void onTabSelected(SelectionEvent<Widget> event) {
