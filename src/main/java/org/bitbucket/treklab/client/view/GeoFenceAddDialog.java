@@ -13,7 +13,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.Window;
-import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.TextArea;
@@ -21,24 +20,40 @@ import com.sencha.gxt.widget.core.client.form.TextField;
 import org.bitbucket.treklab.client.communication.BaseRequestCallback;
 import org.bitbucket.treklab.client.communication.GeofenceData;
 import org.bitbucket.treklab.client.model.Geofence;
+import org.bitbucket.treklab.client.util.LoggerHelper;
+import org.discotools.gwt.leaflet.client.layers.ILayer;
 
 public class GeofenceAddDialog extends Composite {
-    private static final String className = GeofenceAddDialog.class.getSimpleName();
+
     private static GeoFenceAddDialogUiBinder uiBinder = GWT.create(GeoFenceAddDialogUiBinder.class);
+    interface GeoFenceAddDialogUiBinder extends UiBinder<Widget, GeofenceAddDialog> {
+    }
+
+    private static final String className = GeofenceAddDialog.class.getSimpleName();
+    private Geofence geofence;
+    private ListStore<Geofence> geofenceStore;
+    private final GeofenceData geofenceData = new GeofenceData();
+    private final MapView mapView;
+
+    private final ILayer layer;
     @UiField
     Window window;
     @UiField
     VerticalLayoutContainer container;
     @UiField
     TextField nameField;
+
     @UiField
     TextArea descriptionArea;
-    private Geofence geofence;
-    private ListStore<Geofence> geofenceStore;
-    private GeofenceData geofenceData;
-    public GeofenceAddDialog(Geofence geofence, ListStore<Geofence> geofenceStore) {
+
+    public GeofenceAddDialog(Geofence geofence,
+                             ListStore<Geofence> geofenceStore,
+                             MapView mapView,
+                             ILayer layer) {
         this.geofence = geofence;
         this.geofenceStore = geofenceStore;
+        this.mapView = mapView;
+        this.layer = layer;
         uiBinder.createAndBindUi(this);
     }
 
@@ -61,18 +76,19 @@ public class GeofenceAddDialog extends Composite {
         tempGeofence.setDescription(descriptionArea.getText());
         tempGeofence.setType(geofence.getType());
         tempGeofence.setCoordinates(geofence.getCoordinates());
-        GeofenceData geofenceData = new GeofenceData();
         try {
             geofenceData.addGeofence(tempGeofence, new BaseRequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
                     // TODO: 06.05.2016 реализовать метод
                     if (200 == response.getStatusCode()) {
-                        JsArray<Geofence> geofences = JsonUtils.safeEval(response.getText());
-                        geofence = geofences.get(0);
+                        JsArray<Geofence> geofenceJsArray = JsonUtils.safeEval(response.getText());
+                        LoggerHelper.log(className, geofenceJsArray.length() + "");
+                        geofence = geofenceJsArray.get(0);
                         geofenceStore.add(geofence);
                     } else {
-                        new AlertMessageBox("Error", "Response code: " + response.getStatusCode()).show();
+                        LoggerHelper.log(className, "Response code: " + response.getStatusCode());
+                        removeLayer();
                     }
                 }
             });
@@ -84,9 +100,11 @@ public class GeofenceAddDialog extends Composite {
 
     @UiHandler("cancelButton")
     public void onCancelClicked(SelectEvent event) {
+        removeLayer();
         hide();
     }
 
-    interface GeoFenceAddDialogUiBinder extends UiBinder<Widget, GeofenceAddDialog> {
+    private void removeLayer() {
+        mapView.getMap().removeLayer(layer);
     }
 }

@@ -102,7 +102,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
                         if (deviceStore.size() <= 0) {
                             for (int i = 0; i < data.length(); i++) {
                                 deviceStore.add(data.get(i));
-                                deviceCheckBoxActionVisible(data.get(i));
+                                //deviceCheckBoxActionVisible(data.get(i));
                             }
                             startFocused();
                         } else if (deviceStore.size() <= data.length()) {
@@ -272,7 +272,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
                 if(historyFlag){
                     mapController.drawHistory(device);
                 }else {
-                    mapController.startDraw(device);}
+                    mapController.setStartDrawFlag(device);}
             }else {
                 mapController.removeWay(device);
             }

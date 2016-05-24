@@ -46,6 +46,7 @@ import org.bitbucket.treklab.client.state.DeviceVisibilityHandler;
 import org.bitbucket.treklab.client.util.LoggerHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class DeviceView {
@@ -147,8 +148,8 @@ public class DeviceView {
     private static final GeofenceProperties geoProp = GWT.create(GeofenceProperties.class);
     private Resources resources = GWT.create(Resources.class);
     private HeaderIconTemplate headerTemplate = GWT.create(HeaderIconTemplate.class);
-    private boolean flag;
-    private boolean historyFlag;
+    private HashMap<Integer, Boolean> flagMap = new HashMap<>();
+    private HashMap<Integer, Boolean> historyFlagMap = new HashMap<>();
 
     // получаем имя класса для Логера
     private static final String className = DeviceView.class.getSimpleName();
@@ -206,12 +207,12 @@ public class DeviceView {
             public void setValue(Device device, Boolean value) {
                 deviceVisibilityHandler.setVisible(device, value);
                 //если чекбокс visible отключаем то отключаем и follow
-                if (!value&&deviceFollowHandler.isFollow(device)) {
-                    flag=true;
+                if (!value && deviceFollowHandler.isFollow(device)) {
+                    flagMap.put(device.getId(), true);
+                    // flag=true;
                     colDeviceFollow.getValueProvider().setValue(device, value);
-                    historyFlag=true;
-                    //  deviceFollowHandler.setFollow(device,value);
-                    // deviceHandler.deviceCheckBoxActionFollow(device);
+                    historyFlagMap.put(device.getId(), true);
+                    // historyFlag=true;
                 }
                 //метод который реагирует при смене чекбокса
                 deviceHandler.deviceCheckBoxActionVisible(device);
@@ -244,16 +245,19 @@ public class DeviceView {
                     colDeviceVisible.getValueProvider().setValue(device, value);
                     deviceHandler.deviceCheckBoxActionVisible(device);
                 }
-                if(historyFlag){
-                    flag=false;
+                if(historyFlagMap.get(device.getId())==null){
+                    historyFlagMap.put(device.getId(),false);
+                    flagMap.put(device.getId(),false);
+                }else if(historyFlagMap.get(device.getId())){
+                    flagMap.put(device.getId(),false);
                 }
                 if(!value){
-                    historyFlag=false;
+                    historyFlagMap.put(device.getId(),false);
                 }
                 //метод который реагирует при смене чекбокса
-                deviceHandler.deviceCheckBoxActionFollow(device,flag,historyFlag);
+                deviceHandler.deviceCheckBoxActionFollow(device,flagMap.get(device.getId()),historyFlagMap.get(device.getId()));
+                //            deviceHandler.deviceCheckBoxActionFollow(device,flag,historyFlag);
             }
-
             @Override
             public String getPath() {
                 return "follow";

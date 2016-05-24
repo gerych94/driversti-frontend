@@ -45,7 +45,7 @@ public class Application {
         ServerDataHolder instance = ServerDataHolder.getInstance();
 
         navController = new NavController();
-        mapController = new MapController(globalGeofenceStore);
+        mapController = new MapController(globalGeofenceStore, instance);
         visibilityController = new VisibilityController(globalDeviceStore);
         followController = new FollowController(globalDeviceStore);
         stateController = new StateController(instance);
