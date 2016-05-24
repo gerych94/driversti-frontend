@@ -10,8 +10,6 @@ public interface EventProperties extends PropertyAccess<Event> {
     ModelKeyProvider<Event> key();
 
     ValueProvider<Event, String> time();
-
     ValueProvider<Event, String> deviceName();
-
     ValueProvider<Event, String> message();
 }
