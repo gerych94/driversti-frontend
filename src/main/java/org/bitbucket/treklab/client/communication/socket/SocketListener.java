@@ -1,7 +1,6 @@
 package org.bitbucket.treklab.client.communication.socket;
 
 import com.google.gwt.typedarrays.shared.ArrayBuffer;
-import com.google.gwt.user.client.Window;
 import org.bitbucket.treklab.client.util.LoggerHelper;
 import org.bitbucket.treklab.client.util.ServerDataHolder;
 import org.realityforge.gwt.websockets.client.WebSocket;
@@ -19,7 +18,8 @@ public class SocketListener implements WebSocketListener {
 
     @Override
     public void onClose(WebSocket webSocket, boolean wasClean, int code, String reason) {
-        Window.alert("WebSocket close! " + reason + " and webSocket is connected: " + webSocket.isConnected());
+        //Window.alert("WebSocket close! " + reason + " and webSocket is connected: " + webSocket.isConnected());
+        LoggerHelper.log(className, "WebSocket close!");
     }
 
     @Override
@@ -31,7 +31,7 @@ public class SocketListener implements WebSocketListener {
 
     @Override
     public void onMessage(WebSocket webSocket, ArrayBuffer data) {
-
+        LoggerHelper.log(className, "ArrayBuffer data");
     }
 
     @Override

@@ -200,16 +200,11 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
                                 if (204 == response.getStatusCode()) {
                                     // если ответ от сервера правильный (в данном случае 204), удаляем устройство из таблицы
                                     deviceStore.remove(selectedItem);
-                                    // устанавливаем кнопку удаления в выключенное состояние
-                                    //deviceView.getRemoveDeviceButton().setEnabled(false);
                                     LoggerHelper.log(className, "Device " + selectedItem.getName() + " has been removed. Bye-bye motherfucker!");
                                 } else {
                                     LoggerHelper.log(className, "Error while deleting device. " +
                                             "Error code: " + response.getStatusCode() +
                                             ". Error status message: " + response.getStatusText());
-                                    /*new AlertMessageBox("Error", "Error while deleting device. " +
-                                            "Error code: " + response.getStatusCode() +
-                                            ". Error status message: " + response.getStatusText()).show();*/
                                 }
                             }
                         });
@@ -253,10 +248,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
         if (selectedItem != null) {
             //deviceView.getRemoveDeviceButton().setEnabled(true);
             mapController.focusedOnDevice(selectedItem);
-        } /*else {
-            // в противном случае деактивируем кнопку удаления
-            //deviceView.getRemoveDeviceButton().setEnabled(false);
-        }*/
+        }
     }
 
     //метод который реагирует на переключение чекбокса visible
@@ -264,11 +256,8 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
     public void deviceCheckBoxActionVisible(Device device) {
         //устанавливает - удаляет маркер для определенного устройства
         if (deviceView.getDeviceVisibilityHandler().isVisible(device)) {
-            mapController.drawDeviceMarker(device);
-            //  mapController.refocusedDevice(device,true);
-            //  mapController.startDraw(device);
+            mapController.drawDeviceMarker(device);;
         } else {
-            // mapController.refocusedDevice(device,false);
             mapController.removeDeviceMarker(device);
 
         }
@@ -278,24 +267,16 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
     @Override
     public void deviceCheckBoxActionFollow(Device device,boolean flag,boolean historyFlag) {
         //работает только если включен чекбок visible
-        // if (deviceView.getDeviceVisibilityHandler().isVisible(device)) {
-        //  mapController.refocusedDevice(device,deviceView.getDeviceFollowHandler().isFollow(device));
-        // }
         if(!flag){
             if(deviceView.getDeviceFollowHandler().isFollow(device)){
-                // new AlertMessageBox("start draw "," start draw").show();
                 if(historyFlag){
-                    //    new AlertMessageBox("history","history flag").show();
                     mapController.drawHistory(device);
                 }else {
-                    //  new AlertMessageBox("start draw ","start draw").show();
                     mapController.startDraw(device);}
             }else {
-                // new AlertMessageBox("delete","delete").show();
                 mapController.removeWay(device);
             }
         }else {
-            // new AlertMessageBox("set flag","set flag").show();
             mapController.setFlag(device);
         }
     }

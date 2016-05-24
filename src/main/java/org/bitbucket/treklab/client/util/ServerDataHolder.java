@@ -50,7 +50,6 @@ public class ServerDataHolder implements Observable {
         array[1] = value;
 
         notifyObservers();
-        LoggerHelper.log(className, "Receive data: " + key);
     }
 
     @Override
