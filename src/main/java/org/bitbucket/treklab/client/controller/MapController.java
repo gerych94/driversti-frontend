@@ -66,7 +66,6 @@ public class MapController implements Observer {
         if (key.equals(POSITIONS_KEY)) {
             //перебор координат всех девайсов которые пришли от сервера
             JsArray<Position> positions = JsonUtils.safeEval(value);
-            LoggerHelper.log(className, " " + value);
             for (int i = 0; i < positions.length(); i++) {
                 Position position = positions.get(i);
                 //каждый раз сохрянеться позиция маркера что бы знать где последний раз был девайс
@@ -77,6 +76,10 @@ public class MapController implements Observer {
                 } else if (startDrawFlag.get(position.getDeviceId())) {
                     drawRoad(position, position.getDeviceId());
                 }
+                LoggerHelper.log(className, "deviceId: " + position.getDeviceId() + "\n"
+                                    + "position id: " + position.getId() + "\n"
+                                    + "serverTime: " + position.getServerTime() + "\n"
+                                    + "deviceTime: " + position.getDeviceTime());
             }
         }
     }
@@ -118,7 +121,6 @@ public class MapController implements Observer {
 
     //метод корторый отвечает за прорисовку маршрута
     public void drawRoad(Position devicePosition, int deviceId) {
-        LoggerHelper.log(className, " idPosition " + devicePosition.getId() + " IdDevice" + devicePosition.getDeviceId());
         ArrayList<Polyline> polylineArrayList = devicePolyLineHashMap.get(deviceId);
         LatLng previous = previousPositionMap.get(deviceId);
         Position position = markerPosition.get(deviceId);
@@ -179,18 +181,8 @@ public class MapController implements Observer {
                         for (int i = 0; i < positions.length(); i++) {
                             final Position devicePosition = positions.get(i);
                             markerPosition.put(positions.get(i).getDeviceId(), devicePosition);
-                            // startDrawFlag.put(devicePosition.getDeviceId(), false);
                             LatLng latLng = new LatLng(devicePosition.getLatitude(), devicePosition.getLongitude());
-//                            IconOptions iconOptions=new IconOptions();
-//                            iconOptions.setIconUrl(resources.getMarkerIconRed().getSafeUri().asString());
-//                            Icon icon=new Icon(iconOptions);
-//                            MarkerOptions markerOptions=new MarkerOptions();
-//                            markerOptions.setIcon(icon);
-//                            Marker marker = new Marker(latLng,markerOptions);
-//                            marker.setIcon(icon);
-//                            marker.setOptions(new Options());
                             Marker marker = new Marker(latLng, new Options());
-                            //  marker.setOptions(markerOptions);
                             mapView.getMarkers().put(positions.get(i).getDeviceId(), marker);
                             marker.addTo(mapView.getMap());
                             bufLat += devicePosition.getLatitude();

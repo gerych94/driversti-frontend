@@ -12,7 +12,6 @@ import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import com.sencha.gxt.widget.core.client.info.Info;
 import org.bitbucket.treklab.client.communication.BaseRequestCallback;
 import org.bitbucket.treklab.client.communication.GeofenceData;
-import org.bitbucket.treklab.client.map.MyLayerHandler;
 import org.bitbucket.treklab.client.model.Coordinate;
 import org.bitbucket.treklab.client.model.Geofence;
 import org.bitbucket.treklab.client.model.Type;
@@ -101,18 +100,19 @@ public class GeofenceController implements MapView.GeofenceHandler {
     @Override
     public void onAdd(DrawCreatedEvent event, FeatureGroup drawnItems, MapView mapView) {
         ILayer layer = event.getLayer();
-        drawnItems.addLayer(layer);
+        //drawnItems.addLayer(layer);
         String layerType = event.getLayerType().toUpperCase(); // получаем тип геозоны
         final Type type = Type.valueOf(layerType); // приводим к enum
-        LoggerHelper.log(className, "Before dialog. Layer type: " + layerType);
         Geofence geofence = (Geofence) Geofence.createObject(); // создаём пустую геозону
         geofence.setType(type); // присваиваем тип геозоны
         switch (layerType) {
             // если геозона "КРУГ"
-            case "circle":
+            case "CIRCLE":
                 Circle circle = (Circle) layer; // приводим тип геозоны
+                drawnItems.addLayer(circle);
                 LatLng circleLatLng = circle.getLatLng(); // получаем координаты центра круга (геозоны)
                 double radius = circle.getRadius(); // получаем радиус геозоны
+                LoggerHelper.log(className, radius);
                 Coordinate circleCoordinate = (Coordinate) Coordinate.createObject(); // создаём пустой объект координат
                 circleCoordinate.setLongitude(circleLatLng.lng()); // присваиваем координатам долготу
                 circleCoordinate.setLatitude(circleLatLng.lat()); // присваиваем координатам широту
@@ -122,8 +122,9 @@ public class GeofenceController implements MapView.GeofenceHandler {
                 geofence.setRadius(radius); // присваиваем геозоне радиус
                 break;
             // если геозона "ПОЛИГОН"
-            case "polygon":
+            case "POLYGON":
                 Polygon polygon = (Polygon) layer; // приводим тип геозоны
+                drawnItems.addLayer(polygon);
                 LatLng[] polygonLatLngs = polygon.getLatLngs(); // получаем массив координат полигона (геозоны)
                 ArrayList<Coordinate> polygonCoordinates = new ArrayList<>(); // создаём список координат (для геозоны)
                 for (LatLng polygonLatLng : polygonLatLngs) {
@@ -138,14 +139,15 @@ public class GeofenceController implements MapView.GeofenceHandler {
         }
         // вызываем диалог добавления новой геозоны и передаём ей созданную геозону и список геозон
         new GeofenceAddDialog(geofence, geofenceStore, mapView, layer).show();
-        LoggerHelper.log(className, "After dialog");
     }
 
     @Override
-    public void onEdit(DrawEditedEvent event) {
+    public void onEdit(final DrawEditedEvent event) {
         LayerGroup layers = event.getLayers();
-        MyLayerHandler myLayerHandler = new MyLayerHandler();
-        layers.forEachLayer(myLayerHandler);
+        ILayer[] array = layers.getLayers();
+        for (int i = 0; i < array.length; i++) {
+            LoggerHelper.log(className, array[i].getJSObject().getProperty("_mRadius") + "");
+        }
     }
 
     @Override

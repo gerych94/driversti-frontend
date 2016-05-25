@@ -21,6 +21,14 @@ public class LoggerHelper {
         GWT.log(getMessage(className, message));
     }
 
+    public static void log(String className, double number) {
+        GWT.log(getMessage(className, String.valueOf(number)));
+    }
+
+    public static void log(String className, boolean value) {
+        GWT.log(getMessage(className, String.valueOf(value)));
+    }
+
     public static void log(String className, String message, Throwable e) {
         GWT.log(getMessage(className, message), e);
     }
@@ -30,7 +38,7 @@ public class LoggerHelper {
         String hour = getH(now);
         String minutes = getM(now);
         String seconds = getS(now);
-        return className + " " + hour + ":" + minutes + ":" + seconds + " - " + message;
+        return className + "\n" + hour + ":" + minutes + ":" + seconds + "\n" + message;
     }
 
     private static String getH(Date now) {
