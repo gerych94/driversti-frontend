@@ -52,12 +52,13 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
 
     /**
      * Конструктор контроллера
-     *  @param globalDeviceStore   - глобальный список устройств
+     * @param globalDeviceStore   - глобальный список устройств
      *                            В конструкторе инициализируем объект для вызова методов АПИ
      *                            и создаём графический интерфейс для отображения устройств
      * @param globalEventStore    - глобальный список событий
      * @param globalGeofenceStore - глобальный список геозон
      * @param mapController       - контроллер карты
+     * @param geofenceController  - контроллер геозон
      * @param instance            - объект, оповещающий о событии в сокете
      */
     public DeviceController(ListStore<Device> globalDeviceStore,
@@ -67,6 +68,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
                             StateController stateController,
                             DeviceVisibilityHandler deviceVisibilityHandler,
                             DeviceFollowHandler deviceFollowHandler,
+                            GeofenceController geofenceController,
                             ServerDataHolder instance) {
 
         this.deviceStore = globalDeviceStore;
@@ -77,6 +79,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
                 globalEventStore,
                 globalGeofenceStore,
                 stateController,
+                geofenceController,
                 deviceVisibilityHandler,
                 deviceFollowHandler);
         this.deviceData = new DeviceData();

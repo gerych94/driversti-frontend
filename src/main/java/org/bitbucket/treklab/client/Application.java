@@ -44,8 +44,9 @@ public class Application {
         final ListStore<Geofence> globalGeofenceStore = new ListStore<>(geofenceProperties.key());
         ServerDataHolder instance = ServerDataHolder.getInstance();
 
+        geofenceController = new GeofenceController(globalGeofenceStore);
         navController = new NavController();
-        mapController = new MapController(globalGeofenceStore, instance);
+        mapController = new MapController(geofenceController, globalGeofenceStore, instance);
         visibilityController = new VisibilityController(globalDeviceStore);
         followController = new FollowController(globalDeviceStore);
         stateController = new StateController(instance);
@@ -56,9 +57,9 @@ public class Application {
                 stateController,
                 visibilityController,
                 followController,
+                geofenceController,
                 instance);
         eventController = new EventController(globalDeviceStore, globalEventStore);
-        geofenceController = new GeofenceController(globalGeofenceStore);
         scheduleController = new ScheduleController();
 
         centerView = new CenterView(mapController.getView(), scheduleController.getView());

@@ -6,12 +6,9 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.Viewport;
+import org.bitbucket.treklab.client.controller.GeofenceController;
 import org.bitbucket.treklab.client.map.LayerHelper;
-import org.bitbucket.treklab.client.map.MyLayerHandler;
-import org.bitbucket.treklab.client.model.Coordinate;
 import org.bitbucket.treklab.client.model.Geofence;
-import org.bitbucket.treklab.client.model.Type;
-import org.bitbucket.treklab.client.util.LoggerHelper;
 import org.discotools.gwt.leaflet.client.Options;
 import org.discotools.gwt.leaflet.client.controls.ControlOptions;
 import org.discotools.gwt.leaflet.client.controls.Position;
@@ -24,12 +21,8 @@ import org.discotools.gwt.leaflet.client.draw.events.DrawEditedEvent;
 import org.discotools.gwt.leaflet.client.draw.events.handler.DrawEvents;
 import org.discotools.gwt.leaflet.client.events.handler.EventHandler;
 import org.discotools.gwt.leaflet.client.events.handler.EventHandlerManager;
-import org.discotools.gwt.leaflet.client.layers.ILayer;
 import org.discotools.gwt.leaflet.client.layers.others.FeatureGroup;
-import org.discotools.gwt.leaflet.client.layers.others.LayerGroup;
 import org.discotools.gwt.leaflet.client.layers.raster.TileLayer;
-import org.discotools.gwt.leaflet.client.layers.vector.Circle;
-import org.discotools.gwt.leaflet.client.layers.vector.Polygon;
 import org.discotools.gwt.leaflet.client.map.Map;
 import org.discotools.gwt.leaflet.client.map.MapOptions;
 import org.discotools.gwt.leaflet.client.marker.Marker;
@@ -51,8 +44,16 @@ public class MapView {
     private Marker marker = new Marker(new LatLng(0.0, 0.0), new Options());
     private Map map;
     private ListStore<Geofence> geofenceStore;
+    private final GeofenceHandler geofenceHandler;
 
-    public MapView(ListStore<Geofence> globalGeofenceStore) {
+    public interface GeofenceHandler {
+        void onAdd(DrawCreatedEvent event, FeatureGroup drawnItems, MapView mapView);
+        void onEdit(DrawEditedEvent event);
+        void onRemove(Geofence selectedGeofence);
+    }
+
+    public MapView(GeofenceController geofenceController, ListStore<Geofence> globalGeofenceStore) {
+        this.geofenceHandler = geofenceController;
         this.geofenceStore = globalGeofenceStore;
         //создаем компонент для заполнения всего доступного пространства
         viewport = new Viewport();
@@ -144,45 +145,7 @@ public class MapView {
                     @Override
                     public void handle(
                             DrawCreatedEvent event) {
-                        ILayer layer = event.getLayer();
-                        drawnItems.addLayer(layer);
-                        String layerType = event.getLayerType().toUpperCase(); // получаем тип геозоны
-                        final Type type = Type.valueOf(layerType); // приводим к enum
-                        LoggerHelper.log(className, "Before dialog. Layer type: " + layerType);
-                        Geofence geofence = (Geofence) Geofence.createObject(); // создаём пустую геозону
-                        geofence.setType(type); // присваиваем тип геозоны
-                        switch (layerType) {
-                            // если геозона "КРУГ"
-                            case "circle":
-                                Circle circle = (Circle) layer; // приводим тип геозоны
-                                LatLng circleLatLng = circle.getLatLng(); // получаем координаты центра круга (геозоны)
-                                double radius = circle.getRadius(); // получаем радиус геозоны
-                                Coordinate circleCoordinate = (Coordinate) Coordinate.createObject(); // создаём пустой объект координат
-                                circleCoordinate.setLongitude(circleLatLng.lng()); // присваиваем координатам долготу
-                                circleCoordinate.setLatitude(circleLatLng.lat()); // присваиваем координатам широту
-                                ArrayList<Coordinate> circleCoordinates = new ArrayList<>(); // создаём список координат (для геозоны)
-                                circleCoordinates.add(circleCoordinate); // в список координат добавляем координаты центра круга
-                                geofence.setCoordinates(circleCoordinates); // присваиваем геозоне список координат
-                                geofence.setRadius(radius); // присваиваем геозоне радиус
-                                break;
-                            // если геозона "ПОЛИГОН"
-                            case "polygon":
-                                Polygon polygon = (Polygon) layer; // приводим тип геозоны
-                                LatLng[] polygonLatLngs = polygon.getLatLngs(); // получаем массив координат полигона (геозоны)
-                                ArrayList<Coordinate> polygonCoordinates = new ArrayList<>(); // создаём список координат (для геозоны)
-                                for (LatLng polygonLatLng : polygonLatLngs) {
-                                    // в цикле проходимся по всем парам координат точек геозоны
-                                    Coordinate polygonCoordinate = (Coordinate) Coordinate.createObject(); // создаём пустой объект координат
-                                    polygonCoordinate.setLongitude(polygonLatLng.lng()); // присваиваем координатам долготу
-                                    polygonCoordinate.setLatitude(polygonLatLng.lat()); // присваиваем координатам широту
-                                    polygonCoordinates.add(polygonCoordinate); // в список координат добавляем координаты точек полигона
-                                }
-                                geofence.setCoordinates(polygonCoordinates); // присваиваем геозоне список координат
-                                break;
-                        }
-                        // вызываем диалог добавления новой геозоны и передаём ей созданную геозону и список геозон
-                        new GeofenceAddDialog(geofence, geofenceStore, MapView.this, layer).show();
-                        LoggerHelper.log(className, "After dialog");
+                        geofenceHandler.onAdd(event, drawnItems, MapView.this);
                     }
                 });
         EventHandlerManager.addEventHandler(
@@ -192,13 +155,10 @@ public class MapView {
                     @Override
                     public void handle(
                             DrawEditedEvent event) {
-                        LayerGroup layers = event.getLayers();
-                        MyLayerHandler myLayerHandler = new MyLayerHandler();
-                        layers.forEachLayer(myLayerHandler);
+                        geofenceHandler.onEdit(event);
                     }
                 });
     }
-
 
     public Viewport getView() {
         return viewport;

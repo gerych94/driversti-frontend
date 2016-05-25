@@ -53,9 +53,9 @@ public class MapController implements Observer {
         return mapView.getView();
     }
 
-    public MapController(ListStore<Geofence> globalGeofenceStore, ServerDataHolder instance) {
+    public MapController(GeofenceController geofenceController, ListStore<Geofence> globalGeofenceStore, ServerDataHolder instance) {
         this.geofenceStore = globalGeofenceStore;
-        mapView = new MapView(globalGeofenceStore);
+        mapView = new MapView(geofenceController, globalGeofenceStore);
         positionData = new PositionData();
         this.observable = instance;
         observable.registerObserver(this);
