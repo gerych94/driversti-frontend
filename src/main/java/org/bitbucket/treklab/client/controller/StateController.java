@@ -175,8 +175,6 @@ public class StateController implements ContentController, StateView.StateHandle
                     DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
                     rowStore.update(new InfoRow(1, "Время устройства", fmt.format(tmp)));
                 }
-                /** Обновление объектов реализовать пока не удалось.
-                 * Скорее всего причина ошибок в несоответствии их ID, которые генерируются COUNTER'ом */
                 if (positions.get(i).getAltitude() >= 0) {
                     rowStore.update(new InfoRow(2, "Высота", positions.get(i).getAltitude() + " м"));
                 } else {

@@ -48,6 +48,7 @@ import org.bitbucket.treklab.client.state.DeviceVisibilityHandler;
 import org.bitbucket.treklab.client.util.LoggerHelper;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -103,18 +104,18 @@ public class DeviceView {
 
 
     @UiField(provided = true)
-    StoreFilterField<Event> eventFilter;
+    StoreFilterField<OverSpeedEvent> eventFilter;
     @UiField
     TextButton refreshEventButton;
 
     @UiField
-    Grid<Event> eventGrid;
+    Grid<OverSpeedEvent> eventGrid;
     @UiField(provided = true)
-    ListStore<Event> eventStore;
+    ListStore<OverSpeedEvent> eventStore;
     @UiField(provided = true)
-    ColumnModel<Event> eventCM;
+    ColumnModel<OverSpeedEvent> eventCM;
     @UiField
-    GroupingView<Event> eventView;
+    GroupingView<OverSpeedEvent> eventView;
 
 
     @UiField(provided = true)
@@ -139,7 +140,7 @@ public class DeviceView {
     private final ColumnConfig<Device, Boolean> colDeviceFollow;
 
     private static final DeviceProperties deviceProp = GWT.create(DeviceProperties.class);
-    private static final EventProperties eventProp = GWT.create(EventProperties.class);
+    private static final OverSpeedEventProperties eventProp = GWT.create(OverSpeedEventProperties.class);
     private static final GeofenceProperties geoProp = GWT.create(GeofenceProperties.class);
     private Resources resources = GWT.create(Resources.class);
     private HeaderIconTemplate headerTemplate = GWT.create(HeaderIconTemplate.class);
@@ -151,7 +152,7 @@ public class DeviceView {
 
     public DeviceView(final DeviceHandler deviceHandler,
                       ListStore<Device> globalDeviceStore,
-                      ListStore<Event> globalEventStore,
+                      ListStore<OverSpeedEvent> globalEventStore,
                       ListStore<Geofence> globalGeofenceStore,
                       final StateController sController,
                       GeofenceController geofenceController,
@@ -339,24 +340,25 @@ public class DeviceView {
 
         this.deviceCM = new ColumnModel<>(deviceList);
 
-        eventFilter = new StoreFilterField<Event>() {
+        eventFilter = new StoreFilterField<OverSpeedEvent>() {
             @Override
-            protected boolean doSelect(Store<Event> store, Event parent, Event item, String filter) {
-                return filter.trim().isEmpty() ||
-                        item.getDeviceName().toLowerCase().contains(filter.toLowerCase()) ||
-                        item.getMessage().toLowerCase().contains(filter.toLowerCase());
+            protected boolean doSelect(Store<OverSpeedEvent> store, OverSpeedEvent parent, OverSpeedEvent item, String filter) {
+                return false;
+                /*return filter.trim().isEmpty() ||
+                        item.getSpeed().toLowerCase().contains(filter.toLowerCase()) ||
+                        item.getMessage().toLowerCase().contains(filter.toLowerCase());*/
             }
         };
         eventFilter.bind(this.eventStore);
 
-        ColumnConfig<Event, String> colEventTime = new ColumnConfig<>(eventProp.time(), 60, "Time");
-        ColumnConfig<Event, String> colEventDeviceName = new ColumnConfig<>(eventProp.deviceName(), 100, "Object");
-        ColumnConfig<Event, String> colEventMessage = new ColumnConfig<>(eventProp.message(), 60, "Event");
+        ColumnConfig<OverSpeedEvent, Date> colEventTime = new ColumnConfig<>(eventProp.time(), 60, "Time");
+        ColumnConfig<OverSpeedEvent, Integer> colEventDeviceId = new ColumnConfig<>(eventProp.deviceId(), 100, "Object");
+        ColumnConfig<OverSpeedEvent, Double> colEventSpeed = new ColumnConfig<>(eventProp.speed(), 60, "OverSpeedEvent");
 
-        List<ColumnConfig<Event, ?>> eventList = new ArrayList<>();
+        List<ColumnConfig<OverSpeedEvent, ?>> eventList = new ArrayList<>();
         eventList.add(colEventTime);
-        eventList.add(colEventDeviceName);
-        eventList.add(colEventMessage);
+        eventList.add(colEventDeviceId);
+        eventList.add(colEventSpeed);
 
         this.eventCM = new ColumnModel<>(eventList);
 
@@ -452,7 +454,7 @@ public class DeviceView {
             }
         });
 
-        eventView.setAutoExpandColumn(colEventMessage);
+        eventView.setAutoExpandColumn(colEventSpeed);
         eventView.setStripeRows(true);
 
         geofenceView.setAutoExpandColumn(colGeofenceName);

@@ -13,7 +13,7 @@ import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import org.bitbucket.treklab.client.communication.BaseRequestCallback;
 import org.bitbucket.treklab.client.communication.DeviceData;
 import org.bitbucket.treklab.client.model.Device;
-import org.bitbucket.treklab.client.model.Event;
+import org.bitbucket.treklab.client.model.OverSpeedEvent;
 import org.bitbucket.treklab.client.model.Geofence;
 import org.bitbucket.treklab.client.state.DeviceFollowHandler;
 import org.bitbucket.treklab.client.state.DeviceVisibilityHandler;
@@ -62,7 +62,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
      * @param instance            - объект, оповещающий о событии в сокете
      */
     public DeviceController(ListStore<Device> globalDeviceStore,
-                            ListStore<Event> globalEventStore,
+                            ListStore<OverSpeedEvent> globalEventStore,
                             ListStore<Geofence> globalGeofenceStore,
                             MapController mapController,
                             StateController stateController,

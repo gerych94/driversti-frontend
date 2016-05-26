@@ -38,8 +38,8 @@ public class Application {
     public Application() {
         DeviceProperties deviceProperties = GWT.create(DeviceProperties.class);
         final ListStore<Device> globalDeviceStore = new ListStore<>(deviceProperties.key());
-        EventProperties eventProperties = GWT.create(EventProperties.class);
-        final ListStore<Event> globalEventStore = new ListStore<>(eventProperties.key());
+        OverSpeedEventProperties overSpeedEventProperties = GWT.create(OverSpeedEventProperties.class);
+        final ListStore<OverSpeedEvent> globalEventStore = new ListStore<>(overSpeedEventProperties.key());
         GeofenceProperties geofenceProperties = GWT.create(GeofenceProperties.class);
         final ListStore<Geofence> globalGeofenceStore = new ListStore<>(geofenceProperties.key());
         ServerDataHolder instance = ServerDataHolder.getInstance();
@@ -84,7 +84,7 @@ public class Application {
             Window.alert( "WebSocket not available!" );
         }
 
-        eventController.run();
+        //eventController.run();
     }
 
     public static DataService getDataServiceController() {
