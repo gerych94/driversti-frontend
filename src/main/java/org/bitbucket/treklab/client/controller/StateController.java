@@ -86,7 +86,7 @@ public class StateController implements ContentController, StateView.StateHandle
                                 }
                                 rowStore.add(new InfoRow(3, "Долгота", String.valueOf(positions.get(i).getLongitude())));
                                 rowStore.add(new InfoRow(4, "Широта", String.valueOf(positions.get(i).getLatitude())));
-                                double speed = new BigDecimal(positions.get(i).getSpeed()).setScale(1, RoundingMode.UP).doubleValue();
+                                double speed = new BigDecimal(positions.get(i).getSpeed()).setScale(0, RoundingMode.UP).doubleValue();
                                 rowStore.add(new InfoRow(5, "Скорость", speed + " км/ч"));
                                 if (speed > 50) {
                                     Info.display("Overspeed!", "Allowed speed: 50 km/h. Current speed: " + speed + " km/h");
@@ -182,9 +182,9 @@ public class StateController implements ContentController, StateView.StateHandle
                 }
                 rowStore.update(new InfoRow(3, "Долгота", String.valueOf(positions.get(i).getLongitude())));
                 rowStore.update(new InfoRow(4, "Широта", String.valueOf(positions.get(i).getLatitude())));
-                double speed = new BigDecimal(positions.get(i).getSpeed()).setScale(1, RoundingMode.UP).doubleValue();
+                double speed = new BigDecimal(positions.get(i).getSpeed()).setScale(0, RoundingMode.UP).doubleValue();
                 stateView.getRowStore().update(new InfoRow(5, "Скорость", speed + " км/ч"));
-                if (speed > 50) {
+                if (speed > 80) {
                     Info.display("Overspeed!", "Allowed speed: 50 km/h. Current speed: " + speed + " km/h");
                 }
                 rowStore.update(new InfoRow(6, "Курс", positions.get(i).getCourse() + "°"));

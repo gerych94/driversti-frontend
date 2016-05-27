@@ -34,6 +34,8 @@ public class GeofenceController implements MapView.GeofenceHandler {
     private final ListStore<Geofence> geofenceStore;
     private final GeofenceData geofenceData;
 
+    private FeatureGroup drawnItems;
+
     private static final String className = GeofenceController.class.getSimpleName();
 
     public GeofenceController(ListStore<Geofence> globalGeofenceStore) {
@@ -98,7 +100,7 @@ public class GeofenceController implements MapView.GeofenceHandler {
     }
 
     @Override
-    public void onAdd(DrawCreatedEvent event, FeatureGroup drawnItems, MapView mapView) {
+    public void onAdd(DrawCreatedEvent event, MapView mapView) {
         ILayer layer = event.getLayer();
         //drawnItems.addLayer(layer);
         String layerType = event.getLayerType().toUpperCase(); // получаем тип геозоны
@@ -112,7 +114,6 @@ public class GeofenceController implements MapView.GeofenceHandler {
                 drawnItems.addLayer(circle);
                 LatLng circleLatLng = circle.getLatLng(); // получаем координаты центра круга (геозоны)
                 double radius = circle.getRadius(); // получаем радиус геозоны
-                LoggerHelper.log(className, radius);
                 Coordinate circleCoordinate = (Coordinate) Coordinate.createObject(); // создаём пустой объект координат
                 circleCoordinate.setLongitude(circleLatLng.lng()); // присваиваем координатам долготу
                 circleCoordinate.setLatitude(circleLatLng.lat()); // присваиваем координатам широту
@@ -120,6 +121,8 @@ public class GeofenceController implements MapView.GeofenceHandler {
                 circleCoordinates.add(circleCoordinate); // в список координат добавляем координаты центра круга
                 geofence.setCoordinates(circleCoordinates); // присваиваем геозоне список координат
                 geofence.setRadius(radius); // присваиваем геозоне радиус
+                // вызываем диалог добавления новой геозоны и передаём ей созданную геозону и список геозон
+                new GeofenceAddDialog(geofence, geofenceStore, mapView, circle).show();
                 break;
             // если геозона "ПОЛИГОН"
             case "POLYGON":
@@ -135,19 +138,37 @@ public class GeofenceController implements MapView.GeofenceHandler {
                     polygonCoordinates.add(polygonCoordinate); // в список координат добавляем координаты точек полигона
                 }
                 geofence.setCoordinates(polygonCoordinates); // присваиваем геозоне список координат
+                // вызываем диалог добавления новой геозоны и передаём ей созданную геозону и список геозон
+                new GeofenceAddDialog(geofence, geofenceStore, mapView, polygon).show();
                 break;
         }
-        // вызываем диалог добавления новой геозоны и передаём ей созданную геозону и список геозон
-        new GeofenceAddDialog(geofence, geofenceStore, mapView, layer).show();
     }
 
     @Override
-    public void onEdit(final DrawEditedEvent event) {
+    public void onEdit(final DrawEditedEvent event, ListStore<Geofence> geofenceStore) {
         LayerGroup layers = event.getLayers();
         ILayer[] array = layers.getLayers();
-        for (int i = 0; i < array.length; i++) {
-            LoggerHelper.log(className, array[i].getJSObject().getProperty("_mRadius") + "");
-        }
+        /*for (ILayer iLayer : array) {
+            LoggerHelper.log(className, "LatLng: " + iLayer.getJSObject().getProperty("_latlng"));
+            LoggerHelper.log(className, "options: " + iLayer.getJSObject().getProperty("options"));
+            LoggerHelper.log(className, "editing: " + iLayer.getJSObject().getProperty("editing"));
+            LoggerHelper.log(className, "_leaflet_events: " + iLayer.getJSObject().getProperty("_leaflet_events"));
+            LoggerHelper.log(className, "_map: " + iLayer.getJSObject().getProperty("_map"));
+            LoggerHelper.log(className, "_container: " + iLayer.getJSObject().getProperty("_container"));
+            LoggerHelper.log(className, "_path: " + iLayer.getJSObject().getProperty("_path"));
+            LoggerHelper.log(className, "_point: " + iLayer.getJSObject().getProperty("_point"));
+            LoggerHelper.log(className, "_radius: " + iLayer.getJSObject().getProperty("_radius"));
+            LoggerHelper.log(className, "getLatLng: " + iLayer.getJSObject().getProperty("getLatLng"));
+            LoggerHelper.log(className, "toGeoJSON: " + iLayer.getJSObject().getProperty("toGeoJSON"));
+            //LoggerHelper.log(className, Arrays.toString(iLayer.getOptions().getPropertyAsArray("_latlng")));
+            *//*for (int i = 0; i < geofenceStore.size(); i++) {
+                Geofence geofence = geofenceStore.get(i);
+                int leaflet_id = Integer.parseInt(iLayer.getJSObject().getProperty("_leaflet_id") + "");
+                if (geofence.getId() == leaflet_id) {
+                    iLayer.getJSObject().getProperty("_latlng");
+                }
+            }*//*
+        }*/
     }
 
     @Override
@@ -173,6 +194,14 @@ public class GeofenceController implements MapView.GeofenceHandler {
                                 if (204 == response.getStatusCode()) {
                                     // если ответ от сервера правильный (в данном случае 204), удаляем геозону из таблицы
                                     geofenceStore.remove(selectedGeofence);
+                                    ILayer layerForRemove = null;
+                                    for (int i = 0; i < drawnItems.getLayers().length; i++) {
+                                        if (selectedGeofence.getId() == Integer.parseInt(drawnItems.getLayers()[i].getOptions().getProperty("_leaflet_id") + "")) {
+                                            layerForRemove = drawnItems.getLayers()[i];
+                                        }
+                                    }
+                                    assert layerForRemove != null;
+                                    drawnItems.removeLayer(layerForRemove);
                                     Info.display("Уведомление", "Геозона " + selectedGeofence.getName() + " успешно удалено!");
                                     LoggerHelper.log(className, "Device " + selectedGeofence.getName() + " has been removed. Bye-bye motherfucker!");
                                 } else {
@@ -191,5 +220,9 @@ public class GeofenceController implements MapView.GeofenceHandler {
             }
         });
         confirm.show();
+    }
+
+    public void setDrawnItems(FeatureGroup drawnItems) {
+        this.drawnItems = drawnItems;
     }
 }

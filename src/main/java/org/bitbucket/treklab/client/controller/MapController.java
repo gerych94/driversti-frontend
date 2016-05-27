@@ -13,7 +13,6 @@ import org.bitbucket.treklab.client.communication.PositionData;
 import org.bitbucket.treklab.client.model.Device;
 import org.bitbucket.treklab.client.model.Geofence;
 import org.bitbucket.treklab.client.model.Position;
-import org.bitbucket.treklab.client.util.LoggerHelper;
 import org.bitbucket.treklab.client.util.Observable;
 import org.bitbucket.treklab.client.util.Observer;
 import org.bitbucket.treklab.client.util.ServerDataHolder;
@@ -76,10 +75,10 @@ public class MapController implements Observer {
                 } else if (startDrawFlag.get(position.getDeviceId())) {
                     drawRoad(position, position.getDeviceId());
                 }
-                LoggerHelper.log(className, "deviceId: " + position.getDeviceId() + "\n"
+                /*LoggerHelper.log(className, "deviceId: " + position.getDeviceId() + "\n"
                                     + "position id: " + position.getId() + "\n"
                                     + "serverTime: " + position.getServerTime() + "\n"
-                                    + "deviceTime: " + position.getDeviceTime());
+                                    + "deviceTime: " + position.getDeviceTime());*/
             }
         }
     }

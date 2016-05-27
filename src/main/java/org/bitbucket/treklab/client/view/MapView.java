@@ -44,11 +44,12 @@ public class MapView {
     private Marker marker = new Marker(new LatLng(0.0, 0.0), new Options());
     private Map map;
     private ListStore<Geofence> geofenceStore;
-    private final GeofenceHandler geofenceHandler;
+    private final GeofenceController geofenceHandler;
+
 
     public interface GeofenceHandler {
-        void onAdd(DrawCreatedEvent event, FeatureGroup drawnItems, MapView mapView);
-        void onEdit(DrawEditedEvent event);
+        void onAdd(DrawCreatedEvent event, MapView mapView);
+        void onEdit(DrawEditedEvent event, ListStore<Geofence> geofenceStore);
         void onRemove(Geofence selectedGeofence);
     }
 
@@ -129,6 +130,7 @@ public class MapView {
     private void addDrawControl(Map map) {
 
         final FeatureGroup drawnItems = new FeatureGroup();
+        geofenceHandler.setDrawnItems(drawnItems);
         map.addLayer(drawnItems);
         DrawControlOptions drawControlOptions = new DrawControlOptions();
         drawControlOptions.setPosition(Position.TOP_LEFT);
@@ -145,7 +147,7 @@ public class MapView {
                     @Override
                     public void handle(
                             DrawCreatedEvent event) {
-                        geofenceHandler.onAdd(event, drawnItems, MapView.this);
+                        geofenceHandler.onAdd(event, MapView.this);
                     }
                 });
         EventHandlerManager.addEventHandler(
@@ -155,7 +157,7 @@ public class MapView {
                     @Override
                     public void handle(
                             DrawEditedEvent event) {
-                        geofenceHandler.onEdit(event);
+                        geofenceHandler.onEdit(event, geofenceStore);
                     }
                 });
     }
