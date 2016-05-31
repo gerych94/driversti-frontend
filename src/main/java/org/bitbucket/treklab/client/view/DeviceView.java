@@ -35,9 +35,11 @@ import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.GroupingView;
+import com.sencha.gxt.widget.core.client.info.Info;
 import com.sencha.gxt.widget.core.client.menu.Item;
 import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
+import org.bitbucket.treklab.client.controller.GeofenceController;
 import org.bitbucket.treklab.client.controller.StateController;
 import org.bitbucket.treklab.client.model.*;
 import org.bitbucket.treklab.client.resources.Resources;
@@ -47,6 +49,7 @@ import org.bitbucket.treklab.client.state.GeofenceVisibilityHandler;
 import org.bitbucket.treklab.client.util.LoggerHelper;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -63,22 +66,14 @@ public class DeviceView {
      */
     public interface DeviceHandler {
         void onAdd();
-
         void onProperties(Device selectedItem);
-
         void onRefresh();
-
         void onRemove(Device selectedItem);
-
         void onShowHistory(Device selectedItem);
-
         void onSelected();
-
         void doubleClicked(Device selectedItem);
-
         //метод который реагирует при смене чекбокса;
         void deviceCheckBoxActionVisible(Device device);
-
         void deviceCheckBoxActionFollow(Device device, boolean flag, boolean historyFlag);
     }
 
@@ -110,18 +105,18 @@ public class DeviceView {
 
 
     @UiField(provided = true)
-    StoreFilterField<Event> eventFilter;
+    StoreFilterField<OverSpeedEvent> eventFilter;
     @UiField
     TextButton refreshEventButton;
 
     @UiField
-    Grid<Event> eventGrid;
+    Grid<OverSpeedEvent> eventGrid;
     @UiField(provided = true)
-    ListStore<Event> eventStore;
+    ListStore<OverSpeedEvent> eventStore;
     @UiField(provided = true)
-    ColumnModel<Event> eventCM;
+    ColumnModel<OverSpeedEvent> eventCM;
     @UiField
-    GroupingView<Event> eventView;
+    GroupingView<OverSpeedEvent> eventView;
 
 
     @UiField(provided = true)
@@ -140,13 +135,17 @@ public class DeviceView {
     private final StateController stateController;
     private final DeviceVisibilityHandler deviceVisibilityHandler;
     private final DeviceFollowHandler deviceFollowHandler;
+<<<<<<< HEAD
     private final GeofenceVisibilityHandler geofenceVisibilityHandler;
+=======
+    private final MapView.GeofenceHandler geofenceHandler;
+>>>>>>> 8e327a965b23ea287c39635cbebf9101bb0bd580
 
     private final ColumnConfig<Device, Boolean> colDeviceVisible;
     private final ColumnConfig<Device, Boolean> colDeviceFollow;
 
     private static final DeviceProperties deviceProp = GWT.create(DeviceProperties.class);
-    private static final EventProperties eventProp = GWT.create(EventProperties.class);
+    private static final OverSpeedEventProperties eventProp = GWT.create(OverSpeedEventProperties.class);
     private static final GeofenceProperties geoProp = GWT.create(GeofenceProperties.class);
     private Resources resources = GWT.create(Resources.class);
     private HeaderIconTemplate headerTemplate = GWT.create(HeaderIconTemplate.class);
@@ -158,14 +157,16 @@ public class DeviceView {
 
     public DeviceView(final DeviceHandler deviceHandler,
                       ListStore<Device> globalDeviceStore,
-                      ListStore<Event> globalEventStore,
+                      ListStore<OverSpeedEvent> globalEventStore,
                       ListStore<Geofence> globalGeofenceStore,
                       final StateController sController,
+                      GeofenceController geofenceController,
                       final DeviceVisibilityHandler deviceVisibilityHandler,
                       final DeviceFollowHandler deviceFollowHandler,
                       final GeofenceVisibilityHandler geofenceVisibilityHandler) {
         this.deviceHandler = deviceHandler;
         this.stateController = sController;
+        this.geofenceHandler = geofenceController;
         this.deviceVisibilityHandler = deviceVisibilityHandler;
         this.deviceFollowHandler = deviceFollowHandler;
         this.geofenceVisibilityHandler=geofenceVisibilityHandler;
@@ -308,12 +309,6 @@ public class DeviceView {
         final MenuItem remove = new MenuItem("Удалить");
         remove.setId("Удалить");
         menu.add(remove);
-        /*final MenuItem showMaxSpeed = new MenuItem("Show MAX Speed");
-        showMaxSpeed.setId("Show MAX Speed");
-        menu.add(showMaxSpeed);
-        final MenuItem showAverageSpeed = new MenuItem("Show average Speed");
-        showAverageSpeed.setId("Show average Speed");
-        menu.add(showAverageSpeed);*/
         menu.addSelectionHandler(new SelectionHandler<Item>() {
             @Override
             public void onSelection(SelectionEvent<Item> event) {
@@ -331,14 +326,6 @@ public class DeviceView {
                         LoggerHelper.log(className, "'Remove' has been choose in menu");
                         deviceHandler.onRemove(deviceGrid.getSelectionModel().getSelectedItem());
                         break;
-                    /*case "Show MAX Speed":
-                        LoggerHelper.log(className, "'Show MAX Speed' has been choose in menu");
-                        showMaxSpeed();
-                        break;
-                    case "Show average Speed":
-                        LoggerHelper.log(className, "'Show average Speed' has been choose in menu");
-                        showAverageSpeed();
-                        break;*/
                 }
             }
         });
@@ -358,24 +345,25 @@ public class DeviceView {
 
         this.deviceCM = new ColumnModel<>(deviceList);
 
-        eventFilter = new StoreFilterField<Event>() {
+        eventFilter = new StoreFilterField<OverSpeedEvent>() {
             @Override
-            protected boolean doSelect(Store<Event> store, Event parent, Event item, String filter) {
-                return filter.trim().isEmpty() ||
-                        item.getDeviceName().toLowerCase().contains(filter.toLowerCase()) ||
-                        item.getMessage().toLowerCase().contains(filter.toLowerCase());
+            protected boolean doSelect(Store<OverSpeedEvent> store, OverSpeedEvent parent, OverSpeedEvent item, String filter) {
+                return false;
+                /*return filter.trim().isEmpty() ||
+                        item.getSpeed().toLowerCase().contains(filter.toLowerCase()) ||
+                        item.getMessage().toLowerCase().contains(filter.toLowerCase());*/
             }
         };
         eventFilter.bind(this.eventStore);
 
-        ColumnConfig<Event, String> colEventTime = new ColumnConfig<>(eventProp.time(), 60, "Time");
-        ColumnConfig<Event, String> colEventDeviceName = new ColumnConfig<>(eventProp.deviceName(), 100, "Object");
-        ColumnConfig<Event, String> colEventMessage = new ColumnConfig<>(eventProp.message(), 60, "Event");
+        ColumnConfig<OverSpeedEvent, Date> colEventTime = new ColumnConfig<>(eventProp.time(), 60, "Time");
+        ColumnConfig<OverSpeedEvent, Integer> colEventDeviceId = new ColumnConfig<>(eventProp.deviceId(), 100, "Object");
+        ColumnConfig<OverSpeedEvent, Double> colEventSpeed = new ColumnConfig<>(eventProp.speed(), 60, "OverSpeedEvent");
 
-        List<ColumnConfig<Event, ?>> eventList = new ArrayList<>();
+        List<ColumnConfig<OverSpeedEvent, ?>> eventList = new ArrayList<>();
         eventList.add(colEventTime);
-        eventList.add(colEventDeviceName);
-        eventList.add(colEventMessage);
+        eventList.add(colEventDeviceId);
+        eventList.add(colEventSpeed);
 
         this.eventCM = new ColumnModel<>(eventList);
 
@@ -392,7 +380,11 @@ public class DeviceView {
 
             @Override
             public Boolean getValue(Geofence geofence) {
+<<<<<<< HEAD
                 return geofenceVisibilityHandler.isVisible(geofence);
+=======
+                return true;
+>>>>>>> 8e327a965b23ea287c39635cbebf9101bb0bd580
             }
 
             @Override
@@ -407,9 +399,11 @@ public class DeviceView {
         colGeofenceVisible.setCell(new CheckBoxCell());
         colGeofenceVisible.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         colGeofenceVisible.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+
         ColumnConfig<Geofence, String> colGeofenceName = new ColumnConfig<>(geoProp.name(), 100, "Geofence");
         colGeofenceName.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
         colGeofenceName.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+
         ColumnConfig<Geofence, String> colGeofenceSettings = new ColumnConfig<>(geoProp.empty(), 45, "");
         TextButtonCell geofenceButton = new TextButtonCell();
         geofenceButton.setIcon(resources.cogWheel());
@@ -417,13 +411,20 @@ public class DeviceView {
         final MenuItem geofenceEdit = new MenuItem("Свойства");
         geofenceEdit.setId("Свойства");
         geofenceMenu.add(geofenceEdit);
+        final MenuItem geofenceRemove = new MenuItem("Удалить");
+        geofenceRemove.setId("Удалить");
+        geofenceMenu.add(geofenceRemove);
         geofenceMenu.addSelectionHandler(new SelectionHandler<Item>() {
             @Override
             public void onSelection(SelectionEvent<Item> event) {
                 switch (event.getSelectedItem().getId()) {
                     case "Свойства":
                         // TODO: 12.05.2016 реализовать метод
-                        LoggerHelper.log(className, "Not implemented");
+                        Info.display("Ошибка", "Эта фича на стадии разработки. Наслаждайтесь другими ;)");
+                        break;
+                    case "Удалить":
+                        LoggerHelper.log(className, "'Remove' has been choose in menu");
+                        geofenceHandler.onRemove(geofenceGrid.getSelectionModel().getSelectedItem());
                         break;
                 }
             }
@@ -461,61 +462,12 @@ public class DeviceView {
             }
         });
 
-        eventView.setAutoExpandColumn(colEventMessage);
+        eventView.setAutoExpandColumn(colEventSpeed);
         eventView.setStripeRows(true);
 
         geofenceView.setAutoExpandColumn(colGeofenceName);
         geofenceView.setStripeRows(true);
     }
-
-    /*private void showMaxSpeed() {
-        final PositionData positionData = new PositionData();
-        try {
-            positionData.getPositions(deviceGrid.getSelectionModel().getSelectedItem(),
-                    new Date(116, 2, 1),
-                    new Date(),
-                    new BaseRequestCallback() {
-                        @Override
-                        public void onResponseReceived(Request request, Response response) {
-                            JsArray<Position> positionJsArray = JsonUtils.safeEval(response.getText());
-                            double maxSpeed = 0;
-                            for (int i = 0; i < positionJsArray.length(); i++) {
-                                if (maxSpeed < positionJsArray.get(i).getSpeed())
-                                    maxSpeed = positionJsArray.get(i).getSpeed();
-                            }
-                            new AlertMessageBox("Info", "Max speed: " + maxSpeed).show();
-                        }
-                    });
-        } catch (RequestException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void showAverageSpeed() {
-        final PositionData positionData = new PositionData();
-        try {
-            positionData.getPositions(deviceGrid.getSelectionModel().getSelectedItem(),
-                    new Date(116, 2, 1),
-                    new Date(),
-                    new BaseRequestCallback() {
-                        @Override
-                        public void onResponseReceived(Request request, Response response) {
-                            JsArray<Position> positionJsArray = JsonUtils.safeEval(response.getText());
-                            double speed = 0;
-                            int notZeroValue = 0;
-                            for (int i = 0; i < positionJsArray.length(); i++) {
-                                if (positionJsArray.get(i).getSpeed() != 0) {
-                                    speed += positionJsArray.get(i).getSpeed();
-                                    notZeroValue++;
-                                }
-                            }
-                            new AlertMessageBox("Info", "Average speed: " + speed / notZeroValue).show();
-                        }
-                    });
-        } catch (RequestException e) {
-            e.printStackTrace();
-        }
-    }*/
 
     @UiHandler("tabPanel")
     public void onTabSelected(SelectionEvent<Widget> event) {

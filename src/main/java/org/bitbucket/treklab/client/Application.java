@@ -39,17 +39,24 @@ public class Application {
     public Application() {
         DeviceProperties deviceProperties = GWT.create(DeviceProperties.class);
         final ListStore<Device> globalDeviceStore = new ListStore<>(deviceProperties.key());
-        EventProperties eventProperties = GWT.create(EventProperties.class);
-        final ListStore<Event> globalEventStore = new ListStore<>(eventProperties.key());
+        OverSpeedEventProperties overSpeedEventProperties = GWT.create(OverSpeedEventProperties.class);
+        final ListStore<OverSpeedEvent> globalEventStore = new ListStore<>(overSpeedEventProperties.key());
         GeofenceProperties geofenceProperties = GWT.create(GeofenceProperties.class);
         final ListStore<Geofence> globalGeofenceStore = new ListStore<>(geofenceProperties.key());
         ServerDataHolder instance = ServerDataHolder.getInstance();
 
+        geofenceController = new GeofenceController(globalGeofenceStore);
         navController = new NavController();
+<<<<<<< HEAD
         mapController = new MapController(globalGeofenceStore, instance);
         visibilityController = new VisibilityController();
         followController = new FollowController();
         geofenceVisibilityController=new GeofenceVisibilityController();
+=======
+        mapController = new MapController(geofenceController, globalGeofenceStore, instance);
+        visibilityController = new VisibilityController(globalDeviceStore);
+        followController = new FollowController(globalDeviceStore);
+>>>>>>> 8e327a965b23ea287c39635cbebf9101bb0bd580
         stateController = new StateController(instance);
         deviceController = new DeviceController(globalDeviceStore,
                 globalEventStore,
@@ -58,10 +65,13 @@ public class Application {
                 stateController,
                 visibilityController,
                 followController,
+<<<<<<< HEAD
                 geofenceVisibilityController,
+=======
+                geofenceController,
+>>>>>>> 8e327a965b23ea287c39635cbebf9101bb0bd580
                 instance);
         eventController = new EventController(globalDeviceStore, globalEventStore);
-        geofenceController = new GeofenceController(globalGeofenceStore);
         scheduleController = new ScheduleController();
 
         centerView = new CenterView(mapController.getView(), scheduleController.getView());
@@ -87,7 +97,7 @@ public class Application {
             Window.alert( "WebSocket not available!" );
         }
 
-        eventController.run();
+        //eventController.run();
     }
 
     public static DataService getDataServiceController() {

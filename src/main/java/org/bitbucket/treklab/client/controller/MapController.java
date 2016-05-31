@@ -13,7 +13,6 @@ import org.bitbucket.treklab.client.communication.PositionData;
 import org.bitbucket.treklab.client.model.Device;
 import org.bitbucket.treklab.client.model.Geofence;
 import org.bitbucket.treklab.client.model.Position;
-import org.bitbucket.treklab.client.util.LoggerHelper;
 import org.bitbucket.treklab.client.util.Observable;
 import org.bitbucket.treklab.client.util.Observer;
 import org.bitbucket.treklab.client.util.ServerDataHolder;
@@ -54,9 +53,9 @@ public class MapController implements Observer {
         return mapView.getView();
     }
 
-    public MapController(ListStore<Geofence> globalGeofenceStore, ServerDataHolder instance) {
+    public MapController(GeofenceController geofenceController, ListStore<Geofence> globalGeofenceStore, ServerDataHolder instance) {
         this.geofenceStore = globalGeofenceStore;
-        mapView = new MapView(globalGeofenceStore);
+        mapView = new MapView(geofenceController, globalGeofenceStore);
         positionData = new PositionData();
         this.observable = instance;
         observable.registerObserver(this);
@@ -67,7 +66,10 @@ public class MapController implements Observer {
         if (key.equals(POSITIONS_KEY)) {
             //перебор координат всех девайсов которые пришли от сервера
             JsArray<Position> positions = JsonUtils.safeEval(value);
+<<<<<<< HEAD
            // LoggerHelper.log(className, " " + value);
+=======
+>>>>>>> 8e327a965b23ea287c39635cbebf9101bb0bd580
             for (int i = 0; i < positions.length(); i++) {
                 Position position = positions.get(i);
                 LoggerHelper.log(className, " idPosition " + position.getId() + " IdDevice" + position.getDeviceId());
@@ -79,6 +81,10 @@ public class MapController implements Observer {
                 } else if (startDrawFlag.get(position.getDeviceId())) {
                     drawRoad(position, position.getDeviceId());
                 }
+                /*LoggerHelper.log(className, "deviceId: " + position.getDeviceId() + "\n"
+                                    + "position id: " + position.getId() + "\n"
+                                    + "serverTime: " + position.getServerTime() + "\n"
+                                    + "deviceTime: " + position.getDeviceTime());*/
             }
         }
     }
@@ -120,7 +126,10 @@ public class MapController implements Observer {
 
     //метод корторый отвечает за прорисовку маршрута
     public void drawRoad(Position devicePosition, int deviceId) {
+<<<<<<< HEAD
        // LoggerHelper.log(className, " idPosition " + devicePosition.getId() + " IdDevice" + devicePosition.getDeviceId());
+=======
+>>>>>>> 8e327a965b23ea287c39635cbebf9101bb0bd580
         ArrayList<Polyline> polylineArrayList = devicePolyLineHashMap.get(deviceId);
         LatLng previous = previousPositionMap.get(deviceId);
         Position position = markerPosition.get(deviceId);
@@ -182,18 +191,8 @@ public class MapController implements Observer {
                         for (int i = 0; i < positions.length(); i++) {
                             final Position devicePosition = positions.get(i);
                             markerPosition.put(positions.get(i).getDeviceId(), devicePosition);
-                            // startDrawFlag.put(devicePosition.getDeviceId(), false);
                             LatLng latLng = new LatLng(devicePosition.getLatitude(), devicePosition.getLongitude());
-//                            IconOptions iconOptions=new IconOptions();
-//                            iconOptions.setIconUrl(resources.getMarkerIconRed().getSafeUri().asString());
-//                            Icon icon=new Icon(iconOptions);
-//                            MarkerOptions markerOptions=new MarkerOptions();
-//                            markerOptions.setIcon(icon);
-//                            Marker marker = new Marker(latLng,markerOptions);
-//                            marker.setIcon(icon);
-//                            marker.setOptions(new Options());
                             Marker marker = new Marker(latLng, new Options());
-                            //  marker.setOptions(markerOptions);
                             mapView.getMarkers().put(positions.get(i).getDeviceId(), marker);
                             marker.addTo(mapView.getMap());
                             bufLat += devicePosition.getLatitude();

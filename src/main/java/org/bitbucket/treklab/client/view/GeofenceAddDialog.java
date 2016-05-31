@@ -71,21 +71,21 @@ public class GeofenceAddDialog extends Composite {
 
     @UiHandler("saveButton")
     public void onSaveClicked(SelectEvent event) {
-        Geofence tempGeofence = (Geofence) Geofence.createObject();
-        tempGeofence.setName(nameField.getText());
-        tempGeofence.setDescription(descriptionArea.getText());
-        tempGeofence.setType(geofence.getType());
-        tempGeofence.setCoordinates(geofence.getCoordinates());
+        geofence.setName(nameField.getText());
+        geofence.setDescription(descriptionArea.getText());
+        // TODO: 27.05.2016 userId получать из текущего юзера!!!!!!!!!!!!!!!!!
+        geofence.setUserId(1);
         try {
-            geofenceData.addGeofence(tempGeofence, new BaseRequestCallback() {
+            geofenceData.addGeofence(geofence, new BaseRequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
                     // TODO: 06.05.2016 реализовать метод
                     if (200 == response.getStatusCode()) {
-                        JsArray<Geofence> geofenceJsArray = JsonUtils.safeEval(response.getText());
-                        LoggerHelper.log(className, geofenceJsArray.length() + "");
+                        JsArray<Geofence> geofenceJsArray = JsonUtils.safeEval("[" + response.getText()+ "]");
                         geofence = geofenceJsArray.get(0);
+                        layer.getJSObject().setProperty("_leaflet_id", geofence.getId());
                         geofenceStore.add(geofence);
+                        LoggerHelper.log(className, layer.getJSObject().getProperty("_leaflet_id") + "");
                     } else {
                         LoggerHelper.log(className, "Response code: " + response.getStatusCode());
                         removeLayer();

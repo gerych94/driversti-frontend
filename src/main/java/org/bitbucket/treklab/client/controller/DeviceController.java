@@ -13,7 +13,7 @@ import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import org.bitbucket.treklab.client.communication.BaseRequestCallback;
 import org.bitbucket.treklab.client.communication.DeviceData;
 import org.bitbucket.treklab.client.model.Device;
-import org.bitbucket.treklab.client.model.Event;
+import org.bitbucket.treklab.client.model.OverSpeedEvent;
 import org.bitbucket.treklab.client.model.Geofence;
 import org.bitbucket.treklab.client.state.DeviceFollowHandler;
 import org.bitbucket.treklab.client.state.DeviceVisibilityHandler;
@@ -53,22 +53,27 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
 
     /**
      * Конструктор контроллера
-     *  @param globalDeviceStore   - глобальный список устройств
+     * @param globalDeviceStore   - глобальный список устройств
      *                            В конструкторе инициализируем объект для вызова методов АПИ
      *                            и создаём графический интерфейс для отображения устройств
      * @param globalEventStore    - глобальный список событий
      * @param globalGeofenceStore - глобальный список геозон
      * @param mapController       - контроллер карты
+     * @param geofenceController  - контроллер геозон
      * @param instance            - объект, оповещающий о событии в сокете
      */
     public DeviceController(ListStore<Device> globalDeviceStore,
-                            ListStore<Event> globalEventStore,
+                            ListStore<OverSpeedEvent> globalEventStore,
                             ListStore<Geofence> globalGeofenceStore,
                             MapController mapController,
                             StateController stateController,
                             DeviceVisibilityHandler deviceVisibilityHandler,
                             DeviceFollowHandler deviceFollowHandler,
+<<<<<<< HEAD
                             GeofenceVisibilityHandler geofenceVisibilityHandler,
+=======
+                            GeofenceController geofenceController,
+>>>>>>> 8e327a965b23ea287c39635cbebf9101bb0bd580
                             ServerDataHolder instance) {
 
         this.deviceStore = globalDeviceStore;
@@ -79,6 +84,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
                 globalEventStore,
                 globalGeofenceStore,
                 stateController,
+                geofenceController,
                 deviceVisibilityHandler,
                 deviceFollowHandler,
                 geofenceVisibilityHandler);
