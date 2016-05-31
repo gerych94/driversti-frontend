@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+
 public class MapController implements Observer {
     private final MapView mapView; // объект, отвечающий за визуальное отображение
     private final PositionData positionData; // объект, отвечающий получение данных Position
@@ -66,9 +67,10 @@ public class MapController implements Observer {
         if (key.equals(POSITIONS_KEY)) {
             //перебор координат всех девайсов которые пришли от сервера
             JsArray<Position> positions = JsonUtils.safeEval(value);
-            LoggerHelper.log(className, " " + value);
+           // LoggerHelper.log(className, " " + value);
             for (int i = 0; i < positions.length(); i++) {
                 Position position = positions.get(i);
+                LoggerHelper.log(className, " idPosition " + position.getId() + " IdDevice" + position.getDeviceId());
                 //каждый раз сохрянеться позиция маркера что бы знать где последний раз был девайс
                 markerPosition.put(position.getDeviceId(), position);
                 //если активирован флаг рисования для этого девайса начинаеться прорисовка маршрута
@@ -118,7 +120,7 @@ public class MapController implements Observer {
 
     //метод корторый отвечает за прорисовку маршрута
     public void drawRoad(Position devicePosition, int deviceId) {
-        LoggerHelper.log(className, " idPosition " + devicePosition.getId() + " IdDevice" + devicePosition.getDeviceId());
+       // LoggerHelper.log(className, " idPosition " + devicePosition.getId() + " IdDevice" + devicePosition.getDeviceId());
         ArrayList<Polyline> polylineArrayList = devicePolyLineHashMap.get(deviceId);
         LatLng previous = previousPositionMap.get(deviceId);
         Position position = markerPosition.get(deviceId);
@@ -131,6 +133,7 @@ public class MapController implements Observer {
             marker.setLatLng(latLng);
             if (!flagMap.get(deviceId)) {
                 marker.addTo(mapView.getMap());
+                refocusedDevice(deviceId,true);
             }
             Polyline poly = new Polyline(new LatLng[]{previous, latLng}, polylineOptions);
             if (!flagMap.get(deviceId)) {
@@ -226,13 +229,13 @@ public class MapController implements Observer {
     }
 
     // метод который занимаеться рефокусом карты в зависимости от выбранных чекбоксов follow
-    public void refocusedDevice(final Device device, final boolean flag) {
+    public void refocusedDevice(int deviceId, final boolean flag) {
         int startZoom = mapView.getMap().getZoom();
         int counter = 0;
         double bufLat = 0;
         double bufLong = 0;
         int countOfFollow = 0;
-        deviceHashMapFollow.put(device.getId(), flag);
+        deviceHashMapFollow.put(deviceId, flag);
         Set<Integer> positionSet = markerPosition.keySet();
         for (Integer i : positionSet) {
             Position position = markerPosition.get(i);
@@ -265,7 +268,7 @@ public class MapController implements Observer {
             }
         }
     }
-
+sadfcgd
     //  настройки для линии которой рисуется маршрут
     private PolylineOptions getPolyLineOptions() {
         PolylineOptions polylineOptions = new PolylineOptions();
@@ -286,7 +289,7 @@ public class MapController implements Observer {
     public void drawHistory(Device device) {
         flagMap.put(device.getId(), false);
         // flag = false;
-        refocusedDevice(device, true);
+        refocusedDevice(device.getId(), true);
         ArrayList<Polyline> polylineArrayList = devicePolyLineHashMap.get(device.getId());
         for (Polyline polyline : polylineArrayList) {
             polyline.addTo(mapView.getMap());
@@ -307,7 +310,7 @@ public class MapController implements Observer {
     public void setStartDrawFlag(Device device) {
         flagMap.put(device.getId(), false);
         drawDeviceMarker(device);
-        refocusedDevice(device, true);
+        refocusedDevice(device.getId(), true);
         setStartPosition(device.getId());
         startDrawFlag.put(device.getId(), true);
     }

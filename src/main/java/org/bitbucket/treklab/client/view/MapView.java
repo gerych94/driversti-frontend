@@ -150,6 +150,7 @@ public class MapView {
                         final Type type = Type.valueOf(layerType); // приводим к enum
                         LoggerHelper.log(className, "Before dialog. Layer type: " + layerType);
                         Geofence geofence = (Geofence) Geofence.createObject(); // создаём пустую геозону
+
                         geofence.setType(type); // присваиваем тип геозоны
                         switch (layerType) {
                             // если геозона "КРУГ"

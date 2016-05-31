@@ -52,6 +52,6 @@ public interface Resources extends ClientBundle {
     @Source("org/bitbucket/treklab/client/theme/icon/tool.png")
     ImageResource tool();
 
-    @Source("org/bitbucket/treklab/client/theme/icon/cogWheel.png")
+    @Source("org/bitbucket/treklab/client/theme/icon/cogwheel.png")
     ImageResource cogWheel();
 }

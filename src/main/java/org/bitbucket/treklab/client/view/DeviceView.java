@@ -43,6 +43,7 @@ import org.bitbucket.treklab.client.model.*;
 import org.bitbucket.treklab.client.resources.Resources;
 import org.bitbucket.treklab.client.state.DeviceFollowHandler;
 import org.bitbucket.treklab.client.state.DeviceVisibilityHandler;
+import org.bitbucket.treklab.client.state.GeofenceVisibilityHandler;
 import org.bitbucket.treklab.client.util.LoggerHelper;
 
 import java.util.ArrayList;
@@ -139,6 +140,7 @@ public class DeviceView {
     private final StateController stateController;
     private final DeviceVisibilityHandler deviceVisibilityHandler;
     private final DeviceFollowHandler deviceFollowHandler;
+    private final GeofenceVisibilityHandler geofenceVisibilityHandler;
 
     private final ColumnConfig<Device, Boolean> colDeviceVisible;
     private final ColumnConfig<Device, Boolean> colDeviceFollow;
@@ -160,17 +162,17 @@ public class DeviceView {
                       ListStore<Geofence> globalGeofenceStore,
                       final StateController sController,
                       final DeviceVisibilityHandler deviceVisibilityHandler,
-                      final DeviceFollowHandler deviceFollowHandler) {
+                      final DeviceFollowHandler deviceFollowHandler,
+                      final GeofenceVisibilityHandler geofenceVisibilityHandler) {
         this.deviceHandler = deviceHandler;
         this.stateController = sController;
         this.deviceVisibilityHandler = deviceVisibilityHandler;
         this.deviceFollowHandler = deviceFollowHandler;
+        this.geofenceVisibilityHandler=geofenceVisibilityHandler;
         this.deviceStore = globalDeviceStore;
         this.deviceStore.setAutoCommit(true);
-
         this.eventStore = globalEventStore;
         this.eventStore.setAutoCommit(true);
-
         this.geofenceStore = globalGeofenceStore;
         this.geofenceStore.setAutoCommit(true);
 
@@ -390,19 +392,19 @@ public class DeviceView {
 
             @Override
             public Boolean getValue(Geofence geofence) {
-                return null;
+                return geofenceVisibilityHandler.isVisible(geofence);
             }
 
             @Override
             public void setValue(Geofence geofence, Boolean aBoolean) {
-
+                geofenceVisibilityHandler.setVisible(geofence,aBoolean);
             }
-
             @Override
             public String getPath() {
                 return "Visible";
             }
         }, 40, headerTemplate.render(AbstractImagePrototype.create(resources.eye()).getSafeHtml()));
+        colGeofenceVisible.setCell(new CheckBoxCell());
         colGeofenceVisible.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         colGeofenceVisible.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         ColumnConfig<Geofence, String> colGeofenceName = new ColumnConfig<>(geoProp.name(), 100, "Geofence");

@@ -25,7 +25,7 @@ public class SocketListener implements WebSocketListener {
 
     @Override
     public void onMessage(WebSocket webSocket, String data) {
-        //Window.alert( "message from server: " + data);
+       // Window.alert( "message from server: " + data);
         ServerDataHolder instance = ServerDataHolder.getInstance();
         instance.parse(data);
     }
@@ -37,7 +37,6 @@ public class SocketListener implements WebSocketListener {
 
     @Override
     public void onError(WebSocket webSocket) {
-
     }
 
 }

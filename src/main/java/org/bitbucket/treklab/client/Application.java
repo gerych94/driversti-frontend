@@ -24,6 +24,7 @@ public class Application {
     private final ScheduleController scheduleController;
     private final VisibilityController visibilityController;
     private final FollowController followController;
+    private final GeofenceVisibilityController geofenceVisibilityController;
     private final static DataService dataServiceController = DataServiceController.getInstance();
 
     private ApplicationView view;
@@ -46,8 +47,9 @@ public class Application {
 
         navController = new NavController();
         mapController = new MapController(globalGeofenceStore, instance);
-        visibilityController = new VisibilityController(globalDeviceStore);
-        followController = new FollowController(globalDeviceStore);
+        visibilityController = new VisibilityController();
+        followController = new FollowController();
+        geofenceVisibilityController=new GeofenceVisibilityController();
         stateController = new StateController(instance);
         deviceController = new DeviceController(globalDeviceStore,
                 globalEventStore,
@@ -56,6 +58,7 @@ public class Application {
                 stateController,
                 visibilityController,
                 followController,
+                geofenceVisibilityController,
                 instance);
         eventController = new EventController(globalDeviceStore, globalEventStore);
         geofenceController = new GeofenceController(globalGeofenceStore);
@@ -78,6 +81,7 @@ public class Application {
         final WebSocket webSocket = WebSocket.newWebSocketIfSupported();
         if (webSocket != null) {
             webSocket.setListener(new SocketListener());
+         //   webSocket.connect("ws://192.168.5.118:8082/api/socket");
             webSocket.connect("ws://185.69.152.120:8082/api/socket");
         } else {
             Window.alert( "WebSocket not available!" );

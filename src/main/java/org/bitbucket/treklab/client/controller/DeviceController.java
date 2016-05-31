@@ -17,6 +17,7 @@ import org.bitbucket.treklab.client.model.Event;
 import org.bitbucket.treklab.client.model.Geofence;
 import org.bitbucket.treklab.client.state.DeviceFollowHandler;
 import org.bitbucket.treklab.client.state.DeviceVisibilityHandler;
+import org.bitbucket.treklab.client.state.GeofenceVisibilityHandler;
 import org.bitbucket.treklab.client.util.LoggerHelper;
 import org.bitbucket.treklab.client.util.Observable;
 import org.bitbucket.treklab.client.util.Observer;
@@ -67,6 +68,7 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
                             StateController stateController,
                             DeviceVisibilityHandler deviceVisibilityHandler,
                             DeviceFollowHandler deviceFollowHandler,
+                            GeofenceVisibilityHandler geofenceVisibilityHandler,
                             ServerDataHolder instance) {
 
         this.deviceStore = globalDeviceStore;
@@ -78,7 +80,8 @@ public class DeviceController implements ContentController, DeviceView.DeviceHan
                 globalGeofenceStore,
                 stateController,
                 deviceVisibilityHandler,
-                deviceFollowHandler);
+                deviceFollowHandler,
+                geofenceVisibilityHandler);
         this.deviceData = new DeviceData();
         this.observable = instance;
         observable.registerObserver(this);
